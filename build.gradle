@@ -222,6 +222,11 @@ project(':rule-engine') {
         providedCompile project(':data-model')
 		providedCompile project(':util-lib')
     }
+    eclipse {
+		classpath {
+			plusConfigurations += [configurations.droolsLib]
+		}
+	}
 }
 
 ext {
