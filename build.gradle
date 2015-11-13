@@ -4,6 +4,10 @@ ext {
 	extraProperty = "Extra properties can be added, read and set via the owning object's ext property. Alternatively, an ext block can be used to add multiple properties at once."	
 }
 
+allprojects {
+  task hello << { task -> println "I'm $task.project.name" }
+}
+
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
@@ -182,41 +186,41 @@ subprojects {
 	}
 }
 
-project('lib:data-model') {
+project(':data-model') {
     jar {
 		baseName = 'prepayment-data-model'
 	}
 }
-project('lib:util-lib') {
+project(':util-lib') {
     jar {
 		baseName = 'prepayment-util-lib'
 	}
 }
-project('service:data-processing') {
+project(':data-processing') {
     jar {
 		baseName = 'prepayment-data-processing'
 	}
 	dependencies {
-        providedCompile project(':lib:data-model')
-		providedCompile project(':lib:util-lib')
+        providedCompile project(':data-model')
+		providedCompile project(':util-lib')
     }
 }
-project('service:data-synchronization') {
+project(':data-synchronization') {
     jar {
 		baseName = 'prepayment-data-synchronization'
 	}
 	dependencies {
-		providedCompile project(':lib:data-model')
-		providedCompile project(':lib:util-lib')
+		providedCompile project(':data-model')
+		providedCompile project(':util-lib')
     }
 }
-project('service:rule-engine') {
+project(':rule-engine') {
     jar {
 		baseName = 'prepayment-rule-engine'
 	}
 	dependencies {
-        providedCompile project(':lib:data-model')
-		providedCompile project(':lib:util-lib')
+        providedCompile project(':data-model')
+		providedCompile project(':util-lib')
     }
 }
 

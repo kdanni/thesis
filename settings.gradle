@@ -1,1 +1,13 @@
-include 'lib:data-model','lib:util-lib','service:data-processing','service:data-synchronization','service:rule-engine'
+include 'data-model'
+include 'util-lib'
+include 'data-processing'
+include 'data-synchronization'
+include 'rule-engine'
+
+rootProject.name = 'thesis'
+
+project(':data-model').projectDir = new File(settingsDir, 'lib/data-model')
+project(':util-lib').projectDir = new File(settingsDir, 'lib/util-lib')
+project(':data-processing').projectDir = new File(settingsDir, 'service/data-processing')
+project(':data-synchronization').projectDir = new File(settingsDir, 'service/data-synchronization')
+project(':rule-engine').projectDir = new File(settingsDir, 'service/rule-engine')
