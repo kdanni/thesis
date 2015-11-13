@@ -11,18 +11,22 @@ public class AssociationProcessorConfigurator extends BaseConfigurator {
 
 	private String accountSdpAssociationSelector;
 	private String accountSdpStartDateSelector;
+	private String accountSdpEndDateSelector;
 	private String accountSdpStatusSelector;
 	
 	private String sdpMeterAssociationSelector;
 	private String sdpMeterStartDateSelector;
+	private String sdpMeterEndDateSelector;
 	private String sdpMeterStatusSelector;
 	
 	private String accountContactAssociationSelector;
 	private String accountContactStartDateSelector;
+	private String accountContactEndDateSelector;
 	private String accountContactStatusSelector;
 	
 	private String sdpServiceLocationAssociationSelector;
 	private String sdpServiceLocationStartDateSelector;
+	private String sdpServiceLocationEndDateSelector;
 	private String sdpServiceLocationStatusSelector;
 	
 	private String accountIdSelector;
@@ -207,6 +211,46 @@ public class AssociationProcessorConfigurator extends BaseConfigurator {
 			String sdpServiceLocationStatusSelector) {
 		this.sdpServiceLocationStatusSelector = sdpServiceLocationStatusSelector;
 	}
-	
-	
+
+	@ManagedAttribute
+	public String getAccountSdpEndDateSelector() {
+		return accountSdpEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public void setAccountSdpEndDateSelector(String accountSdpEndDateSelector) {
+		this.accountSdpEndDateSelector = accountSdpEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public String getSdpMeterEndDateSelector() {
+		return sdpMeterEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public void setSdpMeterEndDateSelector(String sdpMeterEndDateSelector) {
+		this.sdpMeterEndDateSelector = sdpMeterEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public String getAccountContactEndDateSelector() {
+		return accountContactEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public void setAccountContactEndDateSelector(
+			String accountContactEndDateSelector) {
+		this.accountContactEndDateSelector = accountContactEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public String getSdpServiceLocationEndDateSelector() {
+		return sdpServiceLocationEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public void setSdpServiceLocationEndDateSelector(
+			String sdpServiceLocationEndDateSelector) {
+		this.sdpServiceLocationEndDateSelector = sdpServiceLocationEndDateSelector;
+	}
 }

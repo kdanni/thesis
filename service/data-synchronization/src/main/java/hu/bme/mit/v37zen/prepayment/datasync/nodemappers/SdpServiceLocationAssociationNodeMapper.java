@@ -37,6 +37,10 @@ public class SdpServiceLocationAssociationNodeMapper extends AbstractNodeMapper<
 		buff.append("SdpServiceLocationAssociation StartDate: "+ startDate + '\n');
 		sdpSLAss.setStartDate(DateTimeUtil.stringToDate(startDate, associationProcessorConfigurator.getDateFormat()));
 		
+		String endDate = evaluate(associationProcessorConfigurator.getSdpServiceLocationEndDateSelector(), node);
+		buff.append("SdpServiceLocationAssociation EndDate: "+ endDate + '\n');
+		sdpSLAss.setEndDate(DateTimeUtil.stringToDate(endDate, associationProcessorConfigurator.getDateFormat()));
+		
 		String serviceLocationMRID = evaluate(associationProcessorConfigurator.getServiceLocationIdSelector(), node);
 		buff.append("SdpServiceLocationAssociation MeterAssetMRID: "+ serviceLocationMRID + '\n');
 		sdpSLAss.setServiceLocationMRID(serviceLocationMRID);

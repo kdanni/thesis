@@ -39,6 +39,10 @@ public class AccountSdpAssociationNodeMapper extends AbstractNodeMapper<AccountS
 		buff.append("AccountSDPAssociation StartDate: "+ startDate + '\n');
 		accSdpAss.setStartDate(DateTimeUtil.stringToDate(startDate, associationProcessorConfigurator.getDateFormat()));
 		
+		String endDate = evaluate(associationProcessorConfigurator.getAccountSdpEndDateSelector(), node);
+		buff.append("AccountSDPAssociation endDate: "+ endDate + '\n');
+		accSdpAss.setEndDate(DateTimeUtil.stringToDate(endDate, associationProcessorConfigurator.getDateFormat()));
+		
 		String accountMRID = evaluate(associationProcessorConfigurator.getAccountIdSelector(), node);
 		buff.append("AccountSDPAssociation AccountMRID: "+ accountMRID + '\n');
 		accSdpAss.setAccountMRID(accountMRID);

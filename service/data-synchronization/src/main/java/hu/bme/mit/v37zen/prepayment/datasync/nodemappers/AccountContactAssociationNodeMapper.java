@@ -37,6 +37,10 @@ public class AccountContactAssociationNodeMapper extends AbstractNodeMapper<Acco
 		buff.append("AccountContactAssociation StartDate: "+ startDate + '\n');
 		accContactAss.setStartDate(DateTimeUtil.stringToDate(startDate, associationProcessorConfigurator.getDateFormat()));
 		
+		String endDate = evaluate(associationProcessorConfigurator.getAccountContactEndDateSelector(), node);
+		buff.append("AccountContactAssociation EndDate: "+ endDate + '\n');
+		accContactAss.setEndDate(DateTimeUtil.stringToDate(endDate, associationProcessorConfigurator.getDateFormat()));
+		
 		String accountMRID = evaluate(associationProcessorConfigurator.getAccountIdSelector(), node);
 		buff.append("AccountContactAssociation AccountMRID: "+ accountMRID + '\n');
 		accContactAss.setAccountMRID(accountMRID);

@@ -38,6 +38,10 @@ public static Logger logger = LoggerFactory.getLogger(SdpMeterAssociationNodeMap
 		buff.append("SdpMeterAssociation StartDate: "+ startDate + '\n');
 		sdpMeterAss.setStartDate(DateTimeUtil.stringToDate(startDate, associationProcessorConfigurator.getDateFormat()));
 		
+		String endDate = evaluate(associationProcessorConfigurator.getSdpMeterEndDateSelector(), node);
+		buff.append("SdpMeterAssociation EndDate: "+ endDate + '\n');
+		sdpMeterAss.setEndDate(DateTimeUtil.stringToDate(endDate, associationProcessorConfigurator.getDateFormat()));
+		
 		String meterAssetMRID = evaluate(associationProcessorConfigurator.getMeterIdSelector(), node);
 		buff.append("SdpMeterAssociation MeterAssetMRID: "+ meterAssetMRID + '\n');
 		sdpMeterAss.setMeterAssetMRID(meterAssetMRID);
