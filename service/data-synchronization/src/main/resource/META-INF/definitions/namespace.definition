@@ -1,0 +1,4 @@
+#Prefix URI
+syncif http://www.emeter.com/energyip/syncinterface
+mdif http://www.emeter.com/energyip/meterdatainterface
+xsi http://www.w3.org/2001/XMLSchema-instance

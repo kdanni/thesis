@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:META-INF/properties/integration.properties</value>
+                <value>classpath:META-INF/properties/dataSync.properties</value>
+                <value>classpath:META-INF/properties/meterData.properties</value>
+                <value>classpath:META-INF/properties/xpath.properties</value>
+                <value>classpath:META-INF/properties/jdbc.properties</value>
+                <value>classpath:META-INF/properties/jpa.properties</value>
+            </list>
+        </property> 
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+    
+    <import resource="classpath:META-INF/spring/task-exec.xml"/>
+    
+    <import resource="classpath:META-INF/spring/context.xml"/>
+    <import resource="classpath:META-INF/spring/file-poller.xml"/>
+    <import resource="classpath:META-INF/spring/content-base-router.xml"/>
+    
+    <import resource="classpath:META-INF/spring/syncdata.xml"/>
+    <import resource="classpath:META-INF/spring/meterdata.xml"/>
+    
+    
+    <import resource="classpath:META-INF/spring/jdbc-jpa.xml"/>
+
+</beans>

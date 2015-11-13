@@ -1,0 +1,9 @@
+/3rd-party/
+/build/
+/.gradle/
+/.settings/
+/.classpath
+/.project
+/bin/
+/in/
+/processed/

@@ -1,0 +1,1 @@
+include 'lib:data-model','lib:util-lib','service:data-processing','service:data-synchronization','service:rule-engine'

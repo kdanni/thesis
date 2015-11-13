@@ -1,0 +1,269 @@
+def localVariable = "localVariable"
+
+ext {
+	extraProperty = "Extra properties can be added, read and set via the owning object's ext property. Alternatively, an ext block can be used to add multiple properties at once."	
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'maven'
+
+	jar {
+		version =  '0.1.0'
+		
+		manifest.attributes provider: 'BME V37ZEN'
+		
+		from sourceSets.main.allSource
+	}
+	sourceCompatibility = 1.7
+	targetCompatibility = 1.7
+    //Source folders:
+	sourceSets {
+		main {
+			java {
+				srcDirs = ["src/main/java"]
+			}
+			resources {
+				srcDirs = ["src/main/resource"]
+			}
+		}
+		test {
+			java {
+				srcDirs = ["src/test/java"]
+			}
+			resources {
+				srcDirs = ["src/test/resource"]
+			}
+		}
+	}		
+	configurations { 
+		providedCompile 
+		loggingLib
+		testLib	
+		droolsLib
+		excelProcessLib
+	}
+	sourceSets.main.compileClasspath += configurations.providedCompile
+	sourceSets.test.compileClasspath += configurations.providedCompile
+	sourceSets.test.runtimeClasspath += configurations.providedCompile
+
+	sourceSets.main.compileClasspath += configurations.loggingLib
+	sourceSets.test.compileClasspath += configurations.loggingLib
+	sourceSets.test.runtimeClasspath += configurations.loggingLib
+
+	sourceSets.main.compileClasspath += configurations.testLib
+	sourceSets.test.compileClasspath += configurations.testLib
+	sourceSets.test.runtimeClasspath += configurations.testLib
+
+	sourceSets.main.compileClasspath += configurations.droolsLib
+	sourceSets.test.compileClasspath += configurations.droolsLib
+	sourceSets.test.runtimeClasspath += configurations.droolsLib
+
+	sourceSets.main.compileClasspath += configurations.excelProcessLib
+	sourceSets.test.compileClasspath += configurations.excelProcessLib
+	sourceSets.test.runtimeClasspath += configurations.excelProcessLib
+
+	eclipse {
+		project {
+			natures 'org.springsource.ide.eclipse.gradle.core.nature', 
+					'org.eclipse.jdt.core.javanature',
+					'org.springframework.ide.eclipse.core.springnature'			
+		}
+		classpath {
+			containers 'org.springsource.ide.eclipse.gradle.classpathcontainer'
+			plusConfigurations += [configurations.providedCompile]
+			plusConfigurations += [configurations.loggingLib]
+			plusConfigurations += [configurations.testLib]
+		}
+	}
+
+	repositories {
+		mavenCentral()
+		maven {
+			url "http://repository.primefaces.org"
+			url "http://repository.jboss.org/nexus/content/groups/public"
+		}
+	}
+
+	dependencies {
+		///Verzion variables:
+		ext.springVersion = '4.1.5.RELEASE'
+		ext.SpringDataJPAVersion = '1.8.0.RELEASE'
+		ext.springWSVersion = '2.2.0.RELEASE'
+		ext.springIntegrationVersion = '4.2.1.RELEASE'
+		
+		ext.hibernateVersion = '4.3.8.Final'
+		ext.postgreConnectorVersion = '9.1-901-1.jdbc4'
+		ext.mysqlConnectorVersion = '5.1.30'
+		
+		ext.logbackVersion = '1.1.2'
+		ext.log4jVersion = '2.2'
+		
+		ext.junitVersion = '4.12'
+		
+		ext.servletApiVersion = '3.1.0'
+		ext.enterpriseCdiVersion = '1.2'
+		ext.glassfishElImplVersion = '2.2'
+		ext.jeeCdiVersion = '1.2'
+		
+		ext.JSFVersion = '2.2.10'
+		
+		ext.primefacesVersion = '5.1'
+		ext.primefacesExtensionVersion = '3.0.0'
+		ext.bootstrapVersion = '1.0.10'
+		
+		ext.gsonVersion = '2.3.1'
+		ext.prettyFacesVersion = '3.3.3'
+			
+		///Dependencies:	
+		loggingLib "ch.qos.logback:logback-classic:$logbackVersion"
+		
+		testLib "org.springframework:spring-test:$springVersion"
+		testLib "junit:junit:$junitVersion"
+		
+		//loggingLib "org.apache.logging.log4j:log4j-api:$log4jVersion"
+		//loggingLib "org.apache.logging.log4j:log4j-core:$log4jVersion"
+		
+		providedCompile "com.google.code.gson:gson:$gsonVersion"	
+		
+		providedCompile 'joda-time:joda-time:2.9'
+		
+		providedCompile "org.springframework:spring-context:$springVersion"
+		providedCompile "org.springframework:spring-jdbc:$springVersion" 
+		providedCompile "org.springframework.data:spring-data-jpa:$SpringDataJPAVersion"
+		providedCompile "org.springframework:spring-webmvc:$springVersion"
+		providedCompile "org.springframework.ws:spring-xml:$springWSVersion"
+						
+		providedCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
+		providedCompile "org.springframework.integration:spring-integration-file:$springIntegrationVersion"
+		providedCompile "org.springframework.integration:spring-integration-xml:$springIntegrationVersion"
+		
+		//compile "com.sun.faces:jsf-api:$JSFVersion"
+		//compile "com.sun.faces:jsf-impl:$JSFVersion"
+		
+		//compile "org.glassfish.web:el-impl:$glassfishElImplVersion"
+
+		//compile "javax.enterprise:cdi-api:$jeeCdiVersion"
+		
+		//compile "org.primefaces:primefaces:$primefacesVersion"
+		//compile "org.primefaces.extensions:primefaces-extensions:$primefacesExtensionVersion"
+		
+		
+		//compile "org.primefaces.themes:bootstrap:$bootstrapVersion"
+		
+		//compile "com.ocpsoft:prettyfaces-jsf2:$prettyFacesVersion"
+			
+		providedCompile "org.hibernate:hibernate-core:$hibernateVersion"
+		providedCompile "org.hibernate:hibernate-entitymanager:$hibernateVersion"
+		providedCompile "postgresql:postgresql:$postgreConnectorVersion"
+		providedCompile "mysql:mysql-connector-java:$mysqlConnectorVersion"
+
+		//For rest template:
+		providedCompile 'org.apache.httpcomponents:httpclient:4.5'
+			//httpcore-4.4.1.jar
+			//httpclient-4.5.jar
+			//commons-codec-1.9.jar
+		
+		//providedCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+		
+		//Office Processing Libs
+		excelProcessLib 'org.apache.poi:poi-ooxml:3.11'
+		excelProcessLib 'commons-io:commons-io:2.4'
+		excelProcessLib 'commons-cli:commons-cli:1.3'
+		
+		//Drools
+		ext.droolsVersion = '6.3.0.Final'
+		droolsLib "org.kie:kie-api:$droolsVersion"
+		droolsLib "org.drools:drools-core:$droolsVersion"
+		droolsLib "org.drools:drools-compiler:$droolsVersion"
+		droolsLib "org.drools:drools-decisiontables:$droolsVersion"
+		
+	}
+}
+
+project('lib:data-model') {
+    jar {
+		baseName = 'prepayment-data-model'
+	}
+}
+project('lib:util-lib') {
+    jar {
+		baseName = 'prepayment-util-lib'
+	}
+}
+project('service:data-processing') {
+    jar {
+		baseName = 'prepayment-data-processing'
+	}
+	dependencies {
+        providedCompile project(':lib:data-model')
+		providedCompile project(':lib:util-lib')
+    }
+}
+project('service:data-synchronization') {
+    jar {
+		baseName = 'prepayment-data-synchronization'
+	}
+	dependencies {
+		providedCompile project(':lib:data-model')
+		providedCompile project(':lib:util-lib')
+    }
+}
+project('service:rule-engine') {
+    jar {
+		baseName = 'prepayment-rule-engine'
+	}
+	dependencies {
+        providedCompile project(':lib:data-model')
+		providedCompile project(':lib:util-lib')
+    }
+}
+
+ext {
+	libBaseBase = 'lib'
+	libBase3rdParty = '3rd-party'
+	//libBase = "./lib/3rd-party"
+	libBase = "./$libBaseBase/$libBase3rdParty"
+	libBaseWin = "$libBaseBase\\$libBase3rdParty"
+	
+	libCompile = 'lib-compile'
+	libProvidedCompile = 'lib-provided-compile'
+	libLogging = 'lib-logging'
+	libTest = 'lib-test'
+	libExcel = 'lib-excel'		
+	libDrools = 'lib-drools'
+}
+
+task copyLibs(dependsOn: ['cleanLibsWin', 'copyProvidedCompileLibs', 'copyLoggingLibs', 'copyDroolsLibs']) {
+	
+}
+task copyProvidedCompileLibs(type: Copy) {
+	into file("$libBase/$libProvidedCompile")
+	from subprojects.configurations.providedCompile
+}
+task copyCompileLibs(type: Copy) {
+	into file("$libBase/$libCompile")
+	from subprojects.configurations.compile
+}
+task copyLoggingLibs(type: Copy) {
+	into file("$libBase/$libLogging")
+	from subprojects.configurations.loggingLib
+}
+task copyTestLibs(type: Copy) {
+	into file("$libBase/$libTest")
+	from subprojects.configurations.testLib
+}
+task copyExcelLibs(type: Copy) {
+	into file("$libBase/$libExcel")
+	from subprojects.configurations.excelProcessLib
+}
+task copyDroolsLibs(type: Copy) {
+	into file("$libBase/$libDrools")
+	from subprojects.configurations.droolsLib
+}
+task cleanLibsWin(type:Exec){
+	workingDir file("$rootProject.projectDir")
+	commandLine 'cmd', '/c', "RD /S /Q $libBaseWin"
+	ignoreExitValue = true
+}

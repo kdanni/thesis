@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:META-INF/properties/jdbc.properties</value>
+                <value>classpath:META-INF/properties/jpa.properties</value>
+            </list>
+        </property> 
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+    
+    <import resource="classpath:META-INF/spring/task-exec.xml"/>
+    
+    <import resource="classpath:META-INF/spring/context.xml"/>
+   
+   
+    
+    <import resource="classpath:META-INF/spring/jdbc-jpa.xml"/>
+
+</beans>

@@ -1,0 +1,10 @@
+package hu.bme.v37zen.re.rules
+ 
+import hu.bme.inf.v37zen.re.debug.model.*;
+
+rule "increase value"
+	when
+		d : DebugEntity( value == 1)
+	then
+		d.setValue(2);
+end

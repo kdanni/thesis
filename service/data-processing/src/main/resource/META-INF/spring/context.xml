@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+	
+    
+    <!-- MBean exporter -->
+	<!-- Autodetectálja a annotált beaneket -->
+	
+	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+		<property name="assembler" ref="assembler" />
+		<property name="namingStrategy" ref="namingStrategy" />
+		<property name="autodetect" value="true" />        
+	</bean>
+
+	<bean id="jmxAttributeSource"
+		class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource" />
+
+	<bean id="assembler"
+		class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+		<property name="attributeSource" ref="jmxAttributeSource" />
+	</bean>
+	<bean id="namingStrategy"
+		class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+		<property name="attributeSource" ref="jmxAttributeSource" />
+	</bean>
+	
+	<bean id="exporter2" class="org.springframework.jmx.export.MBeanExporter">
+		<property name="beans">
+            <map>
+<!--                 <entry key="bean:name=DataSyncThreadPoolTaskExecutor" value-ref="dataSyncThreadPoolTaskExecutor"/> -->
+            </map>
+        </property>
+    </bean>
+	
+	<!-- /MBean exporter -->
+	
+<!-- 	<bean id="resourceLoaderBean" class="hu.bme.mit.v37zen.prepayment.util.xml.ResourceLoaderBean"></bean> -->
+	
+
+<!-- 	<bean id="namespaceHandler" class="hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler"> -->
+<!-- 		<constructor-arg name="resourceLoaderBean"> -->
+<!-- 			<ref bean="resourceLoaderBean"/> -->
+<!-- 		</constructor-arg> -->
+<!-- 		<constructor-arg name="namespaceDefinitionFilePath" value="${xpath.namespace.definitionfile.path}" /> -->
+<!-- 	</bean> -->
+	
+</beans>
+
+
