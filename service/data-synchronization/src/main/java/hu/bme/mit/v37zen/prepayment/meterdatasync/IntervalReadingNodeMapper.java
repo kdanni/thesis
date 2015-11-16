@@ -2,7 +2,7 @@ package hu.bme.mit.v37zen.prepayment.meterdatasync;
 
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
 import hu.bme.mit.v37zen.prepayment.util.xml.XPathUtil;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 
 import java.util.ArrayList;
 import java.util.Date;

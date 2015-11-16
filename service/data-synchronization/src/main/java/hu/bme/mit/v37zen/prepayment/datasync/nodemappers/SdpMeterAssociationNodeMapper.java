@@ -4,7 +4,7 @@ import hu.bme.mit.v37zen.prepayment.datasync.configurators.AssociationProcessorC
 import hu.bme.mit.v37zen.prepayment.util.datetime.DateTimeUtil;
 import hu.bme.mit.v37zen.prepayment.util.xml.AbstractNodeMapper;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.SdpMeterAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

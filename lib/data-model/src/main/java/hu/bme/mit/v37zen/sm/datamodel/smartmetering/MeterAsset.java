@@ -1,4 +1,4 @@
-package hu.bme.mit.v37zen.sm.jpa.datamodel;
+package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
 
 import java.util.ArrayList;
 import java.util.Date;

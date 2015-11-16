@@ -1,8 +1,8 @@
 package hu.bme.mit.v37zen.sm.jpa.repositories;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Account;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.AccountSDPAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceDeliveryPoint;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 
 import java.util.Date;
 import java.util.List;

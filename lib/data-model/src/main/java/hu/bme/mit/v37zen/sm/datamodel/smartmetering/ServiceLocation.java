@@ -1,9 +1,9 @@
-package hu.bme.mit.v37zen.sm.jpa.datamodel;
+package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.BaseEntity;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.BaseEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

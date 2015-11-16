@@ -1,8 +1,8 @@
 package hu.bme.mit.v37zen.sm.jpa.repositories;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.SdpServiceLocationAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceDeliveryPoint;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceLocation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpServiceLocationAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
 
 import java.util.Date;
 import java.util.List;

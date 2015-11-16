@@ -1,8 +1,8 @@
 package hu.bme.mit.v37zen.sm.jpa.repositories;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Account;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.AccountContactAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Contact;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountContactAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Contact;
 
 import java.util.Date;
 import java.util.List;

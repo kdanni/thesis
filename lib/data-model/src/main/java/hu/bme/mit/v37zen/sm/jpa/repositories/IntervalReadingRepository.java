@@ -1,7 +1,7 @@
 package hu.bme.mit.v37zen.sm.jpa.repositories;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.MeterAsset;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
 
 import java.util.Date;
 import java.util.List;

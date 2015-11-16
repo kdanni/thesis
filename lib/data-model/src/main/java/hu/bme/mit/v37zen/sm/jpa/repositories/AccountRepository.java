@@ -2,7 +2,7 @@ package hu.bme.mit.v37zen.sm.jpa.repositories;
 
 import java.util.List;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Account;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

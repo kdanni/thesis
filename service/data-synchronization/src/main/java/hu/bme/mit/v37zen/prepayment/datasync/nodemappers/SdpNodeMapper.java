@@ -3,8 +3,8 @@ package hu.bme.mit.v37zen.prepayment.datasync.nodemappers;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.SdpProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.util.xml.AbstractNodeMapper;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Parameter;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceDeliveryPoint;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Parameter;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 
 import java.util.List;
 

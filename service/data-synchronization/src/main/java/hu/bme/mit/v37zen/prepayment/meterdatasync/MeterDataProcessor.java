@@ -1,7 +1,7 @@
 package hu.bme.mit.v37zen.prepayment.meterdatasync;
 
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.jpa.repositories.IntervalReadingRepository;
 
 import java.util.ArrayList;

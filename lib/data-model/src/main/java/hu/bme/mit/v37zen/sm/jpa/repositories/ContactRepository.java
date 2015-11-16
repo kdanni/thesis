@@ -1,7 +1,7 @@
 package hu.bme.mit.v37zen.sm.jpa.repositories;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Contact;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceLocation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Contact;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
 
 import java.util.List;
 

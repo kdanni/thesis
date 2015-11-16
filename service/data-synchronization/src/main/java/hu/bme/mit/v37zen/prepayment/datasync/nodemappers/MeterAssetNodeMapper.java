@@ -4,8 +4,8 @@ import hu.bme.mit.v37zen.prepayment.datasync.configurators.MeterProcessorConfiru
 import hu.bme.mit.v37zen.prepayment.util.datetime.DateTimeUtil;
 import hu.bme.mit.v37zen.prepayment.util.xml.AbstractNodeMapper;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.MeterAsset;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Parameter;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Parameter;
 
 import java.util.List;
 

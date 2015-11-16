@@ -3,8 +3,8 @@ package hu.bme.mit.v37zen.prepayment.datasync.nodemappers;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ServiceLocationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.util.xml.AbstractNodeMapper;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Parameter;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceLocation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Parameter;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
 
 import java.util.List;
 

@@ -7,15 +7,15 @@ import hu.bme.mit.v37zen.prepayment.datasync.configurators.MeterProcessorConfiru
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.SdpProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ServiceLocationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Account;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.AccountContactAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.AccountSDPAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Contact;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.MeterAsset;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.SdpMeterAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.SdpServiceLocationAssociation;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceDeliveryPoint;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceLocation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountContactAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Contact;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpServiceLocationAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
 
 import java.util.List;
 import java.util.Map;

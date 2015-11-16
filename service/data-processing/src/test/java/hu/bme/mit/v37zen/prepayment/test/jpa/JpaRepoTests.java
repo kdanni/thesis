@@ -1,9 +1,9 @@
 package hu.bme.mit.v37zen.prepayment.test.jpa;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Account;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Parameter;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.ServiceDeliveryPoint;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Parameter;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.IntervalReadingRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;

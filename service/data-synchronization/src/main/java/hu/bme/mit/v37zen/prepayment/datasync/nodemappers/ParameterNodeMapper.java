@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.util.Map;
 
 import hu.bme.mit.v37zen.prepayment.util.datetime.DateTimeUtil;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.Parameter;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Parameter;
 
 import org.springframework.xml.xpath.NodeMapper;
 import org.springframework.xml.xpath.XPathExpression;

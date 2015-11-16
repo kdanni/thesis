@@ -1,7 +1,7 @@
-package hu.bme.mit.v37zen.sm.jpa.datamodel.meterreading;
+package hu.bme.mit.v37zen.sm.datamodel.meterreading;
 
-import hu.bme.mit.v37zen.sm.jpa.datamodel.BaseEntity;
-import hu.bme.mit.v37zen.sm.jpa.datamodel.MeterAsset;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.BaseEntity;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
 
 import java.util.Date;
 
