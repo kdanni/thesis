@@ -93,6 +93,10 @@ public class Route extends BaseEntity {
 	public void setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
 	}
+	
+	public void addParameter(Parameter parameter){
+		this.parameters.add(parameter);
+	}
 
 	@Override
 	public int hashCode() {

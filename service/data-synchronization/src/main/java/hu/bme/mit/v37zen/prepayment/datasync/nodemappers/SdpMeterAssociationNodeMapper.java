@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
 
 public class SdpMeterAssociationNodeMapper extends AbstractNodeMapper<SdpMeterAssociation> {
 	
-public static Logger logger = LoggerFactory.getLogger(SdpMeterAssociationNodeMapper.class);
+	public static Logger logger = LoggerFactory.getLogger(SdpMeterAssociationNodeMapper.class);
 
 	private AssociationProcessorConfigurator associationProcessorConfigurator;	
 	

@@ -47,6 +47,9 @@
 		<constructor-arg name="serviceLocationProcessorConfigurator">
 			<ref bean="syncMessageServiceLocationProcessorConfirugarator" />
 		</constructor-arg>
+		<constructor-arg name="routeProcessorConfigurator">
+			<ref bean="syncMessageRouteProcessorConfirugarator"/>
+		</constructor-arg>
 	</bean>
 	
 	<!-- Configurators -->
@@ -84,14 +87,23 @@
 		<property name="accountSdpAssociationSelector" value="${dataSync.xpath.association.accountSdpAssociationSelector}"></property>
 		<property name="accountSdpStartDateSelector" value="${dataSync.xpath.association.accountSdpStartDateSelector}"></property>
 		<property name="accountSdpStatusSelector" value="${dataSync.xpath.association.accountSdpStatusSelector}"></property>
+		<property name="accountSdpEndDateSelector" value="${dataSync.xpath.association.accountSdpEndDateSelector}" ></property>
 		
 		<property name="sdpMeterAssociationSelector" value="${dataSync.xpath.association.sdpMeterAssociationSelector}"></property>
 		<property name="sdpMeterStartDateSelector" value="${dataSync.xpath.association.sdpMeterStartDateSelector}"></property>
 		<property name="sdpMeterStatusSelector" value="${dataSync.xpath.association.sdpMeterStatusSelector}"></property>
+		<property name="sdpMeterEndDateSelector" value="${dataSync.xpath.association.sdpMeterEndDateSelector}"></property>
+		
+		<property name="sdpRouteAssociationSelector" value="${dataSync.xpath.association.sdpRouteAssociationSelector}"></property>
+		<property name="sdpRouteStartDateSelector" value="${dataSync.xpath.association.sdpRouteStartDateSelector}"></property>
+		<property name="sdpRouteStatusSelector" value="${dataSync.xpath.association.sdpRouteStatusSelector}"></property>
+		<property name="sdpRouteEndDateSelector" value="${dataSync.xpath.association.sdpRouteEndDateSelector}"></property>
 		
 		<property name="accountIdSelector" value="${dataSync.xpath.association.accountIdSelector}"></property>
 		<property name="sdpIdSelector" value="${dataSync.xpath.association.sdpIdSelector}"></property>
 		<property name="meterIdSelector" value="${dataSync.xpath.association.meterIdSelector}"></property>
+		<property name="routeIdSelector" value="${dataSync.xpath.association.routeIdSelector}"></property>
+		
 	</bean>
 	<bean id="syncMessageMeterProcessorConfirugarator"  
 			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.MeterProcessorConfirugarator">

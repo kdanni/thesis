@@ -79,7 +79,7 @@ public class MeterAssetNodeMapper extends AbstractNodeMapper<MeterAsset> {
 			for (Parameter parameter : paramList) {
 				meterAsset.addParameter(parameter);
 			}
-			buff.append("SDP Parameters: "+ paramList.toString() + '\n');			
+			buff.append("MeterAsset Parameters: "+ paramList.toString() + '\n');			
 		} catch (XPathParseException e) {
 			logger.error(e.getMessage());
 		} catch (XPathException e) {

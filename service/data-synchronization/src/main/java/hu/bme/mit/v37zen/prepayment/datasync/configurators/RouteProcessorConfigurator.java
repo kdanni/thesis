@@ -1,12 +1,14 @@
 package hu.bme.mit.v37zen.prepayment.datasync.configurators;
 
+import hu.bme.mit.v37zen.prepayment.util.configurators.BaseConfigurator;
+
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 @ManagedResource(
 		objectName = "bean:name=RouteProcessorConfigurator", 
 		description = "RouteProcessorConfigurator")
-public class RouteProcessorConfigurator {
+public class RouteProcessorConfigurator extends BaseConfigurator {
 
 	private String routeSelcetor;
 	private String mridSelector;

@@ -4,6 +4,7 @@ import hu.bme.mit.v37zen.prepayment.datasync.configurators.AccountProcessorConfi
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.AssociationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ContactProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.MeterProcessorConfirugarator;
+import hu.bme.mit.v37zen.prepayment.datasync.configurators.RouteProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.SdpProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ServiceLocationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
@@ -12,7 +13,9 @@ import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountContactAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Contact;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Route;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpRouteAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpServiceLocationAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
@@ -39,6 +42,7 @@ public class SyncMessageMapper {
 	private MeterProcessorConfirugarator meterProcessorConfirugarator;
 	private ContactProcessorConfigurator contactProcessorConfigurator;
 	private ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator;
+	private RouteProcessorConfigurator routeProcessorConfigurator;
 	
 	public SyncMessageMapper(NamespaceHandler namespaces, 
 			AccountProcessorConfigurator accountProcessorConfigurator,
@@ -46,7 +50,8 @@ public class SyncMessageMapper {
 			AssociationProcessorConfigurator associationProcessorConfigurator,
 			MeterProcessorConfirugarator meterProcessorConfirugarator,
 			ContactProcessorConfigurator contactProcessorConfigurator,
-			ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator) 
+			ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator,
+			RouteProcessorConfigurator routeProcessorConfigurator) 
 	{
 		super();
 		this.namespaces = namespaces;
@@ -56,6 +61,7 @@ public class SyncMessageMapper {
 		this.meterProcessorConfirugarator = meterProcessorConfirugarator;
 		this.contactProcessorConfigurator = contactProcessorConfigurator;
 		this.serviceLocationProcessorConfigurator = serviceLocationProcessorConfigurator;
+		this.routeProcessorConfigurator = routeProcessorConfigurator; 
 		
 	}
 	
@@ -66,10 +72,12 @@ public class SyncMessageMapper {
 		private List<MeterAsset> MeterAssets;
 		private List<Contact> Contacts;
 		private List<ServiceLocation> ServiceLocations;
+		private List<Route> Routes;
 		private List<SdpMeterAssociation> SdpMeterAssociations;
 		private List<AccountSDPAssociation> AccountSDPAssociations;
 		private List<SdpServiceLocationAssociation> SdpServiceLocationAssociations;
 		private List<AccountContactAssociation> AccountContactAssociations;
+		private List<SdpRouteAssociation> SdpRouteAssociations;
 		
 		public List<Account> getAccounts() {
 			return Accounts;
@@ -136,10 +144,12 @@ public class SyncMessageMapper {
 				List<MeterAsset> meterAssets,
 				List<Contact> contacts,
 				List<ServiceLocation> serviceLocations,
+				List<Route> routes,
 				List<SdpMeterAssociation> sdpMeterAssociations,
 				List<AccountSDPAssociation> accountSDPAssociations,
 				List<SdpServiceLocationAssociation> sdpServiceLocationAssociations,
-				List<AccountContactAssociation> accountContactAssociations) {
+				List<AccountContactAssociation> accountContactAssociations,
+				List<SdpRouteAssociation> sdpRouteAssociations) {
 			super();
 			Accounts = accounts;
 			ServiceDeliveryPoints = serviceDeliveryPoints;
@@ -150,6 +160,18 @@ public class SyncMessageMapper {
 			AccountSDPAssociations = accountSDPAssociations;
 			SdpServiceLocationAssociations = sdpServiceLocationAssociations;
 			AccountContactAssociations = accountContactAssociations;
+		}
+		public List<Route> getRoutes() {
+			return Routes;
+		}
+		public void setRoutes(List<Route> routes) {
+			Routes = routes;
+		}
+		public List<SdpRouteAssociation> getSdpRouteAssociations() {
+			return SdpRouteAssociations;
+		}
+		public void setSdpRouteAssociations(List<SdpRouteAssociation> sdpRouteAssociations) {
+			SdpRouteAssociations = sdpRouteAssociations;
 		}		
 	}
 	
@@ -160,15 +182,15 @@ public class SyncMessageMapper {
 		List<MeterAsset> maList = this.processMeterAssets(syncMessage);
 		List<Contact> cList = this.processContacts(syncMessage);
 		List<ServiceLocation> slList = this.processServiceLocations(syncMessage);
+		List<Route> rList = this.processRoutes(syncMessage);
 		List<SdpMeterAssociation> smrList = this.processSDPMeterAssetAssociations(syncMessage);
 		List<AccountSDPAssociation> asaList = this.processAccountSDPAssociations(syncMessage);
 		List<SdpServiceLocationAssociation> sdpslrList = this.processSDPServiceLocationAssociations(syncMessage);
 		List<AccountContactAssociation> acaList = this.processAccountContactAssociations(syncMessage);
+		List<SdpRouteAssociation> sraList = this.processSdpRouteAssociations(syncMessage);
 		
-		return new SyncData(accList, sdpList, maList, cList, slList, smrList, asaList, sdpslrList, acaList);	
+		return new SyncData(accList, sdpList, maList, cList, slList, rList, smrList, asaList, sdpslrList, acaList , sraList);	
 	}
-	
-	
 	
 	protected XPathExpression createXPathExpression(String expression, Map<String,String> namespaces){
 		if(expression == null || expression.isEmpty()){
@@ -198,7 +220,7 @@ public class SyncMessageMapper {
 		
 	}
 	
-	private List<ServiceDeliveryPoint> processSDP(Node node) {
+	protected List<ServiceDeliveryPoint> processSDP(Node node) {
 		XPathExpression expr = createXPathExpression(this.sdpProcessorConfigurator.getSdpSelector(), namespaces.getNamespaces());
 		if (expr == null){
 			return null;
@@ -207,6 +229,36 @@ public class SyncMessageMapper {
 		try {
 			sdpList = expr.evaluate(node, new SdpNodeMapper(sdpProcessorConfigurator, namespaces));
 			return sdpList;
+		} catch (XPathException e) {
+			logger.error(e.getMessage());
+			return null;
+		}
+	}
+
+	protected List<Route> processRoutes(Node node) {
+		XPathExpression expr = createXPathExpression(this.routeProcessorConfigurator.getRouteSelcetor(), namespaces.getNamespaces());
+		if (expr == null){
+			return null;
+		}
+		List<Route> routeList;
+		try {
+			routeList = expr.evaluate(node, new RouteNodeMapper(routeProcessorConfigurator, namespaces));
+			return routeList;
+		} catch (XPathException e) {
+			logger.error(e.getMessage());
+			return null;
+		}
+	}
+	
+	protected List<SdpRouteAssociation> processSdpRouteAssociations(Node node) {
+		XPathExpression expr = createXPathExpression(this.associationProcessorConfigurator.getSdpRouteAssociationSelector(), namespaces.getNamespaces());
+		if (expr == null){
+			return null;
+		}
+		List<SdpRouteAssociation> sdpRouteAssList;
+		try {
+			sdpRouteAssList = expr.evaluate(node, new SdpRouteAssociationNodeMapper(associationProcessorConfigurator, namespaces));
+			return sdpRouteAssList;
 		} catch (XPathException e) {
 			logger.error(e.getMessage());
 			return null;
@@ -318,6 +370,18 @@ public class SyncMessageMapper {
 			logger.error(e.getMessage());
 			return null;
 		}
+	}
+
+
+
+	public RouteProcessorConfigurator getRouteProcessorConfigurator() {
+		return routeProcessorConfigurator;
+	}
+
+
+
+	public void setRouteProcessorConfigurator(RouteProcessorConfigurator routeProcessorConfigurator) {
+		this.routeProcessorConfigurator = routeProcessorConfigurator;
 	}
 	
 }

@@ -97,6 +97,67 @@ public class ServiceDeliveryPoint extends BaseEntity {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((billingHoldFlag == null) ? 0 : billingHoldFlag.hashCode());
+		result = prime * result
+				+ ((parameters == null) ? 0 : parameters.hashCode());
+		result = prime * result
+				+ ((premiseId == null) ? 0 : premiseId.hashCode());
+		result = prime * result
+				+ ((serviceType == null) ? 0 : serviceType.hashCode());
+		result = prime * result
+				+ ((universalId == null) ? 0 : universalId.hashCode());
+		result = prime * result
+				+ ((virtualInd == null) ? 0 : virtualInd.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ServiceDeliveryPoint other = (ServiceDeliveryPoint) obj;
+		if (billingHoldFlag == null) {
+			if (other.billingHoldFlag != null)
+				return false;
+		} else if (!billingHoldFlag.equals(other.billingHoldFlag))
+			return false;
+		if (parameters == null) {
+			if (other.parameters != null)
+				return false;
+		} else if (!parameters.equals(other.parameters))
+			return false;
+		if (premiseId == null) {
+			if (other.premiseId != null)
+				return false;
+		} else if (!premiseId.equals(other.premiseId))
+			return false;
+		if (serviceType == null) {
+			if (other.serviceType != null)
+				return false;
+		} else if (!serviceType.equals(other.serviceType))
+			return false;
+		if (universalId == null) {
+			if (other.universalId != null)
+				return false;
+		} else if (!universalId.equals(other.universalId))
+			return false;
+		if (virtualInd == null) {
+			if (other.virtualInd != null)
+				return false;
+		} else if (!virtualInd.equals(other.virtualInd))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "ServiceDeliveryPoint [mRID= " + mRID + ", universalId=" + universalId
 				+ ", virtualInd=" + virtualInd + ", serviceType=" + serviceType

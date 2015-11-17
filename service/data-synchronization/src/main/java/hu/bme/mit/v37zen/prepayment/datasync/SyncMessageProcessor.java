@@ -4,6 +4,7 @@ import hu.bme.mit.v37zen.prepayment.datasync.configurators.AccountProcessorConfi
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.AssociationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ContactProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.MeterProcessorConfirugarator;
+import hu.bme.mit.v37zen.prepayment.datasync.configurators.RouteProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.SdpProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ServiceLocationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.nodemappers.SyncMessageMapper;
@@ -14,7 +15,9 @@ import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountSDPAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ContactRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.MeterAssetRepository;
+import hu.bme.mit.v37zen.sm.jpa.repositories.RouteRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.SdpMeterAssociationRepository;
+import hu.bme.mit.v37zen.sm.jpa.repositories.SdpRouteAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.SdpServiceLocationAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceLocationRepository;
@@ -48,6 +51,7 @@ public class SyncMessageProcessor implements Runnable, ApplicationContextAware {
 	private MeterProcessorConfirugarator meterProcessorConfirugarator;
 	private ContactProcessorConfigurator contactProcessorConfigurator;
 	private ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator;
+	private RouteProcessorConfigurator routeProcessorConfigurator;
 
 	public SyncMessageProcessor(
 			NamespaceHandler namespaces,
@@ -56,7 +60,8 @@ public class SyncMessageProcessor implements Runnable, ApplicationContextAware {
 			AssociationProcessorConfigurator associationProcessorConfigurator,
 			MeterProcessorConfirugarator meterProcessorConfirugarator,
 			ContactProcessorConfigurator contactProcessorConfigurator,
-			ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator) {
+			ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator,
+			RouteProcessorConfigurator routeProcessorConfigurator) {
 		super();
 		this.namespaces = namespaces;
 		this.accountProcessorConfigurator = accountProcessorConfigurator;
@@ -65,71 +70,81 @@ public class SyncMessageProcessor implements Runnable, ApplicationContextAware {
 		this.meterProcessorConfirugarator = meterProcessorConfirugarator;
 		this.contactProcessorConfigurator = contactProcessorConfigurator;
 		this.serviceLocationProcessorConfigurator = serviceLocationProcessorConfigurator;
-
+		this.routeProcessorConfigurator = routeProcessorConfigurator;
 	}
 
 	public void run() {
-		if(this.xmlNode == null){
-			logger.warn("Sync message is null!"); 
+		if (this.xmlNode == null) {
+			logger.warn("Sync message is null!");
 			return;
 		}
-		try{
+		try {
 			logger.info("Sync message processing has started.");
-			
-			SyncData sd = new SyncMessageMapper(namespaces, accountProcessorConfigurator, sdpProcessorConfigurator, 
-					associationProcessorConfigurator, meterProcessorConfirugarator, contactProcessorConfigurator, 
-					serviceLocationProcessorConfigurator).mapSyncMessage(xmlNode);		
-			
-			AccountRepository accountRepository =
-			applicationContext.getBean(AccountRepository.class);
+
+			SyncData sd = new SyncMessageMapper(namespaces,
+					accountProcessorConfigurator, sdpProcessorConfigurator,
+					associationProcessorConfigurator,
+					meterProcessorConfirugarator, contactProcessorConfigurator,
+					serviceLocationProcessorConfigurator,
+					routeProcessorConfigurator).mapSyncMessage(xmlNode);
+
+			AccountRepository accountRepository = applicationContext
+					.getBean(AccountRepository.class);
 			accountRepository.save(sd.getAccounts());
-			
-			ServiceDeliveryPointRepository sdpRepo =
-			applicationContext.getBean(ServiceDeliveryPointRepository.class);
+
+			ServiceDeliveryPointRepository sdpRepo = applicationContext
+					.getBean(ServiceDeliveryPointRepository.class);
 			sdpRepo.save(sd.getServiceDeliveryPoints());
-			
-			AccountSDPAssociationRepository accSdpAssRepo =
-			applicationContext.getBean(AccountSDPAssociationRepository.class);
+
+			AccountSDPAssociationRepository accSdpAssRepo = applicationContext
+					.getBean(AccountSDPAssociationRepository.class);
 			accSdpAssRepo.save(sd.getAccountSDPAssociations());
-			
-			MeterAssetRepository meterRepo =
-			applicationContext.getBean(MeterAssetRepository.class);
+
+			MeterAssetRepository meterRepo = applicationContext
+					.getBean(MeterAssetRepository.class);
 			meterRepo.save(sd.getMeterAssets());
-			
-			SdpMeterAssociationRepository sdpMeterAssRepo =
-			applicationContext.getBean(SdpMeterAssociationRepository.class);
+
+			SdpMeterAssociationRepository sdpMeterAssRepo = applicationContext
+					.getBean(SdpMeterAssociationRepository.class);
 			sdpMeterAssRepo.save(sd.getSdpMeterAssociations());
-			
-			ContactRepository contactRepo =
-			applicationContext.getBean(ContactRepository.class);
+
+			ContactRepository contactRepo = applicationContext
+					.getBean(ContactRepository.class);
 			contactRepo.save(sd.getContacts());
-			
-			ServiceLocationRepository slRepo =
-			applicationContext.getBean(ServiceLocationRepository.class);
+
+			RouteRepository routRepo = applicationContext
+					.getBean(RouteRepository.class);
+			routRepo.save(sd.getRoutes());
+
+			ServiceLocationRepository slRepo = applicationContext
+					.getBean(ServiceLocationRepository.class);
 			slRepo.save(sd.getServiceLocations());
-			
-			SdpServiceLocationAssociationRepository sslaRepo =
-			applicationContext.getBean(SdpServiceLocationAssociationRepository.class);
+
+			SdpServiceLocationAssociationRepository sslaRepo = applicationContext
+					.getBean(SdpServiceLocationAssociationRepository.class);
 			sslaRepo.save(sd.getSdpServiceLocationAssociations());
-			
-			AccountContactAssociationRepository acaRepo =
-			applicationContext.getBean(AccountContactAssociationRepository.class);
+
+			AccountContactAssociationRepository acaRepo = applicationContext
+					.getBean(AccountContactAssociationRepository.class);
 			acaRepo.save(sd.getAccountContactAssociations());
-			
-			
-			logger.info("Sync message processing has finished."); 
-			
+
+			SdpRouteAssociationRepository sraRepo = applicationContext
+					.getBean(SdpRouteAssociationRepository.class);
+			sraRepo.save(sd.getSdpRouteAssociations());
+
+			logger.info("Sync message processing has finished.");
+
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			logger.info("Sync message processing has failed."); 
-		}				
+			logger.info("Sync message processing has failed.");
+		}
 	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
 		this.applicationContext = applicationContext;
-		
+
 	}
 
 	public Node getXmlNode() {
@@ -200,5 +215,14 @@ public class SyncMessageProcessor implements Runnable, ApplicationContextAware {
 	public void setServiceLocationProcessorConfigurator(
 			ServiceLocationProcessorConfigurator serviceLocationProcessorConfigurator) {
 		this.serviceLocationProcessorConfigurator = serviceLocationProcessorConfigurator;
+	}
+
+	public RouteProcessorConfigurator getRouteProcessorConfigurator() {
+		return routeProcessorConfigurator;
+	}
+
+	public void setRouteProcessorConfigurator(
+			RouteProcessorConfigurator routeProcessorConfigurator) {
+		this.routeProcessorConfigurator = routeProcessorConfigurator;
 	}
 }
