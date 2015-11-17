@@ -145,6 +145,19 @@
 		<property name="latitudeSelector" value="${dataSync.xpath.serviceLocation.latitudeSelector}"></property>
 		<property name="longitudeSelector" value="${dataSync.xpath.serviceLocation.longitudeSelector}"></property>
 	</bean>
+	
+	<bean id="syncMessageRouteProcessorConfirugarator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.RouteProcessorConfigurator">
+		
+		<property name="routeSelcetor" value="${dataSync.xpath.routeSelector}"></property>
+		<property name="parameterNamespace" value="${dataSync.xpath.route.parameterNamespace}"></property>
+		<property name="mridSelector" value="${dataSync.xpath.route.mridSelector}"></property>
+		<property name="typeSelector" value="${dataSync.xpath.route.typeSelector}"></property>
+		<property name="billingCycleSelector" value="${dataSync.xpath.route.billingCycleSelector}"></property>
+		<property name="readingCycleSelector" value="${dataSync.xpath.route.readingCycleSelector}"></property>
+		<property name="reconciliationLockFlag" value="${dataSync.xpath.route.reconciliationLockFlag}"></property>
+		<property name="statusSelector" value="${dataSync.xpath.route.statusSelector}"></property>
+	</bean>
 </beans>
 
 

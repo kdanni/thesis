@@ -29,13 +29,18 @@ public class AssociationProcessorConfigurator extends BaseConfigurator {
 	private String sdpServiceLocationEndDateSelector;
 	private String sdpServiceLocationStatusSelector;
 	
+	private String sdpRouteAssociationSelector;
+	private String sdpRouteStartDateSelector;
+	private String sdpRouteEndDateSelector;
+	private String sdpRouteStatusSelector;
+		
 	private String accountIdSelector;
 	private String sdpIdSelector;
 	private String meterIdSelector;
 	private String contactIdSelector;
 	private String serviceLocationIdSelector;
-	
-	
+	private String routeIdSelector;
+		
 	@ManagedAttribute
 	public String getAccountIdSelector() {
 		return accountIdSelector;
@@ -252,5 +257,56 @@ public class AssociationProcessorConfigurator extends BaseConfigurator {
 	public void setSdpServiceLocationEndDateSelector(
 			String sdpServiceLocationEndDateSelector) {
 		this.sdpServiceLocationEndDateSelector = sdpServiceLocationEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public String getSdpRouteAssociationSelector() {
+		return sdpRouteAssociationSelector;
+	}
+
+	@ManagedAttribute
+	public void setSdpRouteAssociationSelector(
+			String sdpRouteAssociationSelector) {
+		this.sdpRouteAssociationSelector = sdpRouteAssociationSelector;
+	}
+
+	@ManagedAttribute
+	public String getSdpRouteStartDateSelector() {
+		return sdpRouteStartDateSelector;
+	}
+
+	@ManagedAttribute
+	public void setSdpRouteStartDateSelector(String sdpRouteStartDateSelector) {
+		this.sdpRouteStartDateSelector = sdpRouteStartDateSelector;
+	}
+
+	@ManagedAttribute
+	public String getSdpRouteEndDateSelector() {
+		return sdpRouteEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public void setSdpRouteEndDateSelector(String sdpRouteEndDateSelector) {
+		this.sdpRouteEndDateSelector = sdpRouteEndDateSelector;
+	}
+
+	@ManagedAttribute
+	public String getSdpRouteStatusSelector() {
+		return sdpRouteStatusSelector;
+	}
+
+	@ManagedAttribute
+	public void setSdpRouteStatusSelector(String sdpRouteStatusSelector) {
+		this.sdpRouteStatusSelector = sdpRouteStatusSelector;
+	}
+
+	@ManagedAttribute
+	public String getRouteIdSelector() {
+		return routeIdSelector;
+	}
+
+	@ManagedAttribute
+	public void setRouteIdSelector(String routeIdSelector) {
+		this.routeIdSelector = routeIdSelector;
 	}
 }
