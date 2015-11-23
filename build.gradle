@@ -12,6 +12,9 @@ allprojects {
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'maven'
+	//apply plugin: 'eclipse-wtp'
+	//apply plugin: 'war'
+	//apply plugin: 'jetty'
 
 	jar {
 		version =  '0.1.0'
@@ -112,19 +115,25 @@ subprojects {
 		ext.springVersion = '4.2.2.RELEASE'
 		providedCompile "org.springframework:spring-context:$springVersion"
 		providedCompile "org.springframework:spring-jdbc:$springVersion" 
-		//providedCompile "org.springframework:spring-webmvc:$springVersion"
+		providedCompile "org.springframework:spring-webmvc:$springVersion"
 		
 		ext.SpringDataJPAVersion = '1.9.0.RELEASE'
 		providedCompile "org.springframework.data:spring-data-jpa:$SpringDataJPAVersion"
 		
 		ext.springWSVersion = '2.2.2.RELEASE'
 		providedCompile "org.springframework.ws:spring-xml:$springWSVersion"
-						
+					
+		ext.jettyVersion = '9.3.0.M2'
+		//providedCompile "org.eclipse.jetty:jetty-server:$jettyVersion"
+		//providedCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+		//providedCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
+		//providedCompile "org.eclipse.jetty:jetty-util:$jettyVersion"
 		
 		ext.springIntegrationVersion = '4.2.1.RELEASE'
 		providedCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-file:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-xml:$springIntegrationVersion"
+		providedCompile "org.springframework.integration:spring-integration-ws:$springIntegrationVersion"
 		
 		testLib "org.springframework:spring-test:$springVersion"
 		
@@ -185,6 +194,11 @@ project(':data-synchronization') {
 		compile  project(':data-model')
 		compile  project(':util-lib')
     }
+    eclipse {
+		project {
+			//natures 'org.eclipse.wst.common.project.facet.core.nature'			
+		}
+	}
 }
 project(':rule-engine') {
     jar {
