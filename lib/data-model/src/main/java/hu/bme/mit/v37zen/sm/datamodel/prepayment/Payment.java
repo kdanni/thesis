@@ -9,7 +9,9 @@ public class Payment extends BaseEntity {
 
 	private static final long serialVersionUID = 5346031537413666843L;
 
-	private double balance;
+	private double value;
+	
+	private String curency;
 	
 	private Date date;
 
@@ -17,18 +19,27 @@ public class Payment extends BaseEntity {
 		super();
 	}
 
-	public Payment(double balance, Date date) {
+	public Payment(double balance, String curency, Date date) {
 		super();
-		this.balance = balance;
+		this.value = balance;
 		this.date = date;
+		this.curency = curency;
 	}
 
-	public double getBalance() {
-		return balance;
+	public double getValue() {
+		return value;
 	}
 
-	public void setBalance(double balance) {
-		this.balance = balance;
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public String getCurency() {
+		return curency;
+	}
+
+	public void setCurency(String curency) {
+		this.curency = curency;
 	}
 
 	public Date getDate() {
@@ -43,10 +54,11 @@ public class Payment extends BaseEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		long temp;
-		temp = Double.doubleToLongBits(balance);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((curency == null) ? 0 : curency.hashCode());
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(value);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -59,20 +71,26 @@ public class Payment extends BaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Payment other = (Payment) obj;
-		if (Double.doubleToLongBits(balance) != Double
-				.doubleToLongBits(other.balance))
+		if (curency == null) {
+			if (other.curency != null)
+				return false;
+		} else if (!curency.equals(other.curency))
 			return false;
 		if (date == null) {
 			if (other.date != null)
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
+		if (Double.doubleToLongBits(value) != Double
+				.doubleToLongBits(other.value))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Payment [balance=" + balance + ", date=" + date + ", id=" + id
-				+ ", mRID=" + mRID + "]";
+		return "Payment [value=" + value + ", curency=" + curency + ", date="
+				+ date + ", id=" + id + ", mRID=" + mRID + "]";
 	}
+
 }
