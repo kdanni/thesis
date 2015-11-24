@@ -25,7 +25,7 @@
 	<!-- XML Unmarshaller + persiter -->
 	
 	<bean id="syncMessageProcessor" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.datasync.SyncMessageProcessor">
+			class="hu.bme.mit.v37zen.prepayment.datasync.SyncMessageProcessorImpl">
 		<constructor-arg name="namespaces">
 			<ref bean="namespaceHandler" />
 		</constructor-arg>
