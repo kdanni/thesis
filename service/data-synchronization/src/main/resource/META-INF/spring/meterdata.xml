@@ -24,7 +24,7 @@
 	<!-- XML Unmarshaller + persiter -->
 	
 	<bean id="meterDataMessageProcessor" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.meterdatasync.MeterDataProcessor">
+			class="hu.bme.mit.v37zen.prepayment.meterdatasync.MeterDataProcessorImpl">
 		<constructor-arg name="namespaceHandler">
 			<ref bean="namespaceHandler" />
 		</constructor-arg>	
