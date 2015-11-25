@@ -132,6 +132,7 @@ subprojects {
 		ext.springIntegrationVersion = '4.2.1.RELEASE'
 		providedCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-file:$springIntegrationVersion"
+		providedCompile "org.springframework.integration:spring-integration-jms:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-xml:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-ws:$springIntegrationVersion"
 		
