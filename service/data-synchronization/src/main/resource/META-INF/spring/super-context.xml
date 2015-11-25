@@ -29,6 +29,7 @@
     
     <import resource="classpath:META-INF/spring/syncdata.xml"/>
     <import resource="classpath:META-INF/spring/meterdata.xml"/>
+    <import resource="classpath:META-INF/spring/paymentdata.xml"/>
     
     
     <import resource="classpath:META-INF/spring/jdbc-jpa.xml"/>

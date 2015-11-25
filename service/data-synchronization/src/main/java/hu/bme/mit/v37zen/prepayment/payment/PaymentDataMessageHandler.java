@@ -16,6 +16,10 @@ public class PaymentDataMessageHandler implements ApplicationContextAware {
 	
 	private ApplicationContext applicationContext;
 	
+	public PaymentDataMessageHandler(ThreadPoolTaskExecutor taskExecutorPool) {
+		this.taskExecutor = taskExecutorPool;
+	}
+	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {

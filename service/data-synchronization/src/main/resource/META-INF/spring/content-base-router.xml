@@ -27,6 +27,7 @@
 			<map>
 				<entry key="syncMessageRoutingRule" value-ref="syncMessageRoutingRule" />
 				<entry key="meterDataRoutingRule" value-ref="meterDataRoutingRule" />
+				<entry key="paymentDataRoutingRule" value-ref="paymentDataRoutingRule" />
 			</map>
 		</constructor-arg>
 		
@@ -65,8 +66,8 @@
 			<ref bean="namespaceHandler" />
 			<!-- Defined in: META-INF/context.xml -->
 		</constructor-arg>
-		<constructor-arg name="contentSelectorString" value="${payment.xpath.paymentDataMessageSelectorString}" />
-		<constructor-arg name="exceptedContent" value="${payment.xpath.paymentDataMessageDistinctiveValue}" />
+		<constructor-arg name="contentSelectorString" value="${paymentData.xpath.paymentDataMessageSelectorString}" />
+		<constructor-arg name="exceptedContent" value="${paymentData.xpath.paymentDataMessageDistinctiveValue}" />
 		<constructor-arg name="route">
 			<ref bean="toPaymentDataHandler"/>
 		</constructor-arg>

@@ -29,6 +29,10 @@ public class PaymentDataProcessoetrImpl implements PaymentDataProcessor {
 	private PaymentConfigurator paymentConfigurator;
 	
 	private ApplicationContext applicationContext;
+	
+    public PaymentDataProcessoetrImpl(NamespaceHandler namespaceHandler) {
+		this.namespaces = namespaceHandler;
+	}
 		
 	@Override
 	public void run() {

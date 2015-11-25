@@ -41,7 +41,7 @@ public class PaymentNodeMapper extends AbstractNodeMapper<Payment> {
 		buff.append("Payment currency: "+ currency + '\n');
 		payment.setMRID(accId);
 		
-		Date date = XPathUtil.evaluateAsDate(paymentConfigurator.getValueSelector(),
+		Date date = XPathUtil.evaluateAsDate(paymentConfigurator.getDateSelector(),
 				paymentConfigurator.getDateFormat(), node, namespaces.getNamespaces());
 		buff.append("Payment date: "+ date + '\n'); 
 		payment.setDate(date);
@@ -49,6 +49,8 @@ public class PaymentNodeMapper extends AbstractNodeMapper<Payment> {
 		String status = evaluate(paymentConfigurator.getStatusSelector(), node);
 		buff.append("Route Status: "+ status + '\n');
 		payment.setStatus(status);
+		
+		logger.debug("[New Payment:]\n" + buff.toString());
 		
 		return payment;
 	}

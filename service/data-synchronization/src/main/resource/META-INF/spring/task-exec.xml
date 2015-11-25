@@ -37,7 +37,7 @@
 	    <property name="maxPoolSize" value="${paymentData.ThreadPoolTaskExecutor.maxPoolSize}" />
 	    <property name="queueCapacity" value="${paymentData.ThreadPoolTaskExecutor.queueCapacity}" />
 	    
-	    <qualifier value="meterDataThreadPoolTaskExecutor"></qualifier>
+	    <qualifier value="paymentDataThreadPoolTaskExecutor"></qualifier>
 	</bean>
 	
 	<!--  /Task Executors  -->	

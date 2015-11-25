@@ -14,7 +14,7 @@
 				input-channel="toPaymentDataHandler">
 	</int:service-activator>
 	<bean id="paymentMessageHandler"
-			class="hu.bme.mit.v37zen.prepayment.meterdatasync.MeterDataMessageHandler">
+			class="hu.bme.mit.v37zen.prepayment.payment.PaymentDataMessageHandler">
 			<constructor-arg name="taskExecutorPool">
 				<ref bean="paymentDataThreadPoolTaskExecutor" />
 				<!-- Defined in: META-INF/task-exec.xml -->
@@ -38,13 +38,13 @@
 	<bean id="paymentConfigurator"  
 			class="hu.bme.mit.v37zen.prepayment.payment.PaymentConfigurator">
 			
-		<property name="paymentSelector" value="${payment.xpath.paymentSelector}"></property>
-		<property name="accountIdSelector" value="${payment.xpath.accountIdSelector}"></property>
-		<property name="statusSelector" value="${payment.xpath.statusSelector}"></property>
-		<property name="valueSelector" value="${payment.xpath.valueSelector}"></property>
-		<property name="curencySelector" value="${payment.xpath.curencySelector}"></property>
-		<property name="dateSelector" value="${payment.xpath.dateSelector}"></property>
-		<property name="dateFormatPattern" value="${payment.timeformat}"></property>
+		<property name="paymentSelector" value="${paymentData.xpath.paymentSelector}"></property>
+		<property name="accountIdSelector" value="${paymentData.xpath.accountIdSelector}"></property>
+		<property name="statusSelector" value="${paymentData.xpath.statusSelector}"></property>
+		<property name="valueSelector" value="${paymentData.xpath.valueSelector}"></property>
+		<property name="curencySelector" value="${paymentData.xpath.curencySelector}"></property>
+		<property name="dateSelector" value="${paymentData.xpath.dateSelector}"></property>
+		<property name="dateFormatPattern" value="${paymentData.timeformat}"></property>
 	</bean>	
 </beans>
 
