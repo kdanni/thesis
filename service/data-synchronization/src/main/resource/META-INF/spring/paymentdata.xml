@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd">
+	
+	<!-- Service Activator -->
+	<int:service-activator id="PaymentDataHandler" 
+				ref="paymentMessageHandler"
+				method="process"
+				input-channel="toPaymentDataHandler">
+	</int:service-activator>
+	<bean id="paymentMessageHandler"
+			class="hu.bme.mit.v37zen.prepayment.meterdatasync.MeterDataMessageHandler">
+			<constructor-arg name="taskExecutorPool">
+				<ref bean="paymentDataThreadPoolTaskExecutor" />
+				<!-- Defined in: META-INF/task-exec.xml -->
+			</constructor-arg>
+	</bean>
+	
+	<!-- XML Unmarshaller + persiter -->
+	
+	<bean id="paymentDataMessageProcessor" scope="prototype"
+			class="hu.bme.mit.v37zen.prepayment.payment.PaymentDataProcessoetrImpl">
+		<constructor-arg name="namespaceHandler">
+			<ref bean="namespaceHandler" />
+		</constructor-arg>	
+		<property name="paymentConfigurator">
+			<ref bean="paymentConfigurator" />
+		</property>
+	</bean>
+	
+	<!-- Configurator -->
+		
+	<bean id="paymentConfigurator"  
+			class="hu.bme.mit.v37zen.prepayment.payment.PaymentConfigurator">
+			
+		<property name="paymentSelector" value="${payment.xpath.paymentSelector}"></property>
+		<property name="accountIdSelector" value="${payment.xpath.accountIdSelector}"></property>
+		<property name="statusSelector" value="${payment.xpath.statusSelector}"></property>
+		<property name="valueSelector" value="${payment.xpath.valueSelector}"></property>
+		<property name="curencySelector" value="${payment.xpath.curencySelector}"></property>
+		<property name="dateSelector" value="${payment.xpath.dateSelector}"></property>
+		<property name="dateFormatPattern" value="${payment.timeformat}"></property>
+	</bean>	
+</beans>
+
+

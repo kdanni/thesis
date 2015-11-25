@@ -60,9 +60,23 @@
 		</constructor-arg>
 	</bean>
 	
+	<bean id="paymentDataRoutingRule"  class="hu.bme.mit.v37zen.prepayment.integration.xpath.RoutingRule">
+		<constructor-arg name="namespaces">
+			<ref bean="namespaceHandler" />
+			<!-- Defined in: META-INF/context.xml -->
+		</constructor-arg>
+		<constructor-arg name="contentSelectorString" value="${payment.xpath.paymentDataMessageSelectorString}" />
+		<constructor-arg name="exceptedContent" value="${payment.xpath.paymentDataMessageDistinctiveValue}" />
+		<constructor-arg name="route">
+			<ref bean="toPaymentDataHandler"/>
+		</constructor-arg>
+	</bean>
+	
 	<!-- "RoutingTable" END -->
 	
 	<int:channel id="toSyncDataHandler" />
 	
 	<int:channel id="toMeterDataHandler" />
+	
+	<int:channel id="toPaymentDataHandler" />
 </beans>

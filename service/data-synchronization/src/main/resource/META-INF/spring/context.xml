@@ -32,6 +32,7 @@
             <map>
                 <entry key="bean:name=DataSyncThreadPoolTaskExecutor" value-ref="dataSyncThreadPoolTaskExecutor"/>
                 <entry key="bean:name=MeterDataThreadPoolTaskExecutor" value-ref="meterDataThreadPoolTaskExecutor"/>
+                <entry key="bean:name=paymentDataThreadPoolTaskExecutor" value-ref="meterDataThreadPoolTaskExecutor"/>
             </map>
         </property>
     </bean>

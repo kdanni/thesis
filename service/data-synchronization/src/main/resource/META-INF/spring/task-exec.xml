@@ -32,6 +32,13 @@
 	    <qualifier value="meterDataThreadPoolTaskExecutor"></qualifier>
 	</bean>
 	
+	<bean id="paymentDataThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="${paymentData.ThreadPoolTaskExecutor.corePoolSize}" />
+	    <property name="maxPoolSize" value="${paymentData.ThreadPoolTaskExecutor.maxPoolSize}" />
+	    <property name="queueCapacity" value="${paymentData.ThreadPoolTaskExecutor.queueCapacity}" />
+	    
+	    <qualifier value="meterDataThreadPoolTaskExecutor"></qualifier>
+	</bean>
 	
 	<!--  /Task Executors  -->	
 		

@@ -16,7 +16,7 @@ public class PaymentConfigurator extends BaseConfigurator {
 	private String curencySelector;
 	private String dateSelector;
 
-	private String parameterNamespace;
+	//private String parameterNamespace;
 
 	@ManagedAttribute
 	public String getPaymentSelector() {
@@ -78,14 +78,14 @@ public class PaymentConfigurator extends BaseConfigurator {
 		this.dateSelector = dateSelector;
 	}
 
-	@ManagedAttribute
-	public String getParameterNamespace() {
-		return parameterNamespace;
-	}
-
-	@ManagedAttribute
-	public void setParameterNamespace(String parameterNamespace) {
-		this.parameterNamespace = parameterNamespace;
-	}
+//	@ManagedAttribute
+//	public String getParameterNamespace() {
+//		return parameterNamespace;
+//	}
+//
+//	@ManagedAttribute
+//	public void setParameterNamespace(String parameterNamespace) {
+//		this.parameterNamespace = parameterNamespace;
+//	}
 
 }

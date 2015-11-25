@@ -13,6 +13,7 @@
                 <value>classpath:META-INF/properties/xpath.properties</value>
                 <value>classpath:META-INF/properties/jdbc.properties</value>
                 <value>classpath:META-INF/properties/jpa.properties</value>
+                <value>classpath:META-INF/properties/payment.properties</value>
             </list>
         </property> 
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
