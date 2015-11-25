@@ -17,7 +17,8 @@
         </logger>
         <logger name="org.hibernate" level="INFO">
         </logger>
-        
+        <logger name="org.apache.activemq" level="WARN">
+        </logger>
 
         <!-- root level logger support following level attributes: TRACE, DEBUG,
                 INFO, WARN, ERROR, ALL or OFF. Using root logger, you can handle level of

@@ -136,6 +136,10 @@ subprojects {
 		providedCompile "org.springframework.integration:spring-integration-xml:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-ws:$springIntegrationVersion"
 		
+		providedCompile 'org.apache.activemq:activemq-core:5.7.0'
+		providedCompile 'org.apache.activemq:activemq-client:5.12.1'
+		
+		
 		testLib "org.springframework:spring-test:$springVersion"
 		
 		ext.hibernateVersion = '4.3.8.Final'
