@@ -20,7 +20,10 @@ public class PrepaymentAccount extends BaseEntity {
 	@JoinColumn(name="accountSDPAssociation_id")
 	private AccountSDPAssociation accountSDPAssociation;
 	
-	boolean active;
+	private String sdpMRID;
+	private String accountMRID;
+	
+	private boolean active;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
@@ -84,16 +87,35 @@ public class PrepaymentAccount extends BaseEntity {
 		this.status = status;
 	}
 
+	public String getSdpMRID() {
+		return sdpMRID;
+	}
+
+	public void setSdpMRID(String sdpMRID) {
+		this.sdpMRID = sdpMRID;
+	}
+
+	public String getAccountMRID() {
+		return accountMRID;
+	}
+
+	public void setAccountMRID(String accountMRID) {
+		this.accountMRID = accountMRID;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result
+				+ ((accountMRID == null) ? 0 : accountMRID.hashCode());
 		result = prime
 				* result
 				+ ((accountSDPAssociation == null) ? 0 : accountSDPAssociation
 						.hashCode());
 		result = prime * result + (active ? 1231 : 1237);
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result + ((sdpMRID == null) ? 0 : sdpMRID.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -109,6 +131,11 @@ public class PrepaymentAccount extends BaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		PrepaymentAccount other = (PrepaymentAccount) obj;
+		if (accountMRID == null) {
+			if (other.accountMRID != null)
+				return false;
+		} else if (!accountMRID.equals(other.accountMRID))
+			return false;
 		if (accountSDPAssociation == null) {
 			if (other.accountSDPAssociation != null)
 				return false;
@@ -120,6 +147,11 @@ public class PrepaymentAccount extends BaseEntity {
 			if (other.endDate != null)
 				return false;
 		} else if (!endDate.equals(other.endDate))
+			return false;
+		if (sdpMRID == null) {
+			if (other.sdpMRID != null)
+				return false;
+		} else if (!sdpMRID.equals(other.sdpMRID))
 			return false;
 		if (startDate == null) {
 			if (other.startDate != null)
@@ -137,9 +169,10 @@ public class PrepaymentAccount extends BaseEntity {
 	@Override
 	public String toString() {
 		return "PrepaymentAccount [accountSDPAssociation="
-				+ accountSDPAssociation + ", active=" + active + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", status=" + status
-				+ ", id=" + id + ", mRID=" + mRID + "]";
+				+ accountSDPAssociation + ", sdpMRID=" + sdpMRID
+				+ ", accountMRID=" + accountMRID + ", active=" + active
+				+ ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", status=" + status + ", id=" + id + ", mRID=" + mRID + "]";
 	}
     
     

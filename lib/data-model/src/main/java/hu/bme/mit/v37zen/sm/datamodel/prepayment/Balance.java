@@ -3,6 +3,8 @@ package hu.bme.mit.v37zen.sm.datamodel.prepayment;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Balance extends BaseEntity {
@@ -11,6 +13,7 @@ public class Balance extends BaseEntity {
 
 	private double balance;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	
 	public Balance() {
