@@ -18,9 +18,18 @@
 				filter="fileFilter"
 				directory="${file.input.directory}" 
 				channel="fileToTransformerChannel">
+				<!-- channel="fileToMoverChannel"> -->
 	    <int:poller id="poller" fixed-rate="${file.input.pollrate}" />
 	</int-file:inbound-channel-adapter>
 	<bean id="fileFilter" class="hu.bme.mit.v37zen.prepayment.util.integration.ModifiedFileFilter"/>
+
+	<int:channel id="fileToMoverChannel"></int:channel>	
+	
+	<int-file:outbound-gateway id="mover" 
+		request-channel="fileToMoverChannel"
+	    reply-channel="fileToTransformerChannel"
+	    directory="${file.output.directory}"
+	    mode="REPLACE" delete-source-files="true"/>
 
 	<int:channel id="fileToTransformerChannel"></int:channel>
 
