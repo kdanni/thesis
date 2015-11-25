@@ -8,7 +8,6 @@ import hu.bme.mit.v37zen.prepayment.datasync.configurators.RouteProcessorConfigu
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.SdpProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.configurators.ServiceLocationProcessorConfigurator;
 import hu.bme.mit.v37zen.prepayment.datasync.nodemappers.SyncMessageMapper;
-import hu.bme.mit.v37zen.prepayment.datasync.nodemappers.SyncMessageMapper.SyncData;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountContactAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
@@ -21,11 +20,19 @@ import hu.bme.mit.v37zen.sm.jpa.repositories.SdpRouteAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.SdpServiceLocationAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceLocationRepository;
+import hu.bme.mit.v37zen.sm.messaging.SyncData;
+import hu.bme.mit.v37zen.sm.messaging.impl.BasicDataProcessRequest;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.w3c.dom.Node;
 
 /**
@@ -80,7 +87,7 @@ public class SyncMessageProcessorImpl implements SyncMessageProcessor {
 		try {
 			logger.info("Sync message processing has started.");
 
-			SyncData sd = new SyncMessageMapper(namespaces,
+			final SyncData sd = new SyncMessageMapper(namespaces,
 					accountProcessorConfigurator, sdpProcessorConfigurator,
 					associationProcessorConfigurator,
 					meterProcessorConfirugarator, contactProcessorConfigurator,
@@ -131,6 +138,15 @@ public class SyncMessageProcessorImpl implements SyncMessageProcessor {
 					.getBean(SdpRouteAssociationRepository.class);
 			sraRepo.save(sd.getSdpRouteAssociations());
 
+			JmsTemplate jmsTemplate = applicationContext.getBean(JmsTemplate.class);
+			jmsTemplate.send(new MessageCreator() {
+				@Override
+				public Message createMessage(Session session) throws JMSException {					
+					return session.createObjectMessage(new BasicDataProcessRequest<SyncData>(sd));
+				}
+			});
+			
+			
 			logger.info("Sync message processing has finished.");
 
 		} catch (Exception e) {

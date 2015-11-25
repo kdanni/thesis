@@ -24,7 +24,7 @@
 	<!-- XML Unmarshaller + persiter -->
 	
 	<bean id="paymentDataMessageProcessor" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.payment.PaymentDataProcessoetrImpl">
+			class="hu.bme.mit.v37zen.prepayment.payment.PaymentDataProcessorImpl">
 		<constructor-arg name="namespaceHandler">
 			<ref bean="namespaceHandler" />
 		</constructor-arg>	

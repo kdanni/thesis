@@ -19,6 +19,7 @@ import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpRouteAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpServiceLocationAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
+import hu.bme.mit.v37zen.sm.messaging.SyncData;
 
 import java.util.List;
 import java.util.Map;
@@ -63,116 +64,6 @@ public class SyncMessageMapper {
 		this.serviceLocationProcessorConfigurator = serviceLocationProcessorConfigurator;
 		this.routeProcessorConfigurator = routeProcessorConfigurator; 
 		
-	}
-	
-	public static class SyncData {
-		
-		private List<Account> Accounts;
-		private List<ServiceDeliveryPoint> ServiceDeliveryPoints;
-		private List<MeterAsset> MeterAssets;
-		private List<Contact> Contacts;
-		private List<ServiceLocation> ServiceLocations;
-		private List<Route> Routes;
-		private List<SdpMeterAssociation> SdpMeterAssociations;
-		private List<AccountSDPAssociation> AccountSDPAssociations;
-		private List<SdpServiceLocationAssociation> SdpServiceLocationAssociations;
-		private List<AccountContactAssociation> AccountContactAssociations;
-		private List<SdpRouteAssociation> SdpRouteAssociations;
-		
-		public List<Account> getAccounts() {
-			return Accounts;
-		}
-		public void setAccounts(List<Account> accounts) {
-			Accounts = accounts;
-		}
-		public List<ServiceDeliveryPoint> getServiceDeliveryPoints() {
-			return ServiceDeliveryPoints;
-		}
-		public void setServiceDeliveryPoints(
-				List<ServiceDeliveryPoint> serviceDeliveryPoints) {
-			ServiceDeliveryPoints = serviceDeliveryPoints;
-		}
-		public List<MeterAsset> getMeterAssets() {
-			return MeterAssets;
-		}
-		public void setMeterAssets(List<MeterAsset> meterAssets) {
-			MeterAssets = meterAssets;
-		}
-		public List<Contact> getContacts() {
-			return Contacts;
-		}
-		public void setContacts(List<Contact> contacts) {
-			Contacts = contacts;
-		}
-		public List<ServiceLocation> getServiceLocations() {
-			return ServiceLocations;
-		}
-		public void setServiceLocations(List<ServiceLocation> serviceLocations) {
-			ServiceLocations = serviceLocations;
-		}
-		public List<SdpMeterAssociation> getSdpMeterAssociations() {
-			return SdpMeterAssociations;
-		}
-		public void setSdpMeterAssociations(
-				List<SdpMeterAssociation> sdpMeterAssociations) {
-			SdpMeterAssociations = sdpMeterAssociations;
-		}
-		public List<AccountSDPAssociation> getAccountSDPAssociations() {
-			return AccountSDPAssociations;
-		}
-		public void setAccountSDPAssociations(
-				List<AccountSDPAssociation> accountSDPAssociations) {
-			AccountSDPAssociations = accountSDPAssociations;
-		}
-		public List<SdpServiceLocationAssociation> getSdpServiceLocationAssociations() {
-			return SdpServiceLocationAssociations;
-		}
-		public void setSdpServiceLocationAssociations(
-				List<SdpServiceLocationAssociation> sdpServiceLocationAssociations) {
-			SdpServiceLocationAssociations = sdpServiceLocationAssociations;
-		}
-		public List<AccountContactAssociation> getAccountContactAssociations() {
-			return AccountContactAssociations;
-		}
-		public void setAccountContactAssociations(
-				List<AccountContactAssociation> accountContactAssociations) {
-			AccountContactAssociations = accountContactAssociations;
-		}
-		public SyncData(
-				List<Account> accounts,
-				List<ServiceDeliveryPoint> serviceDeliveryPoints,
-				List<MeterAsset> meterAssets,
-				List<Contact> contacts,
-				List<ServiceLocation> serviceLocations,
-				List<Route> routes,
-				List<SdpMeterAssociation> sdpMeterAssociations,
-				List<AccountSDPAssociation> accountSDPAssociations,
-				List<SdpServiceLocationAssociation> sdpServiceLocationAssociations,
-				List<AccountContactAssociation> accountContactAssociations,
-				List<SdpRouteAssociation> sdpRouteAssociations) {
-			super();
-			Accounts = accounts;
-			ServiceDeliveryPoints = serviceDeliveryPoints;
-			MeterAssets = meterAssets;
-			Contacts = contacts;
-			ServiceLocations = serviceLocations;
-			SdpMeterAssociations = sdpMeterAssociations;
-			AccountSDPAssociations = accountSDPAssociations;
-			SdpServiceLocationAssociations = sdpServiceLocationAssociations;
-			AccountContactAssociations = accountContactAssociations;
-		}
-		public List<Route> getRoutes() {
-			return Routes;
-		}
-		public void setRoutes(List<Route> routes) {
-			Routes = routes;
-		}
-		public List<SdpRouteAssociation> getSdpRouteAssociations() {
-			return SdpRouteAssociations;
-		}
-		public void setSdpRouteAssociations(List<SdpRouteAssociation> sdpRouteAssociations) {
-			SdpRouteAssociations = sdpRouteAssociations;
-		}		
 	}
 	
 	public SyncData mapSyncMessage(Node syncMessage){

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${jms.broker.endpoint}" />
+	</bean>
+	<bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="${jms.queue.dataprocess.control}" />
+	</bean>
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="destination" />
+	</bean>
+	
+	
+
+<!-- 	<int-jms:message-driven-channel-adapter id="jmsIn" destination="destination" -->
+<!-- 	    channel="toPreprocessorChannel"/> -->
+
+<!-- 	<int:channel id="toPreprocessorChannel"></int:channel> -->
+	
+<!-- 	<int:service-activator id="preprocessorActivator"  -->
+<!-- 				ref="preprocessor" -->
+<!-- 				method="process" -->
+<!-- 				input-channel="toPreprocessorChannel"> -->
+<!-- 	</int:service-activator> -->
+<!-- 	<bean id="preprocessor" -->
+<!-- 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.Preprocessor"> -->
+<!--  			<constructor-arg name="taskExecutorPool"> -->
+<!--  				<ref bean="dataSyncThreadPoolTaskExecutor" /> -->
+<!--  				Defined in: META-INF/task-exec.xml -->
+<!--  			</constructor-arg> -->
+<!-- 	</bean> -->
+</beans>

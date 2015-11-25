@@ -3,24 +3,31 @@ package hu.bme.mit.v37zen.prepayment.payment;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PaymentRepository;
+import hu.bme.mit.v37zen.sm.messaging.impl.BasicDataProcessRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.xml.xpath.XPathException;
 import org.springframework.xml.xpath.XPathExpression;
 import org.springframework.xml.xpath.XPathExpressionFactory;
 import org.springframework.xml.xpath.XPathParseException;
 import org.w3c.dom.Node;
 
-public class PaymentDataProcessoetrImpl implements PaymentDataProcessor {
+public class PaymentDataProcessorImpl implements PaymentDataProcessor {
 
-	public static Logger logger = LoggerFactory.getLogger(PaymentDataProcessoetrImpl.class);
+	public static Logger logger = LoggerFactory.getLogger(PaymentDataProcessorImpl.class);
 	
 	private Node xmlNode;
 	
@@ -30,7 +37,7 @@ public class PaymentDataProcessoetrImpl implements PaymentDataProcessor {
 	
 	private ApplicationContext applicationContext;
 	
-    public PaymentDataProcessoetrImpl(NamespaceHandler namespaceHandler) {
+    public PaymentDataProcessorImpl(NamespaceHandler namespaceHandler) {
 		this.namespaces = namespaceHandler;
 	}
 		
@@ -58,6 +65,19 @@ public class PaymentDataProcessoetrImpl implements PaymentDataProcessor {
 			if(payments != null && !payments.isEmpty()){
 				PaymentRepository repo = applicationContext.getBean(PaymentRepository.class);
 				repo.save(payments);
+				
+				JmsTemplate jmsTemplate = applicationContext.getBean(JmsTemplate.class);
+				for (final Payment payment : payments) {
+					jmsTemplate.send(new MessageCreator() {
+						@Override
+						public Message createMessage(Session session)
+								throws JMSException {
+							return session
+									.createObjectMessage(new BasicDataProcessRequest<Payment>(
+											payment));
+						}
+					});
+				}
 			}
 			
 			logger.info("Payment reading processing has finished."); 

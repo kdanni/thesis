@@ -13,7 +13,8 @@
                 <value>classpath:META-INF/properties/xpath.properties</value>
                 <value>classpath:META-INF/properties/jdbc.properties</value>
                 <value>classpath:META-INF/properties/jpa.properties</value>
-                <value>classpath:META-INF/properties/payment.properties</value>
+                <value>classpath:META-INF/properties/jms.properties</value>
+                <value>classpath:META-INF/properties/payment.properties</value>                
             </list>
         </property> 
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
@@ -31,7 +32,7 @@
     <import resource="classpath:META-INF/spring/meterdata.xml"/>
     <import resource="classpath:META-INF/spring/paymentdata.xml"/>
     
-    
+    <import resource="classpath:META-INF/spring/jms.xml"/>
     <import resource="classpath:META-INF/spring/jdbc-jpa.xml"/>
 
 </beans>

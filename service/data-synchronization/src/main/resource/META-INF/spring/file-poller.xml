@@ -16,9 +16,9 @@
 
 	<int-file:inbound-channel-adapter id="filesInChannel"
 				filter="fileFilter"
-				directory="${file.input.directory}" 
-				channel="fileToTransformerChannel">
-				<!-- channel="fileToMoverChannel"> -->
+				directory="${file.input.directory}"
+				channel="fileToMoverChannel">
+<!-- 				channel="fileToTransformerChannel"> -->
 	    <int:poller id="poller" fixed-rate="${file.input.pollrate}" />
 	</int-file:inbound-channel-adapter>
 	<bean id="fileFilter" class="hu.bme.mit.v37zen.prepayment.util.integration.ModifiedFileFilter"/>
