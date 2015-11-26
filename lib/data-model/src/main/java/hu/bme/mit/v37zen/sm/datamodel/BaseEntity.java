@@ -1,4 +1,4 @@
-package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
+package hu.bme.mit.v37zen.sm.datamodel;
 import java.io.Serializable;  
 
 import javax.persistence.Basic;  

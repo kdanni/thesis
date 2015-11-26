@@ -1,4 +1,4 @@
-package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
+package hu.bme.mit.v37zen.sm.datamodel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -32,7 +32,7 @@ public class BaseAssociation implements Serializable {
     protected Date startDate;
     
     @Temporal(TemporalType.TIMESTAMP)
-	private Date endDate;
+    protected Date endDate;
     
 	protected String status;
 	

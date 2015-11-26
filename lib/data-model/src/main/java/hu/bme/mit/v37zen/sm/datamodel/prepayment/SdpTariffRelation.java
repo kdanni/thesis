@@ -1,88 +1,77 @@
-package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
+package hu.bme.mit.v37zen.sm.datamodel.prepayment;
 
 import hu.bme.mit.v37zen.sm.datamodel.BaseAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-@Entity
-public class SdpRouteAssociation extends BaseAssociation {
+public class SdpTariffRelation extends BaseAssociation {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8216971786866716422L;
 
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="sdp_id")
 	private ServiceDeliveryPoint serviceDeliveryPoint;
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="meter_id")
-	private Route route;
-
-	private String sdpMRID;
-	private String routeMRID;
+	@JoinColumn(name="tarif_id")
+	private Tariff account;
 	
-	public SdpRouteAssociation() {
+	private String sdpMRID;
+	private String tarifMRID;
+	
+	public SdpTariffRelation() {
 		super();
-		
 	}
-
-	public SdpRouteAssociation(Date startDate, String status,
-			String sdpMRID, String routeMRID) {
+		
+	public SdpTariffRelation(Date startDate, String status, String sdpMRID,
+			String tarifMRID) {
 		super(startDate, status);
 		this.sdpMRID = sdpMRID;
-		this.routeMRID = routeMRID;
+		this.tarifMRID = tarifMRID;
 	}
 
 	public ServiceDeliveryPoint getServiceDeliveryPoint() {
 		return serviceDeliveryPoint;
 	}
-
 	public void setServiceDeliveryPoint(ServiceDeliveryPoint serviceDeliveryPoint) {
 		this.serviceDeliveryPoint = serviceDeliveryPoint;
 	}
-
-	public Route getRoute() {
-		return route;
+	public Tariff getAccount() {
+		return account;
 	}
-
-	public void setRoute(Route route) {
-		this.route = route;
+	public void setAccount(Tariff account) {
+		this.account = account;
 	}
-
 	public String getSdpMRID() {
 		return sdpMRID;
 	}
-
 	public void setSdpMRID(String sdpMRID) {
 		this.sdpMRID = sdpMRID;
 	}
-
-	public String getRouteMRID() {
-		return routeMRID;
+	public String getTarifMRID() {
+		return tarifMRID;
 	}
-
-	public void setRouteMRID(String routeMRID) {
-		this.routeMRID = routeMRID;
+	public void setTarifMRID(String tarifMRID) {
+		this.tarifMRID = tarifMRID;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((route == null) ? 0 : route.hashCode());
-		result = prime * result
-				+ ((routeMRID == null) ? 0 : routeMRID.hashCode());
+		result = prime * result + ((account == null) ? 0 : account.hashCode());
 		result = prime * result + ((sdpMRID == null) ? 0 : sdpMRID.hashCode());
 		result = prime
 				* result
 				+ ((serviceDeliveryPoint == null) ? 0 : serviceDeliveryPoint
 						.hashCode());
+		result = prime * result
+				+ ((tarifMRID == null) ? 0 : tarifMRID.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -91,16 +80,11 @@ public class SdpRouteAssociation extends BaseAssociation {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SdpRouteAssociation other = (SdpRouteAssociation) obj;
-		if (route == null) {
-			if (other.route != null)
+		SdpTariffRelation other = (SdpTariffRelation) obj;
+		if (account == null) {
+			if (other.account != null)
 				return false;
-		} else if (!route.equals(other.route))
-			return false;
-		if (routeMRID == null) {
-			if (other.routeMRID != null)
-				return false;
-		} else if (!routeMRID.equals(other.routeMRID))
+		} else if (!account.equals(other.account))
 			return false;
 		if (sdpMRID == null) {
 			if (other.sdpMRID != null)
@@ -112,15 +96,20 @@ public class SdpRouteAssociation extends BaseAssociation {
 				return false;
 		} else if (!serviceDeliveryPoint.equals(other.serviceDeliveryPoint))
 			return false;
+		if (tarifMRID == null) {
+			if (other.tarifMRID != null)
+				return false;
+		} else if (!tarifMRID.equals(other.tarifMRID))
+			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
-		return "SdpRouteAssociation [serviceDeliveryPoint="
-				+ serviceDeliveryPoint + ", route=" + route + ", sdpMRID="
-				+ sdpMRID + ", routeMRID=" + routeMRID + ", id=" + id
+		return "SdpTariffRelation [serviceDeliveryPoint="
+				+ serviceDeliveryPoint + ", account=" + account + ", sdpMRID="
+				+ sdpMRID + ", tarifMRID=" + tarifMRID + ", id=" + id
 				+ ", startDate=" + startDate + ", status=" + status + "]";
 	}
-		
+	
+	
 }

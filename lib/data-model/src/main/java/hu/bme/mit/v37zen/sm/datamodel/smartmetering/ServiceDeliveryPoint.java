@@ -1,5 +1,7 @@
 package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
 
+import hu.bme.mit.v37zen.sm.datamodel.BaseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package hu.bme.mit.v37zen.sm.datamodel.meterreading;
 
-import hu.bme.mit.v37zen.sm.datamodel.smartmetering.BaseEntity;
+import hu.bme.mit.v37zen.sm.datamodel.BaseEntity;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
 
 import java.util.Date;

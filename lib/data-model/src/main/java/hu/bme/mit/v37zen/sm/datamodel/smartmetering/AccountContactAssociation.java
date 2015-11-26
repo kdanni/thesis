@@ -1,5 +1,7 @@
 package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
 
+import hu.bme.mit.v37zen.sm.datamodel.BaseAssociation;
+
 import java.util.Date;
 
 import javax.persistence.Entity;

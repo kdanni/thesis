@@ -1,5 +1,7 @@
 package hu.bme.mit.v37zen.sm.datamodel.prepayment;
 
+import hu.bme.mit.v37zen.sm.datamodel.BaseEntity;
+
 import java.util.Date;
 
 import javax.persistence.Entity;

@@ -8,13 +8,13 @@
     
 
 	<!--  Task Executors  -->
-<!-- 	<bean id="routerThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
-<!-- 	    <property name="corePoolSize" value="${router.ThreadPoolTaskExecutor.corePoolSize}" /> -->
-<!-- 	    <property name="maxPoolSize" value="${router.ThreadPoolTaskExecutor.maxPoolSize}" /> -->
-<!-- 	    <property name="queueCapacity" value="${router.ThreadPoolTaskExecutor.queueCapacity}" /> -->
+	<bean id="preprocessorThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="${preprocessor.ThreadPoolTaskExecutor.corePoolSize}" />
+	    <property name="maxPoolSize" value="${preprocessor.ThreadPoolTaskExecutor.maxPoolSize}" />
+	    <property name="queueCapacity" value="${preprocessor.ThreadPoolTaskExecutor.queueCapacity}" />
 	    
-<!-- 	    <qualifier value="routerThreadPoolTaskExecutor"></qualifier> -->
-<!-- 	</bean> -->
+	    <qualifier value="preprocessorThreadPoolTaskExecutor"></qualifier>
+	</bean>
 		
 	<!--  /Task Executors  -->	
 		

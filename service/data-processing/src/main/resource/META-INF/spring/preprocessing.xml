@@ -46,6 +46,9 @@
 	
 	<bean id="preprocessor" scope="prototype"
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.Preprocessor">
+			<constructor-arg name="threadPoolTaskExecutor">
+				<ref bean="preprocessorThreadPoolTaskExecutor"/>
+			</constructor-arg>
 	</bean>
 
 </beans>

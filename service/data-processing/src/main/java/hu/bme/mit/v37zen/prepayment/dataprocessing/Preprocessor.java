@@ -1,18 +1,31 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing;
 
-import java.io.Serializable;
-
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.SeedDataValidator;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
 import hu.bme.mit.v37zen.sm.messaging.DataProcessRequest;
 import hu.bme.mit.v37zen.sm.messaging.SeedData;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-public class Preprocessor {
+public class Preprocessor implements ApplicationContextAware {
 	
 	private static Logger logger = LoggerFactory.getLogger(Preprocessor.class);
+	
+	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+	
+	private ApplicationContext applicationContext;
+	
+	public Preprocessor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+		this.threadPoolTaskExecutor = threadPoolTaskExecutor;
+	}
 	
 	public void dataProcessRequests(DataProcessRequest<?> messageBody){
 		
@@ -34,6 +47,11 @@ public class Preprocessor {
 	public void seedData(SeedData seedData){
 		
 		logger.debug("SeedData: \n" + seedData.toString());
+		
+		SeedDataValidator seedDataValidator = applicationContext.getBean(SeedDataValidator.class);
+		seedDataValidator.setData(seedData);
+		
+		this.threadPoolTaskExecutor.execute(seedDataValidator);
 	}
 	
 	public void meterReading(IntervalReading intervalReading){
@@ -44,5 +62,19 @@ public class Preprocessor {
 	public void paymentData(Payment payment){
 	
 		logger.debug("Payment: \n" + payment.toString());
+	}
+
+	public ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
+		return threadPoolTaskExecutor;
+	}
+
+	public void setThreadPoolTaskExecutor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+		this.threadPoolTaskExecutor = threadPoolTaskExecutor;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext)
+			throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 }

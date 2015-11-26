@@ -10,6 +10,7 @@
                 <value>classpath:META-INF/properties/jdbc.properties</value>
                 <value>classpath:META-INF/properties/jpa.properties</value>
                 <value>classpath:META-INF/properties/jms.properties</value>
+                <value>classpath:META-INF/properties/preprocessor.properties</value>
             </list>
         </property> 
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
@@ -19,6 +20,7 @@
     
     <import resource="classpath:META-INF/spring/context.xml"/>
     <import resource="classpath:META-INF/spring/preprocessing.xml"/>
+    <import resource="classpath:META-INF/spring/validating.xml"/>
    
     <import resource="classpath:META-INF/spring/jms.xml"/>
     

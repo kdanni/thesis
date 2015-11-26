@@ -1,12 +1,17 @@
 package hu.bme.mit.v37zen.sm.datamodel.prepayment;
 
+import hu.bme.mit.v37zen.sm.datamodel.BaseEntity;
+import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,6 +37,15 @@ public class PrepaymentAccount extends BaseEntity {
 	private Date endDate;
     
     private String status;
+    
+    @OneToMany(fetch=FetchType.LAZY)
+    private List<Payment> payments = new ArrayList<Payment>();
+    
+    @OneToMany(fetch=FetchType.LAZY)
+    private List<Balance> balance = new ArrayList<Balance>();
+    
+    @OneToMany(fetch=FetchType.LAZY)
+    private List<IntervalReading> meterReadings = new ArrayList<IntervalReading>();
     
     public PrepaymentAccount() {
 		super();

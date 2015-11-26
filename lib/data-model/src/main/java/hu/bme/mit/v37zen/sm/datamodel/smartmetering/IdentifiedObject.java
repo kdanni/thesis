@@ -1,4 +1,4 @@
-package hu.bme.mit.v37zen.sm.datamodel;
+package hu.bme.mit.v37zen.sm.datamodel.smartmetering;
 
 public class IdentifiedObject extends MasterResourceId{
 
