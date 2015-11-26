@@ -18,6 +18,7 @@
     <import resource="classpath:META-INF/spring/task-exec.xml"/>
     
     <import resource="classpath:META-INF/spring/context.xml"/>
+    <import resource="classpath:META-INF/spring/preprocessing.xml"/>
    
     <import resource="classpath:META-INF/spring/jms.xml"/>
     

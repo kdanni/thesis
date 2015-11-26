@@ -20,7 +20,7 @@ import hu.bme.mit.v37zen.sm.jpa.repositories.SdpRouteAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.SdpServiceLocationAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceLocationRepository;
-import hu.bme.mit.v37zen.sm.messaging.SyncData;
+import hu.bme.mit.v37zen.sm.messaging.SeedData;
 import hu.bme.mit.v37zen.sm.messaging.impl.BasicDataProcessRequest;
 
 import javax.jms.JMSException;
@@ -87,7 +87,7 @@ public class SyncMessageProcessorImpl implements SyncMessageProcessor {
 		try {
 			logger.info("Sync message processing has started.");
 
-			final SyncData sd = new SyncMessageMapper(namespaces,
+			final SeedData sd = new SyncMessageMapper(namespaces,
 					accountProcessorConfigurator, sdpProcessorConfigurator,
 					associationProcessorConfigurator,
 					meterProcessorConfirugarator, contactProcessorConfigurator,
@@ -142,7 +142,7 @@ public class SyncMessageProcessorImpl implements SyncMessageProcessor {
 			jmsTemplate.send(new MessageCreator() {
 				@Override
 				public Message createMessage(Session session) throws JMSException {					
-					return session.createObjectMessage(new BasicDataProcessRequest<SyncData>(sd));
+					return session.createObjectMessage(new BasicDataProcessRequest<SeedData>(sd));
 				}
 			});
 			

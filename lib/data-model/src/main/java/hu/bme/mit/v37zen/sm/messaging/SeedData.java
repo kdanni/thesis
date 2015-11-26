@@ -15,7 +15,7 @@ import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
 import java.io.Serializable;
 import java.util.List;
 
-public class SyncData implements Serializable {
+public class SeedData implements Serializable {
 	
 	private static final long serialVersionUID = 8686170581398417587L;
 	
@@ -31,7 +31,7 @@ public class SyncData implements Serializable {
 	private List<AccountContactAssociation> accountContactAssociations;
 	private List<SdpRouteAssociation> sdpRouteAssociations;
 	
-	public SyncData(List<Account> accounts,
+	public SeedData(List<Account> accounts,
 			List<ServiceDeliveryPoint> serviceDeliveryPoints,
 			List<MeterAsset> meterAssets, List<Contact> contacts,
 			List<ServiceLocation> serviceLocations, List<Route> routes,
@@ -173,7 +173,7 @@ public class SyncData implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SyncData other = (SyncData) obj;
+		SeedData other = (SeedData) obj;
 		if (accountContactAssociations == null) {
 			if (other.accountContactAssociations != null)
 				return false;
@@ -235,7 +235,7 @@ public class SyncData implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "SyncData [accounts=" + accounts + ", serviceDeliveryPoints="
+		return "SeedData [accounts=" + accounts + ", serviceDeliveryPoints="
 				+ serviceDeliveryPoints + ", meterAssets=" + meterAssets
 				+ ", contacts=" + contacts + ", serviceLocations="
 				+ serviceLocations + ", routes=" + routes

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<int:channel id="preProcessRouterChannel"></int:channel>
+
+	<int:payload-type-router input-channel="preProcessRouterChannel">
+	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.DataProcessRequest" channel="dataProcessRequestsChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.SeedData" channel="syncDataChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading" channel="meterDataChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment" channel="paymentDataChannel" />
+	</int:payload-type-router>
+
+	<int:channel id="dataProcessRequestsChannel"></int:channel>
+	
+	<int:channel id="syncDataChannel"></int:channel>
+	<int:channel id="meterDataChannel"></int:channel>
+	<int:channel id="paymentDataChannel"></int:channel>
+	
+	<int:service-activator id="dataProcessRequestActivator" 
+				ref="preprocessor"
+				method="dataProcessRequests"
+				input-channel="dataProcessRequestsChannel">
+	</int:service-activator>
+		
+	<int:service-activator id="syncDataActivator" 
+				ref="preprocessor"
+				method="seedData"
+				input-channel="syncDataChannel">
+	</int:service-activator>
+	<int:service-activator id="meterDataActivator" 
+				ref="preprocessor"
+				method="meterReading"
+				input-channel="meterDataChannel">
+	</int:service-activator>
+	<int:service-activator id="paymebtDataActivator" 
+				ref="preprocessor"
+				method="paymentData"
+				input-channel="paymentDataChannel">
+	</int:service-activator>
+	
+	
+	<bean id="preprocessor" scope="prototype"
+			class="hu.bme.mit.v37zen.prepayment.dataprocessing.Preprocessor">
+	</bean>
+
+</beans>

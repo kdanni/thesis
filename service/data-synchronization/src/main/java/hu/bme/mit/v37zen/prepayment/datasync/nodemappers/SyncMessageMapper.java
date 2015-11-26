@@ -19,7 +19,7 @@ import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpRouteAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpServiceLocationAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceLocation;
-import hu.bme.mit.v37zen.sm.messaging.SyncData;
+import hu.bme.mit.v37zen.sm.messaging.SeedData;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class SyncMessageMapper {
 		
 	}
 	
-	public SyncData mapSyncMessage(Node syncMessage){
+	public SeedData mapSyncMessage(Node syncMessage){
 		
 		List<Account> accList = this.processAccounts(syncMessage);
 		List<ServiceDeliveryPoint> sdpList = this.processSDP(syncMessage);
@@ -80,7 +80,7 @@ public class SyncMessageMapper {
 		List<AccountContactAssociation> acaList = this.processAccountContactAssociations(syncMessage);
 		List<SdpRouteAssociation> sraList = this.processSdpRouteAssociations(syncMessage);
 		
-		return new SyncData(accList, sdpList, maList, cList, slList, rList, smrList, asaList, sdpslrList, acaList , sraList);	
+		return new SeedData(accList, sdpList, maList, cList, slList, rList, smrList, asaList, sdpslrList, acaList , sraList);	
 	}
 	
 	protected XPathExpression createXPathExpression(String expression, Map<String,String> namespaces){

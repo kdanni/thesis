@@ -3,7 +3,6 @@ package hu.bme.mit.v37zen.prepayment.meterdatasync;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.jpa.repositories.IntervalReadingRepository;
-import hu.bme.mit.v37zen.sm.messaging.impl.BasicDataProcessRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +64,7 @@ public class MeterDataProcessorImpl implements MeterDataProcessor {
 					public Message createMessage(Session session)
 							throws JMSException {
 						return session
-								.createObjectMessage(new BasicDataProcessRequest<IntervalReading>(
-										intervalReading));
+								.createObjectMessage(intervalReading);
 					}
 				});
 			}

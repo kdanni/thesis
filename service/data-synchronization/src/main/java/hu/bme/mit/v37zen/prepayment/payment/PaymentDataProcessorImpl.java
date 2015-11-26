@@ -3,7 +3,6 @@ package hu.bme.mit.v37zen.prepayment.payment;
 import hu.bme.mit.v37zen.prepayment.util.xml.NamespaceHandler;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PaymentRepository;
-import hu.bme.mit.v37zen.sm.messaging.impl.BasicDataProcessRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +72,7 @@ public class PaymentDataProcessorImpl implements PaymentDataProcessor {
 						public Message createMessage(Session session)
 								throws JMSException {
 							return session
-									.createObjectMessage(new BasicDataProcessRequest<Payment>(
-											payment));
+									.createObjectMessage(payment);
 						}
 					});
 				}
