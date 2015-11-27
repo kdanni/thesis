@@ -19,6 +19,8 @@ public class SeedData implements Serializable {
 	
 	private static final long serialVersionUID = 8686170581398417587L;
 	
+	private int processed = 0;
+	
 	private List<Account> accounts;
 	private List<ServiceDeliveryPoint> serviceDeliveryPoints;
 	private List<MeterAsset> meterAssets;
@@ -245,5 +247,12 @@ public class SeedData implements Serializable {
 				+ sdpServiceLocationAssociations
 				+ ", accountContactAssociations=" + accountContactAssociations
 				+ ", sdpRouteAssociations=" + sdpRouteAssociations + "]";
+	}
+
+	public int getProcessed() {
+		return processed;
+	}
+	public void setProcessed(int processed) {
+		this.processed = processed;
 	}
 }

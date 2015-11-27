@@ -2,17 +2,25 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 	
 	<bean id="seedDataValidator" scope="prototype"
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.SeedDataValidator" >
-			<property name="accountValidator">
-				<ref bean="accountValidator" />
+			<property name="toRevalidationChannel">
+				<ref bean="toRevalidatingChannel" />
 			</property>
 	</bean>
 	
-	<bean id="accountValidator"
-			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator" >
-	</bean>
+	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata" />	
+	
+	<int:channel id="toRevalidatingChannel" />
+	
+	<int:delayer id="revalidatindDelayer" default-delay="5000"
+		input-channel="toRevalidatingChannel"
+		output-channel="preProcessRouterChannel"
+	></int:delayer>
+	
 </beans>

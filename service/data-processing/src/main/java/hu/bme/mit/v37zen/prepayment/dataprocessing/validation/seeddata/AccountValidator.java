@@ -7,7 +7,9 @@ import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccountValidator {
 
 	@Autowired
