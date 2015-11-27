@@ -32,6 +32,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 	private static Logger logger = LoggerFactory.getLogger(SeedDataValidator.class);
 	
 	private MessageChannel toRevalidationChannel; 
+	private MessageChannel validChannel; 
 	
 	@Autowired
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
@@ -89,6 +90,8 @@ public class SeedDataValidator implements Validator<SeedData> {
 								
 				accountCache.put(account.getMRID(), account);
 				
+				validChannel.send(new GenericMessage<Account>(account));
+				
 				logger.debug("Valid Account: " + account.toString());
 				
 			} catch (ValidationException e) {
@@ -108,6 +111,8 @@ public class SeedDataValidator implements Validator<SeedData> {
 				
 				sdpCache.put(serviceDeliveryPoint.getMRID(), serviceDeliveryPoint);
 				
+				validChannel.send(new GenericMessage<ServiceDeliveryPoint>(serviceDeliveryPoint));
+				
 				logger.debug("Valid SDP: " + serviceDeliveryPoint.toString());
 				
 			} catch (ValidationException e) {
@@ -126,6 +131,8 @@ public class SeedDataValidator implements Validator<SeedData> {
 				accountSDPAssociationValidator.validate(accountSDPAssociation, this.accountCache, this.sdpCache);
 				
 				accSdpCache.add(accountSDPAssociation);
+				
+				validChannel.send(new GenericMessage<AccountSDPAssociation>(accountSDPAssociation));
 				
 				logger.info("Valid AccountSDPAssociation: " + accountSDPAssociation.toString());
 								
@@ -150,11 +157,14 @@ public class SeedDataValidator implements Validator<SeedData> {
 	}
 	
 	protected void seedDataHasMeter(List<MeterAsset> meterAssets) {
+		
 		for (MeterAsset meterAsset : meterAssets) {
 			try{
 				meterAssetValidator.validate(meterAsset);
 				
 				meterCache.put(meterAsset.getMRID(), meterAsset);
+
+				validChannel.send(new GenericMessage<MeterAsset>(meterAsset));
 				
 				logger.debug("Valid MeterAsset: " + meterAsset.toString());
 				
@@ -175,7 +185,9 @@ public class SeedDataValidator implements Validator<SeedData> {
 				
 				sdpMeterCache.add(sdpMeterAssociation);
 				
-				logger.info("Valid AccountSDPAssociation: " + sdpMeterAssociation.toString());
+				validChannel.send(new GenericMessage<SdpMeterAssociation>(sdpMeterAssociation));
+				
+				logger.info("Valid SdpMeterAssociation: " + sdpMeterAssociation.toString());
 								
 			} catch (ValidationException e) {
 				logValidationException(e);
@@ -259,6 +271,14 @@ public class SeedDataValidator implements Validator<SeedData> {
 	public void setsDPMeterAssociationValidator(
 			SDPMeterAssociationValidator sDPMeterAssociationValidator) {
 		this.sDPMeterAssociationValidator = sDPMeterAssociationValidator;
+	}
+
+	public MessageChannel getValidChannel() {
+		return validChannel;
+	}
+
+	public void setValidChannel(MessageChannel validChannel) {
+		this.validChannel = validChannel;
 	}
 
 }

@@ -21,6 +21,7 @@
     <import resource="classpath:META-INF/spring/context.xml"/>
     <import resource="classpath:META-INF/spring/preprocessing.xml"/>
     <import resource="classpath:META-INF/spring/validating.xml"/>
+    <import resource="classpath:META-INF/spring/persisting.xml"/>
    
     <import resource="classpath:META-INF/spring/jms.xml"/>
     

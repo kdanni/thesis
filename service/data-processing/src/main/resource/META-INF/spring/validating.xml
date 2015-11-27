@@ -12,6 +12,9 @@
 			<property name="toRevalidationChannel">
 				<ref bean="toRevalidatingChannel" />
 			</property>
+			<property name="validChannel">
+				<ref bean="validChannel" />
+			</property>
 	</bean>
 	
 	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata" />	
@@ -22,5 +25,20 @@
 		input-channel="toRevalidatingChannel"
 		output-channel="preProcessRouterChannel"
 	></int:delayer>
+	
+	<int:channel id="validChannel" >
+		<int:dispatcher task-executor="validChannelThreadPoolTaskExecutor"/>
+	</int:channel>
+	
+	<int:payload-type-router id="validRouter" input-channel="validChannel" default-output-channel="nullChannel">
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account" channel="validAccountChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint" channel="validSdpChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset" channel="validMeterAssetChannel" />
+	</int:payload-type-router>
+	
+		
+	<int:channel id="validAccountChannel"></int:channel>
+	<int:channel id="validSdpChannel"></int:channel>
+	<int:channel id="validMeterAssetChannel"></int:channel>
 	
 </beans>

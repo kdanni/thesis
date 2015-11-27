@@ -8,7 +8,7 @@
 
 	<int:channel id="preProcessRouterChannel"></int:channel>
 
-	<int:payload-type-router input-channel="preProcessRouterChannel">
+	<int:payload-type-router input-channel="preProcessRouterChannel" default-output-channel="nullChannel">
 	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.DataProcessRequest" channel="dataProcessRequestsChannel" />
 	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.SeedData" channel="syncDataChannel" />
 	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading" channel="meterDataChannel" />

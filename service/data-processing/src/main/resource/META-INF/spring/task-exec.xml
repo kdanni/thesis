@@ -15,9 +15,16 @@
 	    <qualifier value="preprocessorThreadPoolTaskExecutor"></qualifier>
 	</bean>
 		
+	<bean id="validChannelThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="2" />
+	    <property name="maxPoolSize" value="6" />
+	    <property name="queueCapacity" value="25" />
+	    
+	    <qualifier value="validChannelThreadPoolTaskExecutor"></qualifier>
+	</bean>
+	
 	<!--  /Task Executors  -->	
 				
-	
 </beans>
 
 
