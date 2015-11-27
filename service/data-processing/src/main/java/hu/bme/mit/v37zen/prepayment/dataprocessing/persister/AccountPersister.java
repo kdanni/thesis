@@ -49,6 +49,7 @@ public class AccountPersister implements MessageHandler {
 				account = this.accountRepository.save(account);
 			} else if (accList.size() == 1){
 				account = AccountMerger.merge(accList.get(0), account);
+				account = this.accountRepository.save(account);
 			} else {
 				String msg = "Multiple Account found with the same id!";
 				logger.error(msg);

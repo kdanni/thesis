@@ -146,7 +146,6 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			ppacc = prepaymentAccountRepository.saveAndFlush(ppacc);
 			
 			
-			
 		}
 		
 	}
@@ -210,7 +209,5 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			ServiceDeliveryPointRepository serviceDeliveryPointRepository) {
 		this.serviceDeliveryPointRepository = serviceDeliveryPointRepository;
 	}
-	
-	
 
 }

@@ -10,7 +10,7 @@
 	<int:channel id="toAccountDeriverChannel">
 		<int:dispatcher task-executor="toAccountDeriverChannelThreadPoolTaskExecutor"/>
 	</int:channel>
-	
+		
 	<bean id="PrepaymentAccountDerivator"
 		class="hu.bme.mit.v37zen.prepayment.dataprocessing.derivation.PrepaymentAccountDerivator" >
 		<property name="channel">
@@ -19,13 +19,36 @@
 		<property name="rederivatorChannel">
 			<ref bean="toAccountRederivatingChannel" />
 		</property>		
-	</bean>
-	
+	</bean>	
+		
 	<int:channel id="toAccountRederivatingChannel" />
 	
-	<int:delayer id="toAccountRederivatingDelayer" default-delay="5000"
+	<int:delayer id="accountRederivatingDelayer" default-delay="5000"
 		input-channel="toAccountRederivatingChannel"
 		output-channel="toAccountDeriverChannel"
 	></int:delayer>
+	
+	<int:channel id="toSdpMeterAssociationDerivatorChannel">
+		<int:dispatcher task-executor="toSdpMeterDeriverChannelThreadPoolTaskExecutor"/>
+	</int:channel>
+	
+	<bean id="sdpMeterAssociationDerivator"
+		class="hu.bme.mit.v37zen.prepayment.dataprocessing.derivation.SdpMeterAssociationDerivator" >
+		<property name="channel">
+			<ref bean="toSdpMeterAssociationDerivatorChannel" />
+		</property>
+		<property name="rederivatorChannel">
+			<ref bean="toSdpMeterRederivatingChannel" />
+		</property>
+	</bean>
+	
+	<int:channel id="toSdpMeterRederivatingChannel" />
+	
+	<int:delayer id="sdpMeterRederivatingDelayer" default-delay="5000"
+		input-channel="toSdpMeterRederivatingChannel"
+		output-channel="toSdpMeterAssociationDerivatorChannel"
+	></int:delayer>
+	
+	
 	
 </beans>

@@ -42,13 +42,17 @@
 	<int:channel id="validAccountChannel"></int:channel>
 	<int:channel id="validSdpChannel"></int:channel>
 	<int:channel id="validMeterAssetChannel"></int:channel>	
-	<int:channel id="validSdpMeterAssociationChannel"></int:channel>
 	
 	<int:channel id="validAccountSDPAssociationChannel"></int:channel>
 	<int:delayer id="validAccountSDPAssociationDelayer" default-delay="1000"
 		input-channel="validAccountSDPAssociationChannel"
 		output-channel="toAccountDeriverChannel"
 	></int:delayer>
-		
+	
+	<int:channel id="validSdpMeterAssociationChannel"></int:channel>
+	<int:delayer id="validSdpMeterAssociationDelayer" default-delay="1000"
+		input-channel="validSdpMeterAssociationChannel"
+		output-channel="toSdpMeterAssociationDerivatorChannel"
+	></int:delayer>		
 	
 </beans>

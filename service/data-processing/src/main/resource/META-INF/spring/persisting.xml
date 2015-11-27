@@ -32,11 +32,4 @@
 		</property>
 	</bean>
 	
-	<bean id="sdpMeterAssociationPersister"
-		class="hu.bme.mit.v37zen.prepayment.dataprocessing.persister.SdpMeterAssociationPersister" >
-		<property name="channel">
-			<ref bean="validSdpMeterAssociationChannel" />
-		</property>
-	</bean>
-	
 </beans>

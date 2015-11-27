@@ -1,7 +1,13 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing.persister;
 
+import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
+import hu.bme.mit.v37zen.sm.datamodel.util.merge.SdpMerger;
+import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
+
+import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +26,30 @@ public class SdpPersister implements MessageHandler {
 	@Autowired
 	private ServiceDeliveryPointRepository serviceDeliveryPointRepository;
 
+	@Autowired
+	private PrepaymentExceptionRepository prepaymentExceptionRepository;
+	
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
 		
 		Object payload = message.getPayload();
 		if(payload instanceof ServiceDeliveryPoint){
 			logger.debug(payload.toString());
-			this.serviceDeliveryPointRepository.save((ServiceDeliveryPoint)payload);
+			ServiceDeliveryPoint sdp = (ServiceDeliveryPoint) payload;
+			List<ServiceDeliveryPoint> sdpList = serviceDeliveryPointRepository.findByMRID(sdp.getMRID()); 
+			
+			if(sdpList.size() == 0){
+				this.serviceDeliveryPointRepository.save(sdp);
+			} else if (sdpList.size() == 1){
+				sdp = SdpMerger.merge(sdpList.get(0), sdp);
+				sdp = this.serviceDeliveryPointRepository.save(sdp);
+			} else {
+				String msg = "Multiple SDP found with the same id!";
+				logger.error(msg);
+				PrepaymentException pe = new PrepaymentException(new Date(), msg);
+				getPrepaymentExceptionRepository().save(pe);
+				return;
+			}
 		}
 	}
 
@@ -46,5 +69,14 @@ public class SdpPersister implements MessageHandler {
 	public void setServiceDeliveryPointRepository(
 			ServiceDeliveryPointRepository serviceDeliveryPointRepository) {
 		this.serviceDeliveryPointRepository = serviceDeliveryPointRepository;
+	}
+
+	public PrepaymentExceptionRepository getPrepaymentExceptionRepository() {
+		return prepaymentExceptionRepository;
+	}
+
+	public void setPrepaymentExceptionRepository(
+			PrepaymentExceptionRepository prepaymentExceptionRepository) {
+		this.prepaymentExceptionRepository = prepaymentExceptionRepository;
 	}
 }

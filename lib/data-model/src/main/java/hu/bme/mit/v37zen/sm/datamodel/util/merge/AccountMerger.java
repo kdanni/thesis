@@ -24,6 +24,9 @@ public class AccountMerger {
 		if(theOtherAccount.getStatus() != null && !theOtherAccount.getStatus().trim().isEmpty()){
 			returnee.setStatus(theOtherAccount.getStatus());
 		}
+		if(theOtherAccount.getParameters() != null && !theOtherAccount.getParameters().isEmpty()){
+			returnee.getParameters().addAll(theOtherAccount.getParameters());
+		}
 				
 		return returnee;
 	}
