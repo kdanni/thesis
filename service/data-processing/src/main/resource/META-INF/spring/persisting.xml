@@ -13,9 +13,12 @@
 		<property name="channel">
 			<ref bean="validAccountChannel" />
 		</property>
+		<property name="outputChannel">
+			<ref bean="toAccountDeriverChannel" />
+		</property>
 	</bean>
 	
-		<bean id="sdpPersister"
+	<bean id="sdpPersister"
 		class="hu.bme.mit.v37zen.prepayment.dataprocessing.persister.SdpPersister" >
 		<property name="channel">
 			<ref bean="validSdpChannel" />
@@ -26,6 +29,13 @@
 		class="hu.bme.mit.v37zen.prepayment.dataprocessing.persister.MeterPersister" >
 		<property name="channel">
 			<ref bean="validMeterAssetChannel" />
+		</property>
+	</bean>
+	
+	<bean id="sdpMeterAssociationPersister"
+		class="hu.bme.mit.v37zen.prepayment.dataprocessing.persister.SdpMeterAssociationPersister" >
+		<property name="channel">
+			<ref bean="validSdpMeterAssociationChannel" />
 		</property>
 	</bean>
 	

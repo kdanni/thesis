@@ -1,7 +1,7 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing.persister;
 
-import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
-import hu.bme.mit.v37zen.sm.jpa.repositories.MeterAssetRepository;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation;
+import hu.bme.mit.v37zen.sm.jpa.repositories.SdpMeterAssociationRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,38 +11,32 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 
-public class MeterPersister implements MessageHandler {
+public class SdpMeterAssociationPersister implements MessageHandler {
 	
-	public static final Logger logger = LoggerFactory.getLogger(MeterPersister.class);
+	public static final Logger logger = LoggerFactory.getLogger(SdpMeterAssociationPersister.class);
 	
 	private SubscribableChannel channel;
 	
 	@Autowired
-	private MeterAssetRepository meterAssetRepository;
+	private SdpMeterAssociationRepository sdpMeterAssociationRepository;
 	
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
 		
 		Object payload = message.getPayload();
-		if(payload instanceof MeterAsset){
-			this.meterAssetRepository.save((MeterAsset)payload);
+		if(payload instanceof SdpMeterAssociation){
+			logger.debug(payload.toString());
+			sdpMeterAssociationRepository.save((SdpMeterAssociation)payload);
 		}
 	}
 
 	public SubscribableChannel getChannel() {
 		return channel;
 	}
-	
+
 	public void setChannel(SubscribableChannel channel) {
 		this.channel = channel;
-		channel.subscribe(this);
+		this.channel.subscribe(this);
 	}
 
-	public MeterAssetRepository getMeterAssetRepository() {
-		return meterAssetRepository;
-	}
-
-	public void setMeterAssetRepository(MeterAssetRepository meterAssetRepository) {
-		this.meterAssetRepository = meterAssetRepository;
-	}
 }

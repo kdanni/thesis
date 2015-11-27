@@ -3,6 +3,8 @@ package hu.bme.mit.v37zen.prepayment.dataprocessing.persister;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -10,6 +12,8 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 
 public class SdpPersister implements MessageHandler {
+	
+	public static final Logger logger = LoggerFactory.getLogger(SdpPersister.class);
 	
 	private SubscribableChannel channel;
 	
@@ -21,6 +25,7 @@ public class SdpPersister implements MessageHandler {
 		
 		Object payload = message.getPayload();
 		if(payload instanceof ServiceDeliveryPoint){
+			logger.debug(payload.toString());
 			this.serviceDeliveryPointRepository.save((ServiceDeliveryPoint)payload);
 		}
 	}

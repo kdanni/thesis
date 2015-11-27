@@ -34,11 +34,21 @@
 	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account" channel="validAccountChannel" />
 	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint" channel="validSdpChannel" />
 	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset" channel="validMeterAssetChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation" channel="validAccountSDPAssociationChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation" channel="validSdpMeterAssociationChannel" />
 	</int:payload-type-router>
 	
 		
 	<int:channel id="validAccountChannel"></int:channel>
 	<int:channel id="validSdpChannel"></int:channel>
-	<int:channel id="validMeterAssetChannel"></int:channel>
+	<int:channel id="validMeterAssetChannel"></int:channel>	
+	<int:channel id="validSdpMeterAssociationChannel"></int:channel>
+	
+	<int:channel id="validAccountSDPAssociationChannel"></int:channel>
+	<int:delayer id="validAccountSDPAssociationDelayer" default-delay="1000"
+		input-channel="validAccountSDPAssociationChannel"
+		output-channel="toAccountDeriverChannel"
+	></int:delayer>
+		
 	
 </beans>

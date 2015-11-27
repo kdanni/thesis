@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	
+	<int:channel id="toAccountDeriverChannel">
+		<int:dispatcher task-executor="toAccountDeriverChannelThreadPoolTaskExecutor"/>
+	</int:channel>
+	
+	<bean id="PrepaymentAccountDerivator"
+		class="hu.bme.mit.v37zen.prepayment.dataprocessing.derivation.PrepaymentAccountDerivator" >
+		<property name="channel">
+			<ref bean="toAccountDeriverChannel" />
+		</property>
+		<property name="rederivatorChannel">
+			<ref bean="toAccountRederivatingChannel" />
+		</property>		
+	</bean>
+	
+	<int:channel id="toAccountRederivatingChannel" />
+	
+	<int:delayer id="toAccountRederivatingDelayer" default-delay="5000"
+		input-channel="toAccountRederivatingChannel"
+		output-channel="toAccountDeriverChannel"
+	></int:delayer>
+	
+</beans>
