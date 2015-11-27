@@ -3,19 +3,19 @@ package hu.bme.mit.v37zen.prepayment.dataprocessing.validation;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
 import hu.bme.mit.v37zen.sm.messaging.SeedData;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -25,56 +25,100 @@ public class SeedDataValidator implements Validator<SeedData>, ApplicationContex
 	private static Logger logger = LoggerFactory.getLogger(SeedDataValidator.class);
 	
 	private ApplicationContext applicationContext;
+	
+	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 		
 	private SeedData seedData;
 	
-	private AccountValidator accountValidator;
+	private HashMap<String, Account> accountCache = new HashMap<String, Account>();
 	
-	@Autowired
-	private AccountRepository accountRepository;
+	private AccountValidator accountValidator;
 	
 	@Override
 	public void run() {
 		
 		List<Account> accList = seedData.getAccounts();
-		
 		if(accList.size() > 0){
-			for (Account account : accList) {
-				try {
-					if(accountValidator.isAccountExist(account.getMRID())){
-						List<Account> list = accountRepository.findByMRID(account.getMRID());
-						Account existingAccount = list.size() > 0 ? list.get(0) : null;
-						
-						
-						
-						
-						
-					} else {
-						
-						
-					}	
-					
-				} catch (ValidationException e) {
-					logger.info(e.getMessage());
-					PrepaymentExceptionRepository repo = applicationContext.getBean(PrepaymentExceptionRepository.class);
-					PrepaymentException pe = new PrepaymentException(new Date(), e.getMessage());
-					repo.save(pe);
-				}
-				catch (Exception e) {
-					logger.error(e.getMessage(),e);
-				}
-				
-			}			
+			this.seedDataHasAccount(accList);						
+		}
+		List<AccountSDPAssociation> accSdpList = seedData.getAccountSDPAssociations();
+		if(accSdpList.size() > 0){
+			this.seedDataHasAccountSDPAssociation(accSdpList);
 		}
 		
 		
+	}
+	
+	protected void seedDataHasAccount(List<Account> accList){
 		
+		for (Account account : accList) {
+			try {
+				accountValidator.validate(account);
+								
+				accountCache.put(account.getMRID(), account);
+				
+				logger.info("Valid Account: " + account.toString());
+				
+			} catch (ValidationException e) {
+				logValidationException(e);
+			}
+			catch (Exception e) {
+				logger.error(e.getMessage(),e);
+			}		
+		}
+	}
+	
+	protected void seedDataHasAccountSDPAssociation(List<AccountSDPAssociation> accSdpList){
+		
+		for (AccountSDPAssociation accountSDPAssociation : accSdpList) {
+			try{
+				//TODO remove this:
+				throw new ValidationException("");
+				
+				
+				
+				
+			} catch (ValidationException e) {
+				logValidationException(e);
+			}
+			catch (Exception e) {
+				logger.error(e.getMessage(),e);
+			}
+		}		
+	}
+		
+	
+	protected void seedDataHasSDP(List<ServiceDeliveryPoint> sdpList){
+		
+		for (ServiceDeliveryPoint serviceDeliveryPoint : sdpList) {
+			try{
+				//TODO remove this:
+				throw new ValidationException("");
+				
+				
+				
+				
+			} catch (ValidationException e) {
+				logValidationException(e);
+			}
+			catch (Exception e) {
+				logger.error(e.getMessage(),e);
+			}	
+		}		
+	}
+	
+	protected void logValidationException(ValidationException e){
+		logger.info("[ValidationException]: " + e.getMessage());
+		PrepaymentException pe = new PrepaymentException(new Date(), e.getMessage());
+		prepaymentExceptionRepository.save(pe);
 	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
 		this.applicationContext = applicationContext;		
+		
+		this.prepaymentExceptionRepository = applicationContext.getBean(PrepaymentExceptionRepository.class);
 	}
 
 	@Override
@@ -88,14 +132,6 @@ public class SeedDataValidator implements Validator<SeedData>, ApplicationContex
 
 	public void setAccountValidator(AccountValidator accountValidator) {
 		this.accountValidator = accountValidator;
-	}
-
-	public AccountRepository getAccountRepository() {
-		return accountRepository;
-	}
-
-	public void setAccountRepository(AccountRepository accountRepository) {
-		this.accountRepository = accountRepository;
 	}
 
 }

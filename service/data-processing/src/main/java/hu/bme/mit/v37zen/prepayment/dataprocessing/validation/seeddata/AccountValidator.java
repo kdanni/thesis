@@ -22,6 +22,14 @@ public class AccountValidator {
 		return al.size() == 1;
 	}
 	
+	public void validate(Account account) throws ValidationException{
+		
+		if(account.getMRID() == null || account.getMRID().trim().isEmpty()){
+			throw new ValidationException("Account mRID is empty!", account);
+		}	
+		
+	}
+	
 	
 	
 	public AccountRepository getAccountRepository() {
