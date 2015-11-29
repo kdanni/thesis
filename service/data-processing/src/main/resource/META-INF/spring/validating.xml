@@ -53,6 +53,22 @@
 	<int:delayer id="validSdpMeterAssociationDelayer" default-delay="1000"
 		input-channel="validSdpMeterAssociationChannel"
 		output-channel="toSdpMeterAssociationDerivatorChannel"
-	></int:delayer>		
+	></int:delayer>	
+	
+	
+	<!-- Meter Reading Validation -->
+	<bean id="meterReadValidator" scope="prototype"
+			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.MeterReadValidator" >
+		<property name="validChannel">
+			<ref bean="validMeterReadChannel" />
+		</property>
+		<property name="invalidChannel">
+			<ref bean="invalidMeterReadChannel" />
+		</property>
+	</bean>
+	
+	<int:channel id="validMeterReadChannel"></int:channel>
+	<int:channel id="invalidMeterReadChannel"></int:channel>
+	
 	
 </beans>

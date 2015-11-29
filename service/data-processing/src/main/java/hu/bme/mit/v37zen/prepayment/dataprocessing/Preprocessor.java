@@ -1,5 +1,6 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing;
 
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.MeterReadValidator;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.SeedDataValidator;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
@@ -19,12 +20,20 @@ public class Preprocessor implements ApplicationContextAware {
 	
 	private static Logger logger = LoggerFactory.getLogger(Preprocessor.class);
 	
-	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+	private ThreadPoolTaskExecutor seedDataValidatorThreadPoolTaskExecutor;
+	
+	private ThreadPoolTaskExecutor meterReadingValidatorThreadPoolTaskExecutor;
+	
+	private ThreadPoolTaskExecutor paymentValidatorThreadPoolTaskExecutor;
 	
 	private ApplicationContext applicationContext;
 	
-	public Preprocessor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-		this.threadPoolTaskExecutor = threadPoolTaskExecutor;
+	public Preprocessor(ThreadPoolTaskExecutor seedDataValidatorThreadPoolTaskExecutor,
+			ThreadPoolTaskExecutor meterReadingValidatorThreadPoolTaskExecutor,
+			ThreadPoolTaskExecutor paymentValidatorThreadPoolTaskExecutor) {
+		this.seedDataValidatorThreadPoolTaskExecutor = seedDataValidatorThreadPoolTaskExecutor;
+		this.meterReadingValidatorThreadPoolTaskExecutor = meterReadingValidatorThreadPoolTaskExecutor;
+		this.paymentValidatorThreadPoolTaskExecutor = paymentValidatorThreadPoolTaskExecutor;
 	}
 	
 	public void dataProcessRequests(DataProcessRequest<?> messageBody){
@@ -51,12 +60,17 @@ public class Preprocessor implements ApplicationContextAware {
 		SeedDataValidator seedDataValidator = applicationContext.getBean(SeedDataValidator.class);
 		seedDataValidator.setData(seedData);
 		
-		this.threadPoolTaskExecutor.execute(seedDataValidator);
+		this.seedDataValidatorThreadPoolTaskExecutor.execute(seedDataValidator);
 	}
 	
 	public void meterReading(IntervalReading intervalReading){
 		
 		logger.debug("IntervalReading" + intervalReading.toString());
+		
+		MeterReadValidator meterReadValidator = applicationContext.getBean(MeterReadValidator.class);
+		meterReadValidator.setData(intervalReading);
+		
+		this.meterReadingValidatorThreadPoolTaskExecutor.execute(meterReadValidator);
 	}
 
 	public void paymentData(Payment payment){
@@ -64,17 +78,36 @@ public class Preprocessor implements ApplicationContextAware {
 		logger.debug("Payment: \n" + payment.toString());
 	}
 
-	public ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
-		return threadPoolTaskExecutor;
-	}
-
-	public void setThreadPoolTaskExecutor(ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-		this.threadPoolTaskExecutor = threadPoolTaskExecutor;
-	}
-
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
 		this.applicationContext = applicationContext;
+	}
+
+	public ThreadPoolTaskExecutor getSeedDataValidatorThreadPoolTaskExecutor() {
+		return seedDataValidatorThreadPoolTaskExecutor;
+	}
+
+	public void setSeedDataValidatorThreadPoolTaskExecutor(
+			ThreadPoolTaskExecutor seedDataValidatorThreadPoolTaskExecutor) {
+		this.seedDataValidatorThreadPoolTaskExecutor = seedDataValidatorThreadPoolTaskExecutor;
+	}
+
+	public ThreadPoolTaskExecutor getMeterReadingValidatorThreadPoolTaskExecutor() {
+		return meterReadingValidatorThreadPoolTaskExecutor;
+	}
+
+	public void setMeterReadingValidatorThreadPoolTaskExecutor(
+			ThreadPoolTaskExecutor meterReadingValidatorThreadPoolTaskExecutor) {
+		this.meterReadingValidatorThreadPoolTaskExecutor = meterReadingValidatorThreadPoolTaskExecutor;
+	}
+
+	public ThreadPoolTaskExecutor getPaymentValidatorThreadPoolTaskExecutor() {
+		return paymentValidatorThreadPoolTaskExecutor;
+	}
+
+	public void setPaymentValidatorThreadPoolTaskExecutor(
+			ThreadPoolTaskExecutor paymentValidatorThreadPoolTaskExecutor) {
+		this.paymentValidatorThreadPoolTaskExecutor = paymentValidatorThreadPoolTaskExecutor;
 	}
 }

@@ -7,14 +7,33 @@
 	
     
 	<!--  Task Executors  -->
-	<bean id="preprocessorThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	<bean id="seedDataValidatorThreadPoolTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 	    <property name="corePoolSize" value="${preprocessor.ThreadPoolTaskExecutor.corePoolSize}" />
 	    <property name="maxPoolSize" value="${preprocessor.ThreadPoolTaskExecutor.maxPoolSize}" />
 	    <property name="queueCapacity" value="${preprocessor.ThreadPoolTaskExecutor.queueCapacity}" />
 	    
-	    <qualifier value="preprocessorThreadPoolTaskExecutor"></qualifier>
+	    <qualifier value="seedDataValidatorThreadPoolTaskExecutor"></qualifier>
 	</bean>
-		
+	
+	<bean id="meterReadingValidatorThreadPoolTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="${preprocessor.ThreadPoolTaskExecutor.corePoolSize}" />
+	    <property name="maxPoolSize" value="${preprocessor.ThreadPoolTaskExecutor.maxPoolSize}" />
+	    <property name="queueCapacity" value="${preprocessor.ThreadPoolTaskExecutor.queueCapacity}" />
+	    
+	    <qualifier value="meterReadingValidatorThreadPoolTaskExecutor"></qualifier>
+	</bean>
+	
+	<bean id="paymentValidatorThreadPoolTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="${preprocessor.ThreadPoolTaskExecutor.corePoolSize}" />
+	    <property name="maxPoolSize" value="${preprocessor.ThreadPoolTaskExecutor.maxPoolSize}" />
+	    <property name="queueCapacity" value="${preprocessor.ThreadPoolTaskExecutor.queueCapacity}" />
+	    
+	    <qualifier value="paymentValidatorThreadPoolTaskExecutor"></qualifier>
+	</bean>
+
 	<bean id="validChannelThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 	    <property name="corePoolSize" value="2" />
 	    <property name="maxPoolSize" value="6" />

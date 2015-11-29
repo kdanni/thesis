@@ -46,8 +46,14 @@
 	
 	<bean id="preprocessor" scope="prototype"
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.Preprocessor">
-			<constructor-arg name="threadPoolTaskExecutor">
-				<ref bean="preprocessorThreadPoolTaskExecutor"/>
+			<constructor-arg name="seedDataValidatorThreadPoolTaskExecutor">
+				<ref bean="seedDataValidatorThreadPoolTaskExecutor"/>
+			</constructor-arg>
+			<constructor-arg name="meterReadingValidatorThreadPoolTaskExecutor">
+				<ref bean="meterReadingValidatorThreadPoolTaskExecutor"/>
+			</constructor-arg>
+			<constructor-arg name="paymentValidatorThreadPoolTaskExecutor">
+				<ref bean="paymentValidatorThreadPoolTaskExecutor"/>
 			</constructor-arg>
 	</bean>
 
