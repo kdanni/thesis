@@ -1,7 +1,6 @@
 package hu.bme.mit.v37zen.sm.jpa.repositories;
 
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
-import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
 
 import java.util.Date;
 import java.util.List;
@@ -18,8 +17,6 @@ public interface IntervalReadingRepository extends JpaRepository<IntervalReading
 	public List<IntervalReading> findByEndTime(Date endTime);
 	
 	public List<IntervalReading> findByMeterReferenceId(String referenceId);
-	
-	public List<IntervalReading> findByMeterAsset(MeterAsset meter);
 	
 	public List<IntervalReading> findByValid(Boolean status);
 	
