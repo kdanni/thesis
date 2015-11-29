@@ -34,6 +34,10 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 	
 	private MessageChannel rederivatorChannel;
 	
+	private String inactiveStatus;
+	
+	private String activeStatus;
+	
 	@Autowired
 	private SdpMeterAssociationRepository sdpMeterAssociationRepository;
 	
@@ -69,11 +73,13 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 			String sdpMRID = sma.getSdpMRID();
 			if(sdpMRID == null || sdpMRID.trim().isEmpty()){
 				sdpMRID = sma.getServiceDeliveryPoint() != null ? sma.getServiceDeliveryPoint().getMRID() : null;
+				sma.setSdpMRID(sdpMRID);
 			}
 			
 			String meterMRID = sma.getMeterAssetMRID();
 			if(meterMRID == null || meterMRID.trim().isEmpty()){
 				meterMRID = sma.getMeterAsset() != null ? sma.getMeterAsset().getMRID() : null;
+				sma.setMeterAssetMRID(meterMRID);
 			}
 			
 			List<ServiceDeliveryPoint> sdpList = getServiceDeliveryPointRepository().findByMRID(sdpMRID); 
@@ -111,7 +117,7 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 			for (SdpMeterAssociation sdpMeterAssociation : list) {
 				if(sdpMeterAssociation.getMeterAssetMRID() != null && sdpMeterAssociation.getMeterAssetMRID().equals(meterMRID)){
 					sdpMeterAssociation.setEndDate(new Date());
-					sdpMeterAssociation.setStatus("inactive");
+					sdpMeterAssociation.setStatus(inactiveStatus);
 				}
 			}	
 			
@@ -168,4 +174,28 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 		this.prepaymentExceptionRepository = prepaymentExceptionRepository;
 	}
 
+	public String getActiveStatus() {
+		return activeStatus;
+	}
+
+	public void setActiveStatus(String activeStatus) {
+		this.activeStatus = activeStatus;
+	}
+
+	public SdpMeterAssociationRepository getSdpMeterAssociationRepository() {
+		return sdpMeterAssociationRepository;
+	}
+
+	public void setSdpMeterAssociationRepository(
+			SdpMeterAssociationRepository sdpMeterAssociationRepository) {
+		this.sdpMeterAssociationRepository = sdpMeterAssociationRepository;
+	}
+
+	public String getInactiveStatus() {
+		return inactiveStatus;
+	}
+
+	public void setInactiveStatus(String inactiveStatus) {
+		this.inactiveStatus = inactiveStatus;
+	}
 }

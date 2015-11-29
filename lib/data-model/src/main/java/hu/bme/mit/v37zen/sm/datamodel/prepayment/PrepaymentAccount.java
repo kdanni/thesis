@@ -188,6 +188,18 @@ public class PrepaymentAccount extends BaseEntity {
 				+ ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", status=" + status + ", id=" + id + ", mRID=" + mRID + "]";
 	}
+
+	public List<Payment> getPayments() {
+		return payments;
+	}
+
+	public List<Balance> getBalance() {
+		return balance;
+	}
+
+	public List<IntervalReading> getMeterReadings() {
+		return meterReadings;
+	}
     
     
 }

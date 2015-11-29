@@ -12,4 +12,6 @@ public interface PrepaymentAccountRepository extends JpaRepository<PrepaymentAcc
 	
 	public List<PrepaymentAccount> findByAccountMRID(String mRID);
 	
+	public List<PrepaymentAccount> findBySdpMRID(String mRID);
+	
 }

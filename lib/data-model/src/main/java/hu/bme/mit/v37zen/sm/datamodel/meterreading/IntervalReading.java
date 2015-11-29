@@ -6,8 +6,6 @@ import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,9 +15,6 @@ public class IntervalReading extends BaseEntity {
 	private static final long serialVersionUID = -2471771834985064822L;
     
 	public static final String METER_X_UDC_ASSET_ID = "METER_X_UDC_ASSET_ID";
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	private MeterAsset meterAsset;
 	
 	private String meterReferenceId;
 	
@@ -58,7 +53,6 @@ public class IntervalReading extends BaseEntity {
 			Boolean processed, Boolean archived, int intervalLength,
 			String readingBlock, Date endTime) {
 		super();
-		this.meterAsset = meterAsset;
 		this.meterReferenceId = meterReferenceId;
 		this.referenceIdType = referenceIdType;
 		this.referenceIdNamepsace = referenceIdNamepsace;
@@ -96,14 +90,6 @@ public class IntervalReading extends BaseEntity {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
-	}
-
-	public MeterAsset getMeterAsset() {
-		return meterAsset;
-	}
-
-	public void setMeterAsset(MeterAsset meterAsset) {
-		this.meterAsset = meterAsset;
 	}
 
 	public String getReferenceId() {
@@ -178,6 +164,18 @@ public class IntervalReading extends BaseEntity {
 		this.insertTime = insertTime;
 	}
 
+	public String getMeterReferenceId() {
+		return meterReferenceId;
+	}
+
+	public void setMeterReferenceId(String meterReferenceId) {
+		this.meterReferenceId = meterReferenceId;
+	}
+
+	public void setIntervalLength(Integer intervalLength) {
+		this.intervalLength = intervalLength;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -189,8 +187,6 @@ public class IntervalReading extends BaseEntity {
 				+ ((insertTime == null) ? 0 : insertTime.hashCode());
 		result = prime * result
 				+ ((intervalLength == null) ? 0 : intervalLength.hashCode());
-		result = prime * result
-				+ ((meterAsset == null) ? 0 : meterAsset.hashCode());
 		result = prime
 				* result
 				+ ((meterReferenceId == null) ? 0 : meterReferenceId.hashCode());
@@ -240,11 +236,6 @@ public class IntervalReading extends BaseEntity {
 				return false;
 		} else if (!intervalLength.equals(other.intervalLength))
 			return false;
-		if (meterAsset == null) {
-			if (other.meterAsset != null)
-				return false;
-		} else if (!meterAsset.equals(other.meterAsset))
-			return false;
 		if (meterReferenceId == null) {
 			if (other.meterReferenceId != null)
 				return false;
@@ -290,7 +281,7 @@ public class IntervalReading extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "IntervalReading [meterAsset=" + meterAsset
+		return "IntervalReading [meterAsset="
 				+ ", meterReferenceId=" + meterReferenceId
 				+ ", referenceIdType=" + referenceIdType
 				+ ", referenceIdNamepsace=" + referenceIdNamepsace

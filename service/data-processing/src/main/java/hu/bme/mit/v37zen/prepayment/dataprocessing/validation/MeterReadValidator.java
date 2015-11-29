@@ -29,7 +29,7 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 	
 	@Override
 	public void run() {
-		String mRID = meterData.getMRID();
+		String mRID = meterData.getMeterReferenceId();
 		
 		try {
 			if(!meterAssetValidator.isMeterExist(mRID)){

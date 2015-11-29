@@ -19,6 +19,8 @@
 		<property name="rederivatorChannel">
 			<ref bean="toAccountRederivatingChannel" />
 		</property>		
+		<property name="activeStatus" value="${validation.association.active.status}"></property>
+		<property name="inactiveStatus" value="${validation.association.inactive.status}"></property>
 	</bean>	
 		
 	<int:channel id="toAccountRederivatingChannel" />
@@ -40,6 +42,8 @@
 		<property name="rederivatorChannel">
 			<ref bean="toSdpMeterRederivatingChannel" />
 		</property>
+		<property name="activeStatus" value="${validation.association.active.status}"></property>
+		<property name="inactiveStatus" value="${validation.association.inactive.status}"></property>
 	</bean>
 	
 	<int:channel id="toSdpMeterRederivatingChannel" />

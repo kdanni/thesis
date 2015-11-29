@@ -70,5 +70,18 @@
 	<int:channel id="validMeterReadChannel"></int:channel>
 	<int:channel id="invalidMeterReadChannel"></int:channel>
 	
+	<int:logging-channel-adapter
+	channel="validMeterReadChannel" 
+	level="INFO" 
+	expression=""
+	log-full-message="false"
+	logger-name="" />
+	
+	<int:logging-channel-adapter
+	channel="invalidMeterReadChannel" 
+	level="WARN" 
+	expression=""
+	log-full-message="false"
+	logger-name="" />
 	
 </beans>

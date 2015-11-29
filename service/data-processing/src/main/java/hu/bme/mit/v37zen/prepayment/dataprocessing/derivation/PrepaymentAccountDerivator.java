@@ -38,6 +38,10 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 	
 	private MessageChannel rederivatorChannel;
 	
+	private String inactiveStatus;
+	
+	private String activeStatus;
+	
 	@Autowired
 	private AccountRepository accountRepository;
 	
@@ -73,6 +77,7 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			String accMRID = accSdpAss.getAccountMRID();
 			if(accMRID == null || accMRID.trim().isEmpty()){
 				accMRID = accSdpAss.getAccount() != null ? accSdpAss.getAccount().getMRID() : null;
+				accSdpAss.setAccountMRID(accMRID);
 			}
 						
 			List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findByAccountMRID(accMRID);
@@ -108,6 +113,7 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			String sdpMRID = accSdpAss.getSdpMRID();
 			if(sdpMRID == null || sdpMRID.trim().isEmpty()){
 				sdpMRID = accSdpAss.getServiceDeliveryPoint() != null ? accSdpAss.getServiceDeliveryPoint().getMRID() : null;
+				accSdpAss.setSdpMRID(sdpMRID);
 			}
 			List<ServiceDeliveryPoint> sdpList = serviceDeliveryPointRepository.findByMRID(sdpMRID); 
 			if(sdpList.size() == 0){
@@ -129,7 +135,7 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			for (AccountSDPAssociation accountSDPAssociation : list) {
 				if(accountSDPAssociation.getSdpMRID() != null && accountSDPAssociation.getSdpMRID().equals(sdpMRID)){
 					accountSDPAssociation.setEndDate(new Date());
-					accountSDPAssociation.setStatus("inactive");
+					accountSDPAssociation.setStatus(inactiveStatus);
 				}
 			}			
 			
@@ -208,6 +214,22 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 	public void setServiceDeliveryPointRepository(
 			ServiceDeliveryPointRepository serviceDeliveryPointRepository) {
 		this.serviceDeliveryPointRepository = serviceDeliveryPointRepository;
+	}
+
+	public String getInactiveStatus() {
+		return inactiveStatus;
+	}
+
+	public void setInactiveStatus(String inactiveStatus) {
+		this.inactiveStatus = inactiveStatus;
+	}
+
+	public String getActiveStatus() {
+		return activeStatus;
+	}
+
+	public void setActiveStatus(String activeStatus) {
+		this.activeStatus = activeStatus;
 	}
 
 }
