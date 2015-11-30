@@ -124,10 +124,10 @@ subprojects {
 		providedCompile "org.springframework.ws:spring-xml:$springWSVersion"
 					
 		ext.jettyVersion = '9.3.0.M2'
-		//providedCompile "org.eclipse.jetty:jetty-server:$jettyVersion"
-		//providedCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
-		//providedCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
-		//providedCompile "org.eclipse.jetty:jetty-util:$jettyVersion"
+		providedCompile "org.eclipse.jetty:jetty-server:$jettyVersion"
+		providedCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+		providedCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
+		providedCompile "org.eclipse.jetty:jetty-util:$jettyVersion"
 		
 		ext.springIntegrationVersion = '4.2.1.RELEASE'
 		providedCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
