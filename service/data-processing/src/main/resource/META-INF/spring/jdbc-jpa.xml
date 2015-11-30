@@ -44,6 +44,7 @@
 		</property>
 		<property name="jpaProperties">
 			<props>
+<!-- 				<prop key="hibernate.event.merge.entity_copy_observer">allow</prop> -->
 				<prop key="hibernate.hbm2ddl.auto">${jpa.entityManager.factory.hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.dialect">${jpa.entityManager.factory.hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${jpa.entityManager.factory.hibernate.show_sql}</prop>

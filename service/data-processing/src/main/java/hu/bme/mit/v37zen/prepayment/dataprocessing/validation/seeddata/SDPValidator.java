@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class SDPValidator {
@@ -50,8 +51,8 @@ public class SDPValidator {
 	 * @return meterMRID
 	 * @throws ValidationException 
 	 */
-	public String isActiveSdpMeterAssociationExist(String sdpMRID) throws ValidationException{
-		
+	@Transactional
+	public synchronized String isActiveSdpMeterAssociationExist(String sdpMRID) throws ValidationException{
 		List<SdpMeterAssociation> sdpMeterAssList = sdpMeterAssociationRepository.findBySdpMRID(sdpMRID);
 		if(sdpMeterAssList.size() == 0){
 			String msg = "No SdpMeterAssetAssociation found with the given id!";

@@ -68,7 +68,8 @@
 	</bean>
 	
 	<int:channel id="validMeterReadChannel">
-		<int:dispatcher task-executor="toMeterReadDeriverChannelThreadPoolTaskExecutor"/>
+<!-- 		<int:dispatcher task-executor="toMeterReadDeriverChannelThreadPoolTaskExecutor"/> -->
+		
 	</int:channel>
 	<int:channel id="invalidMeterReadChannel"></int:channel>
 		

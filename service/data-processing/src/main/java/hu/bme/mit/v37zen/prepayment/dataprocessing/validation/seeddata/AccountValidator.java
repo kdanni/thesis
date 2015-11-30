@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class AccountValidator {
@@ -51,10 +52,10 @@ public class AccountValidator {
 		
 	}
 	
-	public PrepaymentAccount getPrepaymentAccountByMeterAsset(String meterMRID) throws ValidationException{
+	@Transactional
+	public synchronized PrepaymentAccount getPrepaymentAccountByMeterAsset(String meterMRID) throws ValidationException{
 		
 		String sdpMRID = meterAsssetValidator.isActiveSdpMeterAssociationExist(meterMRID);
-		
 		List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findBySdpMRID(sdpMRID);
 		if(ppaccList.size() == 0){
 			String msg = "No PrepaymentAccount found for the SDP id: " + sdpMRID +".";

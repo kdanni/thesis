@@ -1,7 +1,6 @@
 package hu.bme.mit.v37zen.sm.datamodel.meterreading;
 
 import hu.bme.mit.v37zen.sm.datamodel.BaseEntity;
-import hu.bme.mit.v37zen.sm.datamodel.smartmetering.MeterAsset;
 
 import java.util.Date;
 
@@ -47,7 +46,7 @@ public class IntervalReading extends BaseEntity {
 		this.insertTime = new Date();
 	}
 
-	public IntervalReading(MeterAsset meterAsset, String meterReferenceId,
+	public IntervalReading(String meterReferenceId,
 			String referenceIdType, String referenceIdNamepsace,
 			String readingTypeId, Double value, Boolean valid,
 			Boolean processed, Boolean archived, int intervalLength,
@@ -66,6 +65,22 @@ public class IntervalReading extends BaseEntity {
 		this.endTime = endTime;
 
 		this.insertTime = new Date();
+	}
+	
+	public IntervalReading(IntervalReading intervalReading){
+		this.archived = intervalReading.archived;
+		this.endTime = intervalReading.endTime;
+		this.insertTime = intervalReading.insertTime;
+		this.intervalLength = intervalReading.intervalLength;
+		this.meterReferenceId = intervalReading.meterReferenceId;
+		this.mRID = intervalReading.mRID;
+		this.processed = intervalReading.processed;
+		this.readingBlock = intervalReading.readingBlock;
+		this.readingTypeId = intervalReading.readingTypeId;
+		this.referenceIdNamepsace = intervalReading.referenceIdNamepsace;
+		this.referenceIdType = intervalReading.referenceIdType;
+		this.valid = intervalReading.valid;
+		this.value = intervalReading.value;
 	}
 
 	public String getReadingTypeId() {

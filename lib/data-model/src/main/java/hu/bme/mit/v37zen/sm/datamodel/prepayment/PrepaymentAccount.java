@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -39,13 +38,13 @@ public class PrepaymentAccount extends BaseEntity {
     
     private String status;
     
-    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToMany(fetch=FetchType.EAGER)
     private List<Payment> payments = new ArrayList<Payment>();
     
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="prepaymentAccount", cascade=CascadeType.ALL)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="prepaymentAccount")
     private List<Balance> balance = new ArrayList<Balance>();
     
-    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToMany(fetch=FetchType.EAGER)
     private List<IntervalReading> meterReadings = new ArrayList<IntervalReading>();
     
     public PrepaymentAccount() {
