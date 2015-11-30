@@ -1,5 +1,8 @@
-package hu.bme.mit.v37zen.prepayment.dataprocessing.validation;
+package hu.bme.mit.v37zen.prepayment.dataprocessing.validation.meterdata;
 
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationException;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.Validator;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.MeterAsssetValidator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
@@ -12,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 public class MeterReadValidator implements Validator<IntervalReading> {
 	
@@ -25,20 +29,28 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 	@Autowired
 	private MeterAsssetValidator meterAssetValidator;
 	@Autowired
+	private AccountValidator accountValidator;
+	@Autowired
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 	
 	@Override
 	public void run() {
+		if(meterData == null){
+			return;
+		}
 		String mRID = meterData.getMeterReferenceId();
 		
 		try {
 			if(!meterAssetValidator.isMeterExist(mRID)){
 				throw new ValidationException("Meter reading isn't valid. Can't found meter with mRID: " + mRID + ".", meterData); 
 			}
+			accountValidator.getPrepaymentAccountByMeterAsset(mRID);
+			//Exception is thrown if no valid Meter-SDP-Account relation exist.
 			
+			meterData.setValid(true);
 			this.validChannel.send(new GenericMessage<IntervalReading>(meterData));
 			
-			logger.debug("Valid Meter Data: " + meterData.toString());
+			//logger.debug("Valid Meter Data: " + meterData.toString());
 			
 		} catch (ValidationException e) {
 			logValidationException(e);
@@ -50,6 +62,7 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 			
 	}
 	
+	@Transactional
 	protected void logValidationException(ValidationException e){
 		logger.info("[ValidationException]: " + e.getMessage());
 		PrepaymentException pe = new PrepaymentException(new Date(), e.getMessage());
@@ -75,6 +88,14 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 
 	public void setValidChannel(MessageChannel validChannel) {
 		this.validChannel = validChannel;
+	}
+
+	public AccountValidator getAccountValidator() {
+		return accountValidator;
+	}
+
+	public void setAccountValidator(AccountValidator accountValidator) {
+		this.accountValidator = accountValidator;
 	}
 
 	

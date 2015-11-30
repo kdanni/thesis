@@ -1,7 +1,7 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing;
 
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.MeterReadValidator;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.SeedDataValidator;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.meterdata.MeterReadValidator;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.SeedDataValidator;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
 import hu.bme.mit.v37zen.sm.messaging.DataProcessRequest;

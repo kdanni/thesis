@@ -53,6 +53,23 @@
 		output-channel="toSdpMeterAssociationDerivatorChannel"
 	></int:delayer>
 	
+	<bean id="MeterReadDerivator"
+		class="hu.bme.mit.v37zen.prepayment.dataprocessing.derivation.MeterReadDerivator" >
+		<property name="channel">
+			<ref bean="validMeterReadChannel" />
+		</property>
+		<property name="outputChannel">
+			<ref bean="afterMeterReadDerivatorChannel"/>
+		</property>		
+	</bean>
 	
+	<int:channel id="afterMeterReadDerivatorChannel"></int:channel>
+	
+	<int:logging-channel-adapter
+		channel="afterMeterReadDerivatorChannel" 
+		level="DEBUG" 
+		expression=""
+		log-full-message="false"
+		logger-name="" />
 	
 </beans>

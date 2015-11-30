@@ -11,6 +11,9 @@ import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
 
 import java.util.Date;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 public class MeterReadDerivator implements MessageHandler {
 	
@@ -41,39 +45,55 @@ public class MeterReadDerivator implements MessageHandler {
 	@Autowired
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 	
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
 		Object payload = message.getPayload();
-		if(payload instanceof IntervalReading){
-			logger.debug(payload.toString());
-		
-			IntervalReading ir = (IntervalReading)payload;
-			String meterMRID = ir.getMeterReferenceId();
-			
+		if(payload instanceof IntervalReading){			
 			try {
-				PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(meterMRID);
-
-				ir = this.intervalReadingRepository.save(ir);
-				ppacc.getMeterReadings().add(ir);
-				
-				ppacc = this.prepaymentAccountRepository.save(ppacc);			
-				
+				PrepaymentAccount ppacc = deriveTransaction((IntervalReading)payload);
 				outputChannel.send(new GenericMessage<PrepaymentAccount>(ppacc));
-				
+			
 			} catch (ValidationException e) {
 				logValidationException(e);
 			}
 			catch (Exception e) {
 				logger.error(e.getMessage(),e);
-			}		
+			}	
 		}
 	}
 	
+	@Transactional
+	protected PrepaymentAccount deriveTransaction(IntervalReading intervalReading) throws ValidationException{
+		
+			String meterMRID = intervalReading.getMeterReferenceId();
+			PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(meterMRID);
+							
+			//Hibernate.initialize(ppacc.getMeterReadings());
+			ppacc.getMeterReadings().size();
+			ppacc.getMeterReadings().add(intervalReading);
+			
+			ppacc = this.prepaymentAccountRepository.saveAndFlush(ppacc);
+			
+			return ppacc;
+	}	
+	
+	@Transactional
 	protected void logValidationException(ValidationException e){
 		logger.info("[ValidationException]: " + e.getMessage());
 		PrepaymentException pe = new PrepaymentException(new Date(), e.getMessage());
 		prepaymentExceptionRepository.save(pe);
+	}
+	
+	public SubscribableChannel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(SubscribableChannel channel) {
+		this.channel = channel;
+		this.channel.subscribe(this);
 	}
 
 	public MessageChannel getOutputChannel() {
@@ -82,14 +102,6 @@ public class MeterReadDerivator implements MessageHandler {
 
 	public void setOutputChannel(MessageChannel outputChannel) {
 		this.outputChannel = outputChannel;
-	}
-
-	public SubscribableChannel getChannel() {
-		return channel;
-	}
-
-	public void setChannel(SubscribableChannel channel) {
-		this.channel = channel;
 	}
 
 	public IntervalReadingRepository getIntervalReadingRepository() {
@@ -124,6 +136,14 @@ public class MeterReadDerivator implements MessageHandler {
 
 	public void setAccountValidator(AccountValidator accountValidator) {
 		this.accountValidator = accountValidator;
+	}
+
+	public EntityManagerFactory getEntityManagerFactory() {
+		return entityManagerFactory;
+	}
+
+	public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+		this.entityManagerFactory = entityManagerFactory;
 	}
 
 }

@@ -21,6 +21,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 public class SdpMeterAssociationDerivator implements MessageHandler {
 	
@@ -51,6 +52,7 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 	private MeterAssetRepository meterAssetRepository;
 	
 	@Override
+	@Transactional
 	public void handleMessage(Message<?> message) throws MessagingException {
 		logger.debug(message.toString());
 		int processed = 0;

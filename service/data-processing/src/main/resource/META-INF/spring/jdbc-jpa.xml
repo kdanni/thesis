@@ -50,11 +50,30 @@
 			</props>
 		</property>
 	</bean>
+	
+<!-- 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"> -->
+<!-- 		<property name=""></property> -->
+<!-- 	    <property name="dataSource" ref="dataSource" /> -->
+<!-- 	    <property name="packagesToScan" value="com.hcentive.cig.domain" /> -->
+<!-- 	    <property name="hibernateProperties"> -->
+<!-- 	        <props> -->
+<!-- 	            <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+<!-- 	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
+<!-- 	            <prop key="hibernate.show_sql">true</prop> -->
+<!-- 	        </props> -->
+<!-- 	    </property> -->
+<!-- 	</bean>    -->
+
+<!-- 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> -->
+<!-- 	        <property name="sessionFactory" ref="sessionFactory" /> -->
+<!-- 	</bean> -->
     
     <!--Transaction manager for both H2 and Mysql-->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
+    
+    <tx:annotation-driven/>
     
     <jpa:repositories transaction-manager-ref="transactionManager"
         entity-manager-factory-ref="entityManagerFactory" 

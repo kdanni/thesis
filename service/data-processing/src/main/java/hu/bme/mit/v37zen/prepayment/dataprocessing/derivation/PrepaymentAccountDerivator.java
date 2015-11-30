@@ -23,6 +23,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 public class PrepaymentAccountDerivator implements MessageHandler {
 
@@ -58,8 +59,8 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 	private ServiceDeliveryPointRepository serviceDeliveryPointRepository;
 	
 	@Override
+	@Transactional
 	public void handleMessage(Message<?> message) throws MessagingException {
-		logger.debug(message.toString());
 		int processed = 0;
 		if(message.getHeaders().containsKey(PROCESSED_KEY)){
 			processed = message.getHeaders().get(PROCESSED_KEY, Integer.class);
@@ -148,12 +149,14 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			
 			accSdpAss = accountSDPAssociationRepository.save(accSdpAss);
 			
+			ppacc.setMRID(accMRID);
+			ppacc.setStatus(activeStatus);
+			ppacc.setActive(true);
 			ppacc.setAccountSDPAssociation(accSdpAss);
 			ppacc = prepaymentAccountRepository.saveAndFlush(ppacc);
 			
-			
-		}
-		
+			logger.debug("PrepaymentAccount derived: " + ppacc.toString());
+		}		
 	}
 
 	public SubscribableChannel getChannel() {

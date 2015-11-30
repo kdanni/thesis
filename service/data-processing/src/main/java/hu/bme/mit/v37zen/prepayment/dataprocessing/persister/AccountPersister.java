@@ -19,6 +19,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
+import org.springframework.transaction.annotation.Transactional;
 
 public class AccountPersister implements MessageHandler {
 	
@@ -38,6 +39,7 @@ public class AccountPersister implements MessageHandler {
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 	
 	@Override
+	@Transactional
 	public void handleMessage(Message<?> message) throws MessagingException {
 		
 		Object payload = message.getPayload();

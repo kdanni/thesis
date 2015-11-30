@@ -3,7 +3,6 @@ package hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationException;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
-import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentAccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.SdpMeterAssociationRepository;
@@ -23,6 +22,9 @@ public class AccountValidator {
 	@Value("${validation.association.inactive.status}")
 	private String inactiveStatus;
 
+	@Autowired
+	private MeterAsssetValidator meterAsssetValidator;
+	
 	@Autowired
 	private AccountRepository accountRepository;
 	
@@ -51,51 +53,19 @@ public class AccountValidator {
 	
 	public PrepaymentAccount getPrepaymentAccountByMeterAsset(String meterMRID) throws ValidationException{
 		
-		List<SdpMeterAssociation> sdpMeterAssList = sdpMeterAssociationRepository.findByMeterAssetMRID(meterMRID);
-		if(sdpMeterAssList.size() == 0){
-			String msg = "No SdpMeterAssetAssociation found with the given id!";
-			throw new ValidationException(msg);
-		}
-		SdpMeterAssociation activeSdpMeterAssociation = null;
-		int activeCount = 0;
-		for (SdpMeterAssociation sdpMeterAssociation : sdpMeterAssList) {
-			if(sdpMeterAssociation.getStatus() != null && sdpMeterAssociation.getStatus().equalsIgnoreCase(activeStatus)){
-				activeSdpMeterAssociation = sdpMeterAssociation;
-				activeCount++; 
-			}
-		}
-		if(activeCount != 1){
-			String msg = (activeCount > 1) ? "Multiple active SdpMeterAssetAssociation found!"
-					: "No active SdpMeterAssetAssociation found!";
-			throw new ValidationException(msg);
-		}
-		String sdpMRID = null;
-		if(activeSdpMeterAssociation != null){
-			sdpMRID = activeSdpMeterAssociation.getSdpMRID();
-		}
+		String sdpMRID = meterAsssetValidator.isActiveSdpMeterAssociationExist(meterMRID);
 		
 		List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findBySdpMRID(sdpMRID);
 		if(ppaccList.size() == 0){
 			String msg = "No PrepaymentAccount found for the SDP id: " + sdpMRID +".";
 			throw new ValidationException(msg);
 		}
-		PrepaymentAccount ppacc = null;
-		if(ppaccList.size() > 1){
-			int active = 0;
-			for (PrepaymentAccount prepaymentAccount : ppaccList) {
-				if(prepaymentAccount.getStatus() != null && 
-						prepaymentAccount.getAccountSDPAssociation().getStatus().equalsIgnoreCase(activeStatus)){
-					ppacc = prepaymentAccount;
-					active++;
-				}
-			}
-			if(active != 1){
-				String msg = ((active > 1) ? "Multiple" : "No") + " active PrepaymentAccount found for the SDP id: " + sdpMRID +".";
-				throw new ValidationException(msg);
-			}
+		if(ppaccList.size() != 1){
+			String msg = ((ppaccList.size() > 1) ? "Multiple" : "No") + " active PrepaymentAccount found for the SDP id: " + sdpMRID +".";
+			throw new ValidationException(msg);
 		}
+		return ppaccList.get(0);
 		
-		return ppacc;
 	}
 	
 	public AccountRepository getAccountRepository() {
@@ -138,6 +108,14 @@ public class AccountValidator {
 
 	public void setActiveStatus(String activeStatus) {
 		this.activeStatus = activeStatus;
+	}
+
+	public MeterAsssetValidator getMeterAsssetValidator() {
+		return meterAsssetValidator;
+	}
+
+	public void setMeterAsssetValidator(MeterAsssetValidator meterAsssetValidator) {
+		this.meterAsssetValidator = meterAsssetValidator;
 	}
 	
 	

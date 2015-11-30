@@ -47,15 +47,23 @@
 	    <property name="maxPoolSize" value="6" />
 	    <property name="queueCapacity" value="25" />
 	    
-	    <qualifier value="validChannelThreadPoolTaskExecutor"></qualifier>
+	    <qualifier value="toAccountDeriverChannelThreadPoolTaskExecutor"></qualifier>
 	</bean>
 	
-		<bean id="toSdpMeterDeriverChannelThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	<bean id="toSdpMeterDeriverChannelThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 	    <property name="corePoolSize" value="2" />
 	    <property name="maxPoolSize" value="6" />
 	    <property name="queueCapacity" value="25" />
 	    
-	    <qualifier value="validChannelThreadPoolTaskExecutor"></qualifier>
+	    <qualifier value="toSdpMeterDeriverChannelThreadPoolTaskExecutor"></qualifier>
+	</bean>
+		
+	<bean id="toMeterReadDeriverChannelThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="2" />
+	    <property name="maxPoolSize" value="6" />
+	    <property name="queueCapacity" value="50" />
+	    
+	    <qualifier value="toMeterReadDeriverChannelThreadPoolTaskExecutor"></qualifier>
 	</bean>
 	
 	<!--  /Task Executors  -->	

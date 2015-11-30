@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -38,13 +39,13 @@ public class PrepaymentAccount extends BaseEntity {
     
     private String status;
     
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private List<Payment> payments = new ArrayList<Payment>();
     
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="prepaymentAccount", cascade=CascadeType.ALL)
     private List<Balance> balance = new ArrayList<Balance>();
     
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private List<IntervalReading> meterReadings = new ArrayList<IntervalReading>();
     
     public PrepaymentAccount() {
@@ -54,7 +55,7 @@ public class PrepaymentAccount extends BaseEntity {
 	public PrepaymentAccount(AccountSDPAssociation accountSDPAssociation,
 			boolean active, Date startDate, Date endDate, String status) {
 		super();
-		this.accountSDPAssociation = accountSDPAssociation;
+		this.setAccountSDPAssociation(accountSDPAssociation);
 		this.active = active;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -67,6 +68,8 @@ public class PrepaymentAccount extends BaseEntity {
 
 	public void setAccountSDPAssociation(AccountSDPAssociation accountSDPAssociation) {
 		this.accountSDPAssociation = accountSDPAssociation;
+		this.accountMRID = accountSDPAssociation.getAccountMRID();
+		this.sdpMRID = accountSDPAssociation.getSdpMRID();
 	}
 
 	public boolean isActive() {

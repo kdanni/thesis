@@ -1,10 +1,8 @@
-package hu.bme.mit.v37zen.prepayment.dataprocessing.validation;
+package hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata;
 
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountSDPAssociationValidator;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.MeterAsssetValidator;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.SDPMeterAssociationValidator;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.SDPValidator;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ScheduledForRevalidationException;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationException;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.Validator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
@@ -24,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Transactional;
 
 public class SeedDataValidator implements Validator<SeedData> {
 	
@@ -210,7 +209,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 	}
 
 
-	
+	@Transactional
 	protected void logValidationException(ValidationException e){
 		logger.info("[ValidationException]: " + e.getMessage());
 		PrepaymentException pe = new PrepaymentException(new Date(), e.getMessage());

@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 	
 	<bean id="seedDataValidator" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.SeedDataValidator" >
+			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.SeedDataValidator" >
 			<property name="toRevalidationChannel">
 				<ref bean="toRevalidatingChannel" />
 			</property>
@@ -58,7 +58,7 @@
 	
 	<!-- Meter Reading Validation -->
 	<bean id="meterReadValidator" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.MeterReadValidator" >
+			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.meterdata.MeterReadValidator" >
 		<property name="validChannel">
 			<ref bean="validMeterReadChannel" />
 		</property>
@@ -67,21 +67,16 @@
 		</property>
 	</bean>
 	
-	<int:channel id="validMeterReadChannel"></int:channel>
+	<int:channel id="validMeterReadChannel">
+		<int:dispatcher task-executor="toMeterReadDeriverChannelThreadPoolTaskExecutor"/>
+	</int:channel>
 	<int:channel id="invalidMeterReadChannel"></int:channel>
-	
+		
 	<int:logging-channel-adapter
-	channel="validMeterReadChannel" 
-	level="INFO" 
-	expression=""
-	log-full-message="false"
-	logger-name="" />
-	
-	<int:logging-channel-adapter
-	channel="invalidMeterReadChannel" 
-	level="WARN" 
-	expression=""
-	log-full-message="false"
-	logger-name="" />
+		channel="invalidMeterReadChannel" 
+		level="DEBUG" 
+		expression=""
+		log-full-message="false"
+		logger-name="" />
 	
 </beans>
