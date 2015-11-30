@@ -142,7 +142,9 @@ public class RatingEngine implements MessageHandler {
 		
 		balance = this.balanceRepository.save(balance);
 		
-		PrepaymentAccount ppacc = ppaccList.get(0);		
+		PrepaymentAccount ppacc = ppaccList.get(0);	
+		ppacc = this.prepaymentAccountRepository.findByIdFetchBalance(ppacc.getId());
+		
 		ppacc.getBalance().size();
 		ppacc.getBalance().add(balance);
 		

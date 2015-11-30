@@ -73,8 +73,9 @@ public class MeterReadDerivator implements MessageHandler {
 		intervalReading = this.intervalReadingRepository.save(intervalReading);
 				
 		PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(meterMRID);
-		String id = ppacc.getMRID();
+		ppacc = this.prepaymentAccountRepository.findByIdFetchMeterReading(ppacc.getId());
 		
+		String id = ppacc.getMRID();
 		ppacc.getMeterReadings().size();
 		ppacc.getMeterReadings().add(intervalReading);
 		

@@ -38,13 +38,13 @@ public class PrepaymentAccount extends BaseEntity {
     
     private String status;
     
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch=FetchType.LAZY)
     private List<Payment> payments = new ArrayList<Payment>();
     
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch=FetchType.LAZY)
     private List<Balance> balance = new ArrayList<Balance>();
     
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch=FetchType.LAZY)
     private List<IntervalReading> meterReadings = new ArrayList<IntervalReading>();
     
     public PrepaymentAccount() {

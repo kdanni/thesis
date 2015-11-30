@@ -75,6 +75,8 @@ public class PaymentDerivator implements MessageHandler {
 			throw new ValidationException(msg);
 		}
 		PrepaymentAccount ppacc = ppaccList.get(0);
+		ppacc = this.prepaymentAccountRepository.findByIdFetchPayment(ppacc.getId());
+				
 		String id = ppacc.getMRID();
 		
 		ppacc.getPayments().size();
