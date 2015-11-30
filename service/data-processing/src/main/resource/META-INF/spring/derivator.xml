@@ -59,18 +59,18 @@
 			<ref bean="validMeterReadChannel" />
 		</property>
 		<property name="outputChannel">
-			<ref bean="afterMeterReadDerivatorChannel"/>
+			<ref bean="toRatingEngine"/>
 		</property>		
 	</bean>
 	
-	<int:channel id="afterMeterReadDerivatorChannel"></int:channel>
+<!-- 	<int:channel id="afterMeterReadDerivatorChannel"></int:channel> -->
 	
-	<int:logging-channel-adapter
-		channel="afterMeterReadDerivatorChannel" 
-		level="DEBUG" 
-		expression=""
-		log-full-message="false"
-		logger-name="" />
+<!-- 	<int:logging-channel-adapter -->
+<!-- 		channel="afterMeterReadDerivatorChannel"  -->
+<!-- 		level="DEBUG"  -->
+<!-- 		expression="" -->
+<!-- 		log-full-message="false" -->
+<!-- 		logger-name="" /> -->
 		
 	<bean id="paymentDerivator"
 		class="hu.bme.mit.v37zen.prepayment.dataprocessing.derivation.PaymentDerivator" >
@@ -78,17 +78,17 @@
 			<ref bean="validPaymentChannel" />
 		</property>
 		<property name="outputChannel">
-			<ref bean="afterPaymentDerivatorChannel"/>
+			<ref bean="toRatingEngine"/>
 		</property>		
 	</bean>
 	
-	<int:channel id="afterPaymentDerivatorChannel"></int:channel>
+<!-- 	<int:channel id="afterPaymentDerivatorChannel"></int:channel> -->
 	
-	<int:logging-channel-adapter
-		channel="afterPaymentDerivatorChannel" 
-		level="DEBUG" 
-		expression=""
-		log-full-message="false"
-		logger-name="" />
+<!-- 	<int:logging-channel-adapter -->
+<!-- 		channel="afterPaymentDerivatorChannel"  -->
+<!-- 		level="DEBUG"  -->
+<!-- 		expression="" -->
+<!-- 		log-full-message="false" -->
+<!-- 		logger-name="" /> -->
 	
 </beans>

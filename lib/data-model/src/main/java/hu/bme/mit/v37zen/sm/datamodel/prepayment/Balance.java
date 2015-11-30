@@ -5,9 +5,6 @@ import hu.bme.mit.v37zen.sm.datamodel.BaseEntity;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,9 +19,7 @@ public class Balance extends BaseEntity {
 	
 	private double consumption;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="prepaymentAccount_id")
-	private PrepaymentAccount prepaymentAccount;
+	private String prepaymentAccountMRID;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
@@ -49,12 +44,12 @@ public class Balance extends BaseEntity {
 	}
 	
 	public Balance(double balance, double prepayed, double consumption,
-			PrepaymentAccount prepaymentAccount, Date date) {
+			String prepaymentAccountMRID, Date date) {
 		super();
 		this.balance = balance;
 		this.prepayed = prepayed;
 		this.consumption = consumption;
-		this.prepaymentAccount = prepaymentAccount;
+		this.prepaymentAccountMRID  = prepaymentAccountMRID;
 		this.date = date;
 	}
 
@@ -90,14 +85,6 @@ public class Balance extends BaseEntity {
 		this.consumption = consumption;
 	}
 
-	public PrepaymentAccount getPrepaymentAccount() {
-		return prepaymentAccount;
-	}
-
-	public void setPrepaymentAccount(PrepaymentAccount prepaymentAccount) {
-		this.prepaymentAccount = prepaymentAccount;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -112,7 +99,7 @@ public class Balance extends BaseEntity {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime
 				* result
-				+ ((prepaymentAccount == null) ? 0 : prepaymentAccount
+				+ ((prepaymentAccountMRID == null) ? 0 : prepaymentAccountMRID
 						.hashCode());
 		return result;
 	}
@@ -140,10 +127,10 @@ public class Balance extends BaseEntity {
 		if (Double.doubleToLongBits(prepayed) != Double
 				.doubleToLongBits(other.prepayed))
 			return false;
-		if (prepaymentAccount == null) {
-			if (other.prepaymentAccount != null)
+		if (prepaymentAccountMRID == null) {
+			if (other.prepaymentAccountMRID != null)
 				return false;
-		} else if (!prepaymentAccount.equals(other.prepaymentAccount))
+		} else if (!prepaymentAccountMRID.equals(other.prepaymentAccountMRID))
 			return false;
 		return true;
 	}
@@ -151,9 +138,17 @@ public class Balance extends BaseEntity {
 	@Override
 	public String toString() {
 		return "Balance [balance=" + balance + ", prepayed=" + prepayed
-				+ ", consumption=" + consumption + ", prepaymentAccount="
-				+ prepaymentAccount + ", date=" + date + ", id=" + id
+				+ ", consumption=" + consumption + ", prepaymentAccountMRID="
+				+ prepaymentAccountMRID + ", date=" + date + ", id=" + id
 				+ ", mRID=" + mRID + "]";
+	}
+
+	public String getPrepaymentAccountMRID() {
+		return prepaymentAccountMRID;
+	}
+
+	public void setPrepaymentAccountMRID(String prepaymentAccountMRID) {
+		this.prepaymentAccountMRID = prepaymentAccountMRID;
 	}
 	
 }

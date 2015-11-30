@@ -64,6 +64,8 @@ public class PaymentDerivator implements MessageHandler {
 		String accMRID = payment.getAccountId();
 		payment = new Payment(payment);
 		payment.setInsertTime(new Date());
+		payment.setProcessed(false);
+		payment.setArchived(false);
 				
 		payment = this.paymentRepository.save(payment);
 		

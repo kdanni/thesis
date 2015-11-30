@@ -41,7 +41,7 @@ public class PrepaymentAccount extends BaseEntity {
     @OneToMany(fetch=FetchType.EAGER)
     private List<Payment> payments = new ArrayList<Payment>();
     
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="prepaymentAccount")
+    @OneToMany(fetch=FetchType.EAGER)
     private List<Balance> balance = new ArrayList<Balance>();
     
     @OneToMany(fetch=FetchType.EAGER)
