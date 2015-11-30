@@ -31,7 +31,7 @@ public class PaymentNodeMapper extends AbstractNodeMapper<Payment> {
 		
 		String accId = evaluate(paymentConfigurator.getAccountIdSelector(), node);
 		buff.append("Payment account ID: "+ accId + '\n');
-		payment.setMRID(accId);
+		payment.setAccountId(accId);
 		
 		Double value = XPathUtil.evaluateAsDouble(paymentConfigurator.getValueSelector(), node, namespaces.getNamespaces());
 		buff.append("Payment value: "+ value + '\n');
@@ -39,7 +39,7 @@ public class PaymentNodeMapper extends AbstractNodeMapper<Payment> {
 
 		String currency = evaluate(paymentConfigurator.getCurencySelector(), node);
 		buff.append("Payment currency: "+ currency + '\n');
-		payment.setMRID(accId);
+		payment.setCurrency(currency);
 		
 		Date date = XPathUtil.evaluateAsDate(paymentConfigurator.getDateSelector(),
 				paymentConfigurator.getDateFormat(), node, namespaces.getNamespaces());

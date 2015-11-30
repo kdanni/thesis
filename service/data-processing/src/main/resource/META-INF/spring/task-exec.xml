@@ -65,7 +65,14 @@
 	    
 	    <qualifier value="toMeterReadDeriverChannelThreadPoolTaskExecutor"></qualifier>
 	</bean>
-	
+			
+	<bean id="toPaymentDeriverChannelThreadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="2" />
+	    <property name="maxPoolSize" value="6" />
+	    <property name="queueCapacity" value="50" />
+	    
+	    <qualifier value="toPaymentDeriverChannelThreadPoolTaskExecutor"></qualifier>
+	</bean>
 	<!--  /Task Executors  -->	
 				
 </beans>

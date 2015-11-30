@@ -36,7 +36,6 @@ public class MeterPersister implements MessageHandler {
 		
 		Object payload = message.getPayload();
 		if(payload instanceof MeterAsset){
-			logger.debug(payload.toString());
 			MeterAsset meter = (MeterAsset) payload;
 			List<MeterAsset> meterList = meterAssetRepository.findByMRID(meter.getMRID()); 
 			

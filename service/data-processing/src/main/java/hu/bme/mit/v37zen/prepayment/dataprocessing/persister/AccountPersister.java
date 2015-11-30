@@ -44,7 +44,6 @@ public class AccountPersister implements MessageHandler {
 		
 		Object payload = message.getPayload();
 		if(payload instanceof Account){
-			logger.debug(payload.toString());
 			Account account = (Account)payload;
 			List<Account> accList = accountRepository.findByMRID(account.getMRID());
 			if(accList.size() == 0){

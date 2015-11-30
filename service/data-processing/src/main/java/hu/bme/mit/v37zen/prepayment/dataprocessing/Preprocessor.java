@@ -1,6 +1,7 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing;
 
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.meterdata.MeterReadValidator;
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.payment.PaymentValidator;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.SeedDataValidator;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
@@ -37,11 +38,7 @@ public class Preprocessor implements ApplicationContextAware {
 	}
 	
 	public void dataProcessRequests(DataProcessRequest<?> messageBody){
-		
-		logger.debug("Echo: \n" + messageBody.toString());
-		
 		Serializable entity = messageBody.getEntity();
-		
 		if(entity instanceof IntervalReading){
 			this.meterReading((IntervalReading)messageBody.getEntity());
 		}
@@ -54,7 +51,6 @@ public class Preprocessor implements ApplicationContextAware {
 	}	
 	
 	public void seedData(SeedData seedData){
-		
 		logger.debug("SeedData: \n" + seedData.toString());
 		
 		SeedDataValidator seedDataValidator = applicationContext.getBean(SeedDataValidator.class);
@@ -64,8 +60,7 @@ public class Preprocessor implements ApplicationContextAware {
 	}
 	
 	public void meterReading(IntervalReading intervalReading){
-		
-		logger.debug("IntervalReading" + intervalReading.toString());
+		logger.debug("IntervalReading: \n" + intervalReading.toString());
 		
 		MeterReadValidator meterReadValidator = applicationContext.getBean(MeterReadValidator.class);
 		meterReadValidator.setData(intervalReading);
@@ -74,8 +69,12 @@ public class Preprocessor implements ApplicationContextAware {
 	}
 
 	public void paymentData(Payment payment){
-	
 		logger.debug("Payment: \n" + payment.toString());
+		
+		PaymentValidator paymentValidator = applicationContext.getBean(PaymentValidator.class);
+		paymentValidator.setData(payment);
+		
+		this.paymentValidatorThreadPoolTaskExecutor.execute(paymentValidator);
 	}
 
 	@Override

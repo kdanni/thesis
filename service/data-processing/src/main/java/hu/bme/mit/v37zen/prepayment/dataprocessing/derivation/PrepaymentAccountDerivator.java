@@ -152,6 +152,7 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			ppacc.setMRID(accMRID);
 			ppacc.setStatus(activeStatus);
 			ppacc.setActive(true);
+			ppacc.setStartDate(new Date());
 			ppacc.setAccountSDPAssociation(accSdpAss);
 			ppacc = prepaymentAccountRepository.saveAndFlush(ppacc);
 			

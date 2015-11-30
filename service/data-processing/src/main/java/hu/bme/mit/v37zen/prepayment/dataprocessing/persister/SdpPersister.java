@@ -36,7 +36,6 @@ public class SdpPersister implements MessageHandler {
 		
 		Object payload = message.getPayload();
 		if(payload instanceof ServiceDeliveryPoint){
-			logger.debug(payload.toString());
 			ServiceDeliveryPoint sdp = (ServiceDeliveryPoint) payload;
 			List<ServiceDeliveryPoint> sdpList = serviceDeliveryPointRepository.findByMRID(sdp.getMRID()); 
 			

@@ -54,7 +54,6 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 	@Override
 	@Transactional
 	public void handleMessage(Message<?> message) throws MessagingException {
-		logger.debug(message.toString());
 		int processed = 0;
 		if(message.getHeaders().containsKey(PROCESSED_KEY)){
 			processed = message.getHeaders().get(PROCESSED_KEY, Integer.class);

@@ -91,7 +91,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 				
 				validChannel.send(new GenericMessage<Account>(account));
 				
-				logger.debug("Valid Account: " + account.toString());
+				//logger.debug("Valid Account: " + account.toString());
 				
 			} catch (ValidationException e) {
 				logValidationException(e);
@@ -112,7 +112,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 				
 				validChannel.send(new GenericMessage<ServiceDeliveryPoint>(serviceDeliveryPoint));
 				
-				logger.debug("Valid SDP: " + serviceDeliveryPoint.toString());
+				//logger.debug("Valid SDP: " + serviceDeliveryPoint.toString());
 				
 			} catch (ValidationException e) {
 				logValidationException(e);
@@ -133,7 +133,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 				
 				validChannel.send(new GenericMessage<AccountSDPAssociation>(accountSDPAssociation));
 				
-				logger.info("Valid AccountSDPAssociation: " + accountSDPAssociation.toString());
+				//logger.info("Valid AccountSDPAssociation: " + accountSDPAssociation.toString());
 								
 			} catch (ValidationException e) {
 				logValidationException(e);
@@ -165,7 +165,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 
 				validChannel.send(new GenericMessage<MeterAsset>(meterAsset));
 				
-				logger.debug("Valid MeterAsset: " + meterAsset.toString());
+				//logger.debug("Valid MeterAsset: " + meterAsset.toString());
 				
 			} catch (ValidationException e) {
 				logValidationException(e);
@@ -186,7 +186,7 @@ public class SeedDataValidator implements Validator<SeedData> {
 				
 				validChannel.send(new GenericMessage<SdpMeterAssociation>(sdpMeterAssociation));
 				
-				logger.info("Valid SdpMeterAssociation: " + sdpMeterAssociation.toString());
+				//logger.info("Valid SdpMeterAssociation: " + sdpMeterAssociation.toString());
 								
 			} catch (ValidationException e) {
 				logValidationException(e);

@@ -68,13 +68,35 @@
 	</bean>
 	
 	<int:channel id="validMeterReadChannel">
-<!-- 		<int:dispatcher task-executor="toMeterReadDeriverChannelThreadPoolTaskExecutor"/> -->
-		
+ 		<int:dispatcher task-executor="toMeterReadDeriverChannelThreadPoolTaskExecutor"/>		
 	</int:channel>
 	<int:channel id="invalidMeterReadChannel"></int:channel>
 		
 	<int:logging-channel-adapter
 		channel="invalidMeterReadChannel" 
+		level="DEBUG" 
+		expression=""
+		log-full-message="false"
+		logger-name="" />
+	
+	<!-- Payment Validation -->
+	<bean id="paymentValidator" scope="prototype"
+			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.payment.PaymentValidator" >
+		<property name="validChannel">
+			<ref bean="validPaymentChannel" />
+		</property>
+		<property name="invalidChannel">
+			<ref bean="invalidPaymentChannel" />
+		</property>
+	</bean>
+	
+	<int:channel id="validPaymentChannel">
+ 		<int:dispatcher task-executor="toPaymentDeriverChannelThreadPoolTaskExecutor"/>		
+	</int:channel>
+	<int:channel id="invalidPaymentChannel"></int:channel>
+			
+	<int:logging-channel-adapter
+		channel="invalidPaymentChannel" 
 		level="DEBUG" 
 		expression=""
 		log-full-message="false"

@@ -1,15 +1,15 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing.derivation;
 
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationException;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
-import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
-import hu.bme.mit.v37zen.sm.jpa.repositories.IntervalReadingRepository;
+import hu.bme.mit.v37zen.sm.jpa.repositories.PaymentRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentAccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,32 +23,30 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-public class MeterReadDerivator implements MessageHandler {
+public class PaymentDerivator implements MessageHandler {
+
+	public static final Logger logger = LoggerFactory.getLogger(PaymentDerivator.class);
 	
-	public static final Logger logger = LoggerFactory.getLogger(MeterReadDerivator.class);
-		
 	private SubscribableChannel channel;
 	
 	private MessageChannel outputChannel;
-
-	@Autowired
-	private AccountValidator accountValidator;
 	
+	@Autowired
+	private PaymentRepository paymentRepository;
+
 	@Autowired
 	private PrepaymentAccountRepository prepaymentAccountRepository;
 	
 	@Autowired
-	private IntervalReadingRepository intervalReadingRepository;
-	
-	@Autowired
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 	
+
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
 		Object payload = message.getPayload();
-		if(payload instanceof IntervalReading){			
+		if(payload instanceof Payment){			
 			try {
-				String ppaccId = persistTransaction((IntervalReading)payload);
+				String ppaccId = persistTransaction((Payment)payload);
 				outputChannel.send(new GenericMessage<String>(ppaccId));
 			
 			} catch (ValidationException e) {
@@ -61,22 +59,28 @@ public class MeterReadDerivator implements MessageHandler {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={ValidationException.class},transactionManager="transactionManager")
-	protected synchronized String persistTransaction(IntervalReading intervalReading) throws ValidationException{
+	protected synchronized String persistTransaction(Payment payment) throws ValidationException{
 				
-		String meterMRID = intervalReading.getMeterReferenceId();
-		intervalReading = new IntervalReading(intervalReading);
-		intervalReading.setInsertTime(new Date());
-		intervalReading = this.intervalReadingRepository.save(intervalReading);
+		String accMRID = payment.getAccountId();
+		payment = new Payment(payment);
+		payment.setInsertTime(new Date());
+				
+		payment = this.paymentRepository.save(payment);
 		
-		PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(meterMRID);
+		List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findByAccountMRID(accMRID);
+		if(ppaccList.size() != 1){
+			String msg = ((ppaccList.size() > 1) ? "Multiple" : "No") + " PrepaymentAccount found with id: " + accMRID +".";
+			throw new ValidationException(msg);
+		}
+		PrepaymentAccount ppacc = ppaccList.get(0);
 		String id = ppacc.getMRID();
 		
-		ppacc.getMeterReadings().size();
-		ppacc.getMeterReadings().add(intervalReading);
+		ppacc.getPayments().size();
+		ppacc.getPayments().add(payment);
 		
 		this.prepaymentAccountRepository.save(ppacc);
 		
-		logger.debug("Meter read derived: " + intervalReading);
+		logger.debug("Payment derived: " + payment);
 		
 		return id;
 	}	
@@ -87,7 +91,7 @@ public class MeterReadDerivator implements MessageHandler {
 		PrepaymentException pe = new PrepaymentException(new Date(), e.getMessage());
 		prepaymentExceptionRepository.save(pe);
 	}
-	
+
 	public SubscribableChannel getChannel() {
 		return channel;
 	}
@@ -104,39 +108,10 @@ public class MeterReadDerivator implements MessageHandler {
 	public void setOutputChannel(MessageChannel outputChannel) {
 		this.outputChannel = outputChannel;
 	}
-
-	public IntervalReadingRepository getIntervalReadingRepository() {
-		return intervalReadingRepository;
+	public PaymentRepository getPaymentRepository() {
+		return paymentRepository;
 	}
-
-	public void setIntervalReadingRepository(IntervalReadingRepository intervalReadingRepository) {
-		this.intervalReadingRepository = intervalReadingRepository;
+	public void setPaymentRepository(PaymentRepository paymentRepository) {
+		this.paymentRepository = paymentRepository;
 	}
-
-	public PrepaymentExceptionRepository getPrepaymentExceptionRepository() {
-		return prepaymentExceptionRepository;
-	}
-
-	public void setPrepaymentExceptionRepository(
-			PrepaymentExceptionRepository prepaymentExceptionRepository) {
-		this.prepaymentExceptionRepository = prepaymentExceptionRepository;
-	}
-
-	public PrepaymentAccountRepository getPrepaymentAccountRepository() {
-		return prepaymentAccountRepository;
-	}
-
-	public void setPrepaymentAccountRepository(
-			PrepaymentAccountRepository prepaymentAccountRepository) {
-		this.prepaymentAccountRepository = prepaymentAccountRepository;
-	}
-
-	public AccountValidator getAccountValidator() {
-		return accountValidator;
-	}
-
-	public void setAccountValidator(AccountValidator accountValidator) {
-		this.accountValidator = accountValidator;
-	}
-
 }

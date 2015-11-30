@@ -71,5 +71,24 @@
 		expression=""
 		log-full-message="false"
 		logger-name="" />
+		
+	<bean id="paymentDerivator"
+		class="hu.bme.mit.v37zen.prepayment.dataprocessing.derivation.PaymentDerivator" >
+		<property name="channel">
+			<ref bean="validPaymentChannel" />
+		</property>
+		<property name="outputChannel">
+			<ref bean="afterPaymentDerivatorChannel"/>
+		</property>		
+	</bean>
+	
+	<int:channel id="afterPaymentDerivatorChannel"></int:channel>
+	
+	<int:logging-channel-adapter
+		channel="afterPaymentDerivatorChannel" 
+		level="DEBUG" 
+		expression=""
+		log-full-message="false"
+		logger-name="" />
 	
 </beans>

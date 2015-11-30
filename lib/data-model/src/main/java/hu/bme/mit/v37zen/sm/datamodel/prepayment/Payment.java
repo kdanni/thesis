@@ -25,10 +25,13 @@ public class Payment extends BaseEntity {
 	
 	private Double value;
 	
-	private String curency;
+	private String currency;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date insertTime;
 
 	public Payment() {
 		super();
@@ -38,7 +41,20 @@ public class Payment extends BaseEntity {
 		super();
 		this.value = balance;
 		this.date = date;
-		this.curency = curency;
+		this.currency = curency;
+	}
+	
+	public Payment(Payment payment){
+		this.accountId = payment.accountId;
+		this.archived = payment.archived;
+		this.currency = payment.currency;
+		this.date = payment.date;
+		this.insertTime = payment.insertTime;
+		this.mRID = payment.mRID;
+		this.processed = payment.processed;
+		this.status = payment.status;
+		this.valid = payment.valid;
+		this.value = payment.value;				
 	}
 
 	public Payment(String accountId, Boolean valid, Boolean processed,
@@ -51,7 +67,7 @@ public class Payment extends BaseEntity {
 		this.archived = archived;
 		this.status = status;
 		this.value = value;
-		this.curency = curency;
+		this.currency = curency;
 		this.date = date;
 	}
 
@@ -103,12 +119,12 @@ public class Payment extends BaseEntity {
 		this.value = value;
 	}
 
-	public String getCurency() {
-		return curency;
+	public String getCurrency() {
+		return currency;
 	}
 
-	public void setCurency(String curency) {
-		this.curency = curency;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public Date getDate() {
@@ -119,6 +135,14 @@ public class Payment extends BaseEntity {
 		this.date = date;
 	}
 
+	public Date getInsertTime() {
+		return insertTime;
+	}
+
+	public void setInsertTime(Date insertTime) {
+		this.insertTime = insertTime;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -127,15 +151,15 @@ public class Payment extends BaseEntity {
 				+ ((accountId == null) ? 0 : accountId.hashCode());
 		result = prime * result
 				+ ((archived == null) ? 0 : archived.hashCode());
-		result = prime * result + ((curency == null) ? 0 : curency.hashCode());
+		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result
+				+ ((insertTime == null) ? 0 : insertTime.hashCode());
 		result = prime * result
 				+ ((processed == null) ? 0 : processed.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((valid == null) ? 0 : valid.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(value);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 
@@ -158,15 +182,20 @@ public class Payment extends BaseEntity {
 				return false;
 		} else if (!archived.equals(other.archived))
 			return false;
-		if (curency == null) {
-			if (other.curency != null)
+		if (currency == null) {
+			if (other.currency != null)
 				return false;
-		} else if (!curency.equals(other.curency))
+		} else if (!currency.equals(other.currency))
 			return false;
 		if (date == null) {
 			if (other.date != null)
 				return false;
 		} else if (!date.equals(other.date))
+			return false;
+		if (insertTime == null) {
+			if (other.insertTime != null)
+				return false;
+		} else if (!insertTime.equals(other.insertTime))
 			return false;
 		if (processed == null) {
 			if (other.processed != null)
@@ -183,8 +212,10 @@ public class Payment extends BaseEntity {
 				return false;
 		} else if (!valid.equals(other.valid))
 			return false;
-		if (Double.doubleToLongBits(value) != Double
-				.doubleToLongBits(other.value))
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
 			return false;
 		return true;
 	}
@@ -193,11 +224,8 @@ public class Payment extends BaseEntity {
 	public String toString() {
 		return "Payment [accountId=" + accountId + ", valid=" + valid
 				+ ", processed=" + processed + ", archived=" + archived
-				+ ", status=" + status + ", value=" + value + ", curency="
-				+ curency + ", date=" + date + ", id=" + id + ", mRID=" + mRID
-				+ "]";
+				+ ", status=" + status + ", value=" + value + ", currency="
+				+ currency + ", date=" + date + ", insertTime=" + insertTime
+				+ ", id=" + id + ", mRID=" + mRID + "]";
 	}
-
-	
-
 }
