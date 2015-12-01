@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/MeterReadings" xmlns:tns="http://www.example.org/MeterReadings" elementFormDefault="qualified">
+
+    <element name="MeterDataMessage" type="tns:MeterDataMessageType"></element>
+    
+    <complexType name="MeterDataMessageType">
+        <sequence>
+        	<any minOccurs="0" maxOccurs="unbounded"></any>
+        </sequence>
+        <anyAttribute></anyAttribute>
+    </complexType>
+</schema>

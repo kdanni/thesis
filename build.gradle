@@ -13,7 +13,7 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'maven'
 	//apply plugin: 'eclipse-wtp'
-	//apply plugin: 'war'
+	apply plugin: 'war'
 	//apply plugin: 'jetty'
 
 	jar {
@@ -45,7 +45,7 @@ subprojects {
 		}
 	}		
 	configurations { 
-		providedCompile 
+		//providedCompile 
 		loggingLib
 		testLib	
 		droolsLib
@@ -129,6 +129,8 @@ subprojects {
 		providedCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 		providedCompile "org.eclipse.jetty:jetty-util:$jettyVersion"
 		providedCompile "wsdl4j:wsdl4j:1.6.1"
+		
+		providedCompile 'org.jdom:jdom2:2.0.6'
 		
 		ext.springIntegrationVersion = '4.2.1.RELEASE'
 		providedCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"

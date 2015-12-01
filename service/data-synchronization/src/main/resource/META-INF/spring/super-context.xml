@@ -21,9 +21,7 @@
     </bean>
     
     <import resource="classpath:META-INF/spring/task-exec.xml"/>
-    
-    <import resource="classpath:META-INF/spring/web-service.xml"/>
-    
+        
     <import resource="classpath:META-INF/spring/context.xml"/>
     <import resource="classpath:META-INF/spring/file-poller.xml"/>
     <import resource="classpath:META-INF/spring/content-base-router.xml"/>

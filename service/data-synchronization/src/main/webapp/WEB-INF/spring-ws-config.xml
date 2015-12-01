@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:web-services="http://www.springframework.org/schema/web-services"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd">
 
 	<import resource="classpath:/META-INF/spring/super-context.xml"/>
 
-	<!-- Ensures that all incoming requests will be routed to the ws:inbound-gateway -->
-	<bean class="org.springframework.ws.server.endpoint.mapping.UriEndpointMapping">
-		<property name="defaultEndpoint" ref="ws-inbound-gateway"/>
-	</bean>
+	<web-services:annotation-driven/>
+	
+	<bean class="hu.bme.mit.v37zen.prepayment.datasync.debug.ws.WsDebugMain"></bean>
 
+	<web-services:dynamic-wsdl id="echo"
+		portTypeName="Echo" locationUri="http://localhost:8080/prepay/echo">
+		<web-services:xsd location="echo.xsd"/>	
+	</web-services:dynamic-wsdl>
+		
 </beans>
