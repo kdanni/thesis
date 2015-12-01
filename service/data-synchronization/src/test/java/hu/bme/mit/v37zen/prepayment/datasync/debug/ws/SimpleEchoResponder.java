@@ -1,4 +1,4 @@
-package hu.bme.mit.v37zen.prepayment.datasync.ws;
+package hu.bme.mit.v37zen.prepayment.datasync.debug.ws;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;

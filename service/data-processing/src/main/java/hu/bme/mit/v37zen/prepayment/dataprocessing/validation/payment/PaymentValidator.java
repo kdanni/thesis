@@ -39,6 +39,9 @@ public class PaymentValidator implements Validator<Payment>{
 			if(!accountValidator.isAccountExist(paymentData.getAccountId())){
 				throw new ValidationException("No Account exist with id: " + paymentData.getAccountId() , paymentData);
 			}
+			if(!accountValidator.isAccountActive(paymentData.getAccountId())){
+				throw new ValidationException("No active Account found with id: " + paymentData.getAccountId() , paymentData);
+			}
 			
 			paymentData.setValid(true);
 			this.validChannel.send(new GenericMessage<Payment>(paymentData));

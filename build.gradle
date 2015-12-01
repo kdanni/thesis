@@ -128,6 +128,7 @@ subprojects {
 		providedCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
 		providedCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 		providedCompile "org.eclipse.jetty:jetty-util:$jettyVersion"
+		providedCompile "wsdl4j:wsdl4j:1.6.1"
 		
 		ext.springIntegrationVersion = '4.2.1.RELEASE'
 		providedCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"

@@ -44,6 +44,23 @@ public class AccountValidator {
 		return al.size() == 1;
 	}
 	
+	public boolean isAccountActive(String mRID) throws ValidationException{
+		
+		List<PrepaymentAccount> al = prepaymentAccountRepository.findByAccountMRID(mRID);
+		if(al.size() == 1){
+			PrepaymentAccount ppacc = al.get(0);
+			String status = ppacc.getStatus();			
+			if(status != null && status.equalsIgnoreCase(activeStatus)){
+				return true;
+			}
+			return false;
+		}
+		if(al.size() > 1){
+			throw new ValidationException("More than one account exist with the mRID of " + mRID + ".", al);
+		}
+		throw new ValidationException("No account exist with the mRID of " + mRID + ".");
+	}
+	
 	public void validate(Account account) throws ValidationException{
 		
 		if(account.getMRID() == null || account.getMRID().trim().isEmpty()){

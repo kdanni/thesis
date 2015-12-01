@@ -7,7 +7,6 @@ import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Balance;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
-import hu.bme.mit.v37zen.sm.datamodel.prepayment.Tariff;
 import hu.bme.mit.v37zen.sm.jpa.repositories.BalanceRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.IntervalReadingRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PaymentRepository;
@@ -40,8 +39,6 @@ public class RatingEngine implements MessageHandler {
 	private SubscribableChannel channel;
 	
 	private MessageChannel outputChannel;
-	
-	public static final Tariff TARIFF = new Tariff(1000, null);
 	
 	@Autowired
 	private AccountValidator accountValidator;
@@ -94,7 +91,7 @@ public class RatingEngine implements MessageHandler {
 					intervalReading.setProcessed(true);
 				}
 				
-				consumption *= TARIFF.getRate();
+				consumption = new BasicRate().rate(consumption);
 				
 				double prepaid = 0;
 				List<Payment> payments = paymentRepository.getPaymentForProccessing(mRID);

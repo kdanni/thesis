@@ -44,6 +44,9 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 			if(!meterAssetValidator.isMeterExist(mRID)){
 				throw new ValidationException("Meter reading isn't valid. Can't found meter with mRID: " + mRID + ".", meterData); 
 			}
+			if(!accountValidator.isAccountActive(mRID)){
+				throw new ValidationException("No active Account found with id: " + mRID , meterData);
+			}
 			accountValidator.getPrepaymentAccountByMeterAsset(mRID);
 			//Exception is thrown if no valid Meter-SDP-Account relation exist.
 			
