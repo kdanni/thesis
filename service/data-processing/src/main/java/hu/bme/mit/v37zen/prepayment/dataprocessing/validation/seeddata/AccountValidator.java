@@ -5,7 +5,6 @@ import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentAccountRepository;
-import hu.bme.mit.v37zen.sm.jpa.repositories.SdpMeterAssociationRepository;
 
 import java.util.List;
 
@@ -28,9 +27,6 @@ public class AccountValidator {
 	
 	@Autowired
 	private AccountRepository accountRepository;
-	
-	@Autowired
-	private SdpMeterAssociationRepository sdpMeterAssociationRepository;
 
 	@Autowired
 	private PrepaymentAccountRepository prepaymentAccountRepository;
@@ -94,15 +90,6 @@ public class AccountValidator {
 		this.accountRepository = accountRepository;
 	}
 
-	public SdpMeterAssociationRepository getSdpMeterAssociationRepository() {
-		return sdpMeterAssociationRepository;
-	}
-
-	public void setSdpMeterAssociationRepository(
-			SdpMeterAssociationRepository sdpMeterAssociationRepository) {
-		this.sdpMeterAssociationRepository = sdpMeterAssociationRepository;
-	}
-
 	public PrepaymentAccountRepository getPrepaymentAccountRepository() {
 		return prepaymentAccountRepository;
 	}
@@ -134,8 +121,5 @@ public class AccountValidator {
 
 	public void setMeterAsssetValidator(MeterAsssetValidator meterAsssetValidator) {
 		this.meterAsssetValidator = meterAsssetValidator;
-	}
-	
-	
-	
+	}	
 }

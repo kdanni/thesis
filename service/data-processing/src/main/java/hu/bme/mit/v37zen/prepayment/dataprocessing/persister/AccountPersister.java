@@ -63,6 +63,7 @@ public class AccountPersister implements MessageHandler {
 			if(ppaccList.isEmpty()){
 				
 				PrepaymentAccount ppacc = new PrepaymentAccount();
+				ppacc.setStartDate(new Date());
 				ppacc.setAccountMRID(account.getMRID());
 				prepaymentAccountRepository.save(ppacc);
 			}			

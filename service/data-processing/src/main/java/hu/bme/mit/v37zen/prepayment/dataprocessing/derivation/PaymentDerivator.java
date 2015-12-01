@@ -20,6 +20,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +59,7 @@ public class PaymentDerivator implements MessageHandler {
 		}
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={ValidationException.class},transactionManager="transactionManager")
+	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,rollbackFor={ValidationException.class},transactionManager="transactionManager")
 	protected synchronized String persistTransaction(Payment payment) throws ValidationException{
 				
 		String accMRID = payment.getAccountId();

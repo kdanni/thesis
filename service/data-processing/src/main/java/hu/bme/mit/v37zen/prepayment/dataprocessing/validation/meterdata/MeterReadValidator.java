@@ -6,13 +6,17 @@ import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountVa
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.MeterAsssetValidator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading;
+import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
+import hu.bme.mit.v37zen.sm.jpa.repositories.IntervalReadingRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +29,16 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 	
 	private MessageChannel invalidChannel; 
 	private MessageChannel validChannel; 
+
+	@Value("${validation.meterread.valid.readtype}")
+	private String validReadingType;
 	
 	@Autowired
 	private MeterAsssetValidator meterAssetValidator;
 	@Autowired
 	private AccountValidator accountValidator;
+	@Autowired
+	private IntervalReadingRepository intervalReadingRepository;
 	@Autowired
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 	
@@ -44,11 +53,20 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 			if(!meterAssetValidator.isMeterExist(mRID)){
 				throw new ValidationException("Meter reading isn't valid. Can't found meter with mRID: " + mRID + ".", meterData); 
 			}
-			if(!accountValidator.isAccountActive(mRID)){
+			PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(mRID);
+			//Exception is thrown if no valid Meter-SDP-Account relation exist.
+			if(!accountValidator.isAccountActive(ppacc.getAccountMRID())){
 				throw new ValidationException("No active Account found with id: " + mRID , meterData);
 			}
-			accountValidator.getPrepaymentAccountByMeterAsset(mRID);
-			//Exception is thrown if no valid Meter-SDP-Account relation exist.
+			
+			if(meterData.getReadingTypeId() == null || !meterData.getReadingTypeId().equalsIgnoreCase(validReadingType)){
+				throw new ValidationException("Reading type not valid!", meterData);
+			}
+			
+			List<IntervalReading> irl = this.intervalReadingRepository.findByMeterReferenceIdAndEndTime(mRID, meterData.getEndTime());
+			if(irl.size() > 0){
+				throw new ValidationException("Redundant IntervalReading!", meterData);
+			}
 			
 			meterData.setValid(true);
 			this.validChannel.send(new GenericMessage<IntervalReading>(meterData));
@@ -99,6 +117,22 @@ public class MeterReadValidator implements Validator<IntervalReading> {
 
 	public void setAccountValidator(AccountValidator accountValidator) {
 		this.accountValidator = accountValidator;
+	}
+
+	public String getValidReadingType() {
+		return validReadingType;
+	}
+
+	public void setValidReadingType(String validReadingType) {
+		this.validReadingType = validReadingType;
+	}
+
+	public IntervalReadingRepository getIntervalReadingRepository() {
+		return intervalReadingRepository;
+	}
+
+	public void setIntervalReadingRepository(IntervalReadingRepository intervalReadingRepository) {
+		this.intervalReadingRepository = intervalReadingRepository;
 	}
 
 	

@@ -23,6 +23,8 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 public class PrepaymentAccountDerivator implements MessageHandler {
@@ -147,17 +149,22 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			accSdpAss.setAccount(acc);
 			accSdpAss.setServiceDeliveryPoint(sdp);
 			
-			accSdpAss = accountSDPAssociationRepository.save(accSdpAss);
-			
 			ppacc.setMRID(accMRID);
 			ppacc.setStatus(accSdpAss.getStatus());
 			ppacc.setActive(true);
-			ppacc.setStartDate(new Date());
 			ppacc.setAccountSDPAssociation(accSdpAss);
-			ppacc = prepaymentAccountRepository.saveAndFlush(ppacc);
 			
-			logger.debug("PrepaymentAccount derived: " + ppacc.toString());
+			persistTransaction(ppacc, accSdpAss);
 		}		
+	}
+	
+	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,transactionManager="transactionManager")
+	protected synchronized void persistTransaction(PrepaymentAccount ppacc, AccountSDPAssociation accSdpAss){
+		
+		accSdpAss = accountSDPAssociationRepository.save(accSdpAss);
+		ppacc = prepaymentAccountRepository.saveAndFlush(ppacc);
+		
+		logger.debug("PrepaymentAccount derived: " + ppacc.toString());
 	}
 
 	public SubscribableChannel getChannel() {

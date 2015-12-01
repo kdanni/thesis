@@ -27,6 +27,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,7 +128,7 @@ public class RatingEngine implements MessageHandler {
 		}		
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={ValidationException.class},transactionManager="transactionManager")
+	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,rollbackFor={ValidationException.class},transactionManager="transactionManager")
 	protected synchronized String persistTransaction(Balance balance) throws ValidationException{
 		List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findByAccountMRID(balance.getPrepaymentAccountMRID());
 		if(ppaccList.size() != 1){

@@ -32,5 +32,7 @@ public interface IntervalReadingRepository extends JpaRepository<IntervalReading
 	@Query("select ir from PrepaymentAccount pa inner join pa.meterReadings ir where pa.accountMRID = :id and ir.processed = '0'")
 	public List<IntervalReading> getIntervalReadingForProccessing(@Param("id") String accountMRID);
 	
+	public List<IntervalReading> findByMeterReferenceIdAndEndTime(String referenceId, Date endTime);
+	
 }
 //and ir.processed = false
