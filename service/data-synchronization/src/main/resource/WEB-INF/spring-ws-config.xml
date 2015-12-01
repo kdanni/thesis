@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:web-services="http://www.springframework.org/schema/web-services"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<import resource="classpath:/META-INF/spring/super-context.xml"/>
+
+	<web-services:annotation-driven/>	
+	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.datasync.ws">
+	</context:component-scan>
+
+	<web-services:dynamic-wsdl id="meterreadings" targetNamespace="http://www.v37zen.prepayment.datasync.com/meterreadings"
+		portTypeName="MeterReadings" locationUri="/prepay/meterreadings/" requestSuffix="Message">
+		<web-services:xsd location="classpath:WEB-INF/xsd/EipGenericDataImporter.xsd"/>
+	</web-services:dynamic-wsdl>
+		
+	<int:channel id="meterReadingsWSInChannel">
+	</int:channel>
+	<int:bridge input-channel="meterReadingsWSInChannel" output-channel="toRouterChannel">
+	</int:bridge>
+	
+</beans>

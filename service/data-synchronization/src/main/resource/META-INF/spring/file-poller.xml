@@ -15,10 +15,9 @@
 	<!-- File poller, filter a módosítás idejére -->
 
 	<int-file:inbound-channel-adapter id="filesInChannel"
-				filter="fileFilter"
 				directory="${file.input.directory}"
 				channel="fileToMoverChannel">
-<!-- 				channel="fileToTransformerChannel"> -->
+<!-- 				filter="fileFilter" -->
 	    <int:poller id="poller" fixed-rate="${file.input.pollrate}" />
 	</int-file:inbound-channel-adapter>
 	<bean id="fileFilter" class="hu.bme.mit.v37zen.prepayment.util.integration.ModifiedFileFilter"/>
@@ -27,23 +26,14 @@
 	
 	<int-file:outbound-gateway id="mover" 
 		request-channel="fileToMoverChannel"
-	    reply-channel="fileToTransformerChannel"
+	    reply-channel="fileOutChannel"
 	    directory="${file.output.directory}"
 	    mode="REPLACE" delete-source-files="true"/>
-
-	<int:channel id="fileToTransformerChannel"></int:channel>
-
-	<!-- File to DOM Document transformer -->
-	
-	<int:transformer id="xmlTransformer"
-				input-channel="fileToTransformerChannel"  
-				output-channel="toRouter" 
-				ref="defXmlTransormer" 
-				method="convertToDocument">
-	</int:transformer>
-	<bean id="defXmlTransormer" class="org.springframework.integration.xml.DefaultXmlPayloadConverter"></bean>
-	
-	
-	<int:channel id="toRouter"></int:channel>
-	
+		
+	<int:channel id="fileOutChannel">
+	</int:channel>
+	<int:bridge 
+		input-channel="fileOutChannel" output-channel="toRouterChannel">
+	</int:bridge>
+		
 </beans>

@@ -19,24 +19,6 @@
 		<property name="connectionFactory" ref="connectionFactory" />
 		<property name="defaultDestination" ref="destination" />
 	</bean>
-	
-	
 
-<!-- 	<int-jms:message-driven-channel-adapter id="jmsIn" destination="destination" -->
-<!-- 	    channel="toPreprocessorChannel"/> -->
 
-<!-- 	<int:channel id="toPreprocessorChannel"></int:channel> -->
-	
-<!-- 	<int:service-activator id="preprocessorActivator"  -->
-<!-- 				ref="preprocessor" -->
-<!-- 				method="process" -->
-<!-- 				input-channel="toPreprocessorChannel"> -->
-<!-- 	</int:service-activator> -->
-<!-- 	<bean id="preprocessor" -->
-<!-- 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.Preprocessor"> -->
-<!--  			<constructor-arg name="taskExecutorPool"> -->
-<!--  				<ref bean="dataSyncThreadPoolTaskExecutor" /> -->
-<!--  				Defined in: META-INF/task-exec.xml -->
-<!--  			</constructor-arg> -->
-<!-- 	</bean> -->
 </beans>

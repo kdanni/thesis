@@ -15,7 +15,7 @@
 				input-channel="toSyncDataHandler">
 	</int:service-activator>
 	<bean id="syncMessageHandler"
-			class="hu.bme.mit.v37zen.prepayment.datasync.SyncMessageHandler">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.SyncMessageHandler">
 			<constructor-arg name="taskExecutorPool">
 				<ref bean="dataSyncThreadPoolTaskExecutor" />
 				<!-- Defined in: META-INF/task-exec.xml -->
@@ -25,7 +25,7 @@
 	<!-- XML Unmarshaller + persiter -->
 	
 	<bean id="syncMessageProcessor" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.datasync.SyncMessageProcessorImpl">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.SyncMessageProcessorImpl">
 		<constructor-arg name="namespaces">
 			<ref bean="namespaceHandler" />
 		</constructor-arg>
@@ -55,7 +55,7 @@
 	<!-- Configurators -->
 	
 	<bean id="syncMessageAccountProcessorConfigurator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.AccountProcessorConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.AccountProcessorConfigurator">
 		
 		<property name="accountSelector" value="${dataSync.xpath.accountSelector}"></property>
 		
@@ -69,7 +69,7 @@
 		<property name="parameterNamespace" value="${dataSync.xpath.account.parameterNamespace}"></property>
 	</bean>
 	<bean id="syncMessageSDPProcessorConfigurator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.SdpProcessorConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.SdpProcessorConfigurator">
 		 
 		<property name="sdpSelector" value="${dataSync.xpath.sdpSelector}"></property>
 				
@@ -82,7 +82,7 @@
 		<property name="parameterNamespace" value="${dataSync.xpath.sdp.parameterNamespace}"></property>
 	</bean>	
 	<bean id="syncAssociationSDPProcessorConfigurator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.AssociationProcessorConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.AssociationProcessorConfigurator">
 		 		
 		<property name="accountSdpAssociationSelector" value="${dataSync.xpath.association.accountSdpAssociationSelector}"></property>
 		<property name="accountSdpStartDateSelector" value="${dataSync.xpath.association.accountSdpStartDateSelector}"></property>
@@ -106,7 +106,7 @@
 		
 	</bean>
 	<bean id="syncMessageMeterProcessorConfirugarator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.MeterProcessorConfirugarator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.MeterProcessorConfirugarator">
 		 
 		<property name="meterAssetSelector" value="${dataSync.xpath.meterSelector}"></property>
 				
@@ -123,7 +123,7 @@
 		<property name="parameterNamespace" value="${dataSync.xpath.meter.parameterNamespace}"></property>
 	</bean>	
 	<bean id="syncMessageContactProcessorConfirugarator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.ContactProcessorConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.ContactProcessorConfigurator">
 			
 		<property name="contactSelector" value="${dataSync.xpath.contactSelector}"></property>
 		<property name="parameterNamespace" value="${dataSync.xpath.contact.parameterNamespace}"></property>
@@ -139,7 +139,7 @@
 		<property name="commentsSelector" value="${dataSync.xpath.contact.commentsSelector}"></property>
 	</bean>
 	<bean id="syncMessageServiceLocationProcessorConfirugarator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.ServiceLocationProcessorConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.ServiceLocationProcessorConfigurator">
 			
 		<property name="serviceLocationSelector" value="${dataSync.xpath.serviceLocationSelector}"></property>
 		<property name="parameterNamespace" value="${dataSync.xpath.serviceLocation.parameterNamespace}"></property>
@@ -159,7 +159,7 @@
 	</bean>
 	
 	<bean id="syncMessageRouteProcessorConfirugarator"  
-			class="hu.bme.mit.v37zen.prepayment.datasync.configurators.RouteProcessorConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.RouteProcessorConfigurator">
 		
 		<property name="routeSelcetor" value="${dataSync.xpath.routeSelector}"></property>
 		<property name="parameterNamespace" value="${dataSync.xpath.route.parameterNamespace}"></property>

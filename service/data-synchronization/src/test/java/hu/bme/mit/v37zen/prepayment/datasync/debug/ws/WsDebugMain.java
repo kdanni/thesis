@@ -1,6 +1,6 @@
 package hu.bme.mit.v37zen.prepayment.datasync.debug.ws;
 
-import hu.bme.mit.v37zen.prepayment.datasync.debug.ws.server.EchoEndpoint;
+import hu.bme.mit.v37zen.prepayment.datasync.debug.ws.server.MeterReadEndpointDebug;
 
 import java.io.File;
 
@@ -14,7 +14,7 @@ import org.springframework.ws.config.annotation.EnableWs;
 
 @EnableWs
 @Configuration
-@ComponentScan(basePackageClasses={EchoEndpoint.class})
+@ComponentScan(basePackageClasses={MeterReadEndpointDebug.class})
 public class WsDebugMain {
 	
 	public final static Logger logger = LoggerFactory.getLogger(WsDebugMain.class);

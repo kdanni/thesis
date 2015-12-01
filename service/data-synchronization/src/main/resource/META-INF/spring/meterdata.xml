@@ -14,7 +14,7 @@
 				input-channel="toMeterDataHandler">
 	</int:service-activator>
 	<bean id="meterMessageHandler"
-			class="hu.bme.mit.v37zen.prepayment.meterdatasync.MeterDataMessageHandler">
+			class="hu.bme.mit.v37zen.prepayment.datasync.meterdatasync.MeterDataMessageHandler">
 			<constructor-arg name="taskExecutorPool">
 				<ref bean="meterDataThreadPoolTaskExecutor" />
 				<!-- Defined in: META-INF/task-exec.xml -->
@@ -24,7 +24,7 @@
 	<!-- XML Unmarshaller + persiter -->
 	
 	<bean id="meterDataMessageProcessor" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.meterdatasync.MeterDataProcessorImpl">
+			class="hu.bme.mit.v37zen.prepayment.datasync.meterdatasync.MeterDataProcessorImpl">
 		<constructor-arg name="namespaceHandler">
 			<ref bean="namespaceHandler" />
 		</constructor-arg>	
@@ -36,7 +36,7 @@
 	<!-- Configurator -->
 		
 	<bean id="intervalReadingConfigurator"  
-			class="hu.bme.mit.v37zen.prepayment.meterdatasync.IntervalReadingConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.meterdatasync.IntervalReadingConfigurator">
 			
 		<property name="meterReadingSelector" value="${meterData.xpath.meterData.MeterReadingSelector}"></property>
 		<property name="meterIdSelector" value="${meterData.xpath.meterData.Meter.meterIdSelector}"></property>

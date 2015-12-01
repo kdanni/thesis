@@ -14,7 +14,7 @@
 				input-channel="toPaymentDataHandler">
 	</int:service-activator>
 	<bean id="paymentMessageHandler"
-			class="hu.bme.mit.v37zen.prepayment.payment.PaymentDataMessageHandler">
+			class="hu.bme.mit.v37zen.prepayment.datasync.paymentsync.PaymentDataMessageHandler">
 			<constructor-arg name="taskExecutorPool">
 				<ref bean="paymentDataThreadPoolTaskExecutor" />
 				<!-- Defined in: META-INF/task-exec.xml -->
@@ -24,7 +24,7 @@
 	<!-- XML Unmarshaller + persiter -->
 	
 	<bean id="paymentDataMessageProcessor" scope="prototype"
-			class="hu.bme.mit.v37zen.prepayment.payment.PaymentDataProcessorImpl">
+			class="hu.bme.mit.v37zen.prepayment.datasync.paymentsync.PaymentDataProcessorImpl">
 		<constructor-arg name="namespaceHandler">
 			<ref bean="namespaceHandler" />
 		</constructor-arg>	
@@ -36,7 +36,7 @@
 	<!-- Configurator -->
 		
 	<bean id="paymentConfigurator"  
-			class="hu.bme.mit.v37zen.prepayment.payment.PaymentConfigurator">
+			class="hu.bme.mit.v37zen.prepayment.datasync.paymentsync.PaymentConfigurator">
 			
 		<property name="paymentSelector" value="${paymentData.xpath.paymentSelector}"></property>
 		<property name="accountIdSelector" value="${paymentData.xpath.accountIdSelector}"></property>
