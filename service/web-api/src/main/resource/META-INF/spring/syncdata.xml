@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd">
+	
+    <!-- ServiceActivator -->
+		
+	<int:service-activator id="SyncDataHandler" 
+				ref="syncMessageHandler"
+				method="process"
+				input-channel="toSyncDataHandler">
+	</int:service-activator>
+	<bean id="syncMessageHandler"
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.SyncMessageHandler">
+			<constructor-arg name="taskExecutorPool">
+				<ref bean="dataSyncThreadPoolTaskExecutor" />
+				<!-- Defined in: META-INF/task-exec.xml -->
+			</constructor-arg>
+	</bean>
+	
+	<!-- XML Unmarshaller + persiter -->
+	
+	<bean id="syncMessageProcessor" scope="prototype"
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.SyncMessageProcessorImpl">
+		<constructor-arg name="namespaces">
+			<ref bean="namespaceHandler" />
+		</constructor-arg>
+		<constructor-arg name="accountProcessorConfigurator">
+			<ref bean="syncMessageAccountProcessorConfigurator" />
+		</constructor-arg>
+		<constructor-arg name="sdpProcessorConfigurator">
+			<ref bean="syncMessageSDPProcessorConfigurator" />
+		</constructor-arg>
+		<constructor-arg name="associationProcessorConfigurator">
+			<ref bean="syncAssociationSDPProcessorConfigurator" />
+		</constructor-arg>
+		<constructor-arg name="meterProcessorConfirugarator">
+			<ref bean="syncMessageMeterProcessorConfirugarator" />
+		</constructor-arg>
+		<constructor-arg name="contactProcessorConfigurator">
+			<ref bean="syncMessageContactProcessorConfirugarator" />
+		</constructor-arg>
+		<constructor-arg name="serviceLocationProcessorConfigurator">
+			<ref bean="syncMessageServiceLocationProcessorConfirugarator" />
+		</constructor-arg>
+		<constructor-arg name="routeProcessorConfigurator">
+			<ref bean="syncMessageRouteProcessorConfirugarator"/>
+		</constructor-arg>
+	</bean>
+	
+	<!-- Configurators -->
+	
+	<bean id="syncMessageAccountProcessorConfigurator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.AccountProcessorConfigurator">
+		
+		<property name="accountSelector" value="${dataSync.xpath.accountSelector}"></property>
+		
+		<property name="mridSelector" value="${dataSync.xpath.account.mridSelector}"></property>
+		<property name="nameSelector" value="${dataSync.xpath.account.nameSelector}"></property>
+		<property name="name2Selector" value="${dataSync.xpath.account.name2Selector}"></property>
+		<property name="statusSelector" value="${dataSync.xpath.account.statusSelector}"></property>
+		<property name="accountTypeSelector" value="${dataSync.xpath.account.accountTypeSelector}"></property>
+		<property name="accountClassSelector" value="${dataSync.xpath.account.accountClassSelector}"></property>
+		<property name="phonNumberSelector" value="${dataSync.xpath.account.phonNumberSelector}"></property>
+		<property name="parameterNamespace" value="${dataSync.xpath.account.parameterNamespace}"></property>
+	</bean>
+	<bean id="syncMessageSDPProcessorConfigurator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.SdpProcessorConfigurator">
+		 
+		<property name="sdpSelector" value="${dataSync.xpath.sdpSelector}"></property>
+				
+		<property name="mridSelector" value="${dataSync.xpath.sdp.mridSelector}"></property>
+		<property name="universalIdSelector" value="${dataSync.xpath.sdp.universalIdSelector}"></property>
+		<property name="virtualIndSelector" value="${dataSync.xpath.sdp.virtualIndSelector}"></property>
+		<property name="serviceTypeSelector" value="${dataSync.xpath.sdp.serviceTypeSelector}"></property>
+		<property name="premiseIdSelector" value="${dataSync.xpath.sdp.premiseIdSelector}"></property>
+		<property name="billingHoldFlagSelector" value="${dataSync.xpath.sdp.billingHoldFlagSelector}"></property>
+		<property name="parameterNamespace" value="${dataSync.xpath.sdp.parameterNamespace}"></property>
+	</bean>	
+	<bean id="syncAssociationSDPProcessorConfigurator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.AssociationProcessorConfigurator">
+		 		
+		<property name="accountSdpAssociationSelector" value="${dataSync.xpath.association.accountSdpAssociationSelector}"></property>
+		<property name="accountSdpStartDateSelector" value="${dataSync.xpath.association.accountSdpStartDateSelector}"></property>
+		<property name="accountSdpStatusSelector" value="${dataSync.xpath.association.accountSdpStatusSelector}"></property>
+		<property name="accountSdpEndDateSelector" value="${dataSync.xpath.association.accountSdpEndDateSelector}" ></property>
+		
+		<property name="sdpMeterAssociationSelector" value="${dataSync.xpath.association.sdpMeterAssociationSelector}"></property>
+		<property name="sdpMeterStartDateSelector" value="${dataSync.xpath.association.sdpMeterStartDateSelector}"></property>
+		<property name="sdpMeterStatusSelector" value="${dataSync.xpath.association.sdpMeterStatusSelector}"></property>
+		<property name="sdpMeterEndDateSelector" value="${dataSync.xpath.association.sdpMeterEndDateSelector}"></property>
+		
+		<property name="sdpRouteAssociationSelector" value="${dataSync.xpath.association.sdpRouteAssociationSelector}"></property>
+		<property name="sdpRouteStartDateSelector" value="${dataSync.xpath.association.sdpRouteStartDateSelector}"></property>
+		<property name="sdpRouteStatusSelector" value="${dataSync.xpath.association.sdpRouteStatusSelector}"></property>
+		<property name="sdpRouteEndDateSelector" value="${dataSync.xpath.association.sdpRouteEndDateSelector}"></property>
+		
+		<property name="accountIdSelector" value="${dataSync.xpath.association.accountIdSelector}"></property>
+		<property name="sdpIdSelector" value="${dataSync.xpath.association.sdpIdSelector}"></property>
+		<property name="meterIdSelector" value="${dataSync.xpath.association.meterIdSelector}"></property>
+		<property name="routeIdSelector" value="${dataSync.xpath.association.routeIdSelector}"></property>
+		
+	</bean>
+	<bean id="syncMessageMeterProcessorConfirugarator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.MeterProcessorConfirugarator">
+		 
+		<property name="meterAssetSelector" value="${dataSync.xpath.meterSelector}"></property>
+				
+		<property name="mridSelector" value="${dataSync.xpath.meter.mridSelector}"></property>
+		<property name="statusSelector" value="${dataSync.xpath.meter.statusSelector}"></property>
+		<property name="manufacturedDateSelector" value="${dataSync.xpath.meter.manufacturedDateSelector}"></property>
+		<property name="virtualIndSelector" value="${dataSync.xpath.meter.virtualIndSelector}"></property>
+		<property name="serviceTypeSelector" value="${dataSync.xpath.meter.serviceTypeSelector}"></property>
+		<property name="serialNumberSelector" value="${dataSync.xpath.meter.serialNumberSelector}"></property>
+		<property name="installDateSelector" value="${dataSync.xpath.meter.installDateSelector}"></property>
+		<property name="firstReadSelector" value="${dataSync.xpath.meter.firstReadSelector}"></property>
+		<property name="lastReadSelector" value="${dataSync.xpath.meter.lastReadSelector}"></property>
+		
+		<property name="parameterNamespace" value="${dataSync.xpath.meter.parameterNamespace}"></property>
+	</bean>	
+	<bean id="syncMessageContactProcessorConfirugarator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.ContactProcessorConfigurator">
+			
+		<property name="contactSelector" value="${dataSync.xpath.contactSelector}"></property>
+		<property name="parameterNamespace" value="${dataSync.xpath.contact.parameterNamespace}"></property>
+		<property name="mridSelector" value="${dataSync.xpath.contact.mridSelector}"></property>
+		<property name="statusSelector" value="${dataSync.xpath.contact.statusSelector}"></property>
+		<property name="firstNameSelector" value="${dataSync.xpath.contact.firstNameSelector}"></property>
+		<property name="lastNameSelector" value="${dataSync.xpath.contact.lastNameSelector}"></property>
+		<property name="middleNameSelector" value="${dataSync.xpath.contact.middleNameSelector}"></property>
+		<property name="homePhoneNumberSelector" value="${dataSync.xpath.contact.homePhoneNumberSelector}"></property>
+		<property name="mobilePhoneNumberSelector" value="${dataSync.xpath.contact.mobilePhoneNumberSelector}"></property>
+		<property name="emailAddressSelector" value="${dataSync.xpath.contact.emailAddressSelector}"></property>
+		<property name="secondaryEmailAddressSelector" value="${dataSync.xpath.contact.secondaryEmailAddressSelector}"></property>
+		<property name="commentsSelector" value="${dataSync.xpath.contact.commentsSelector}"></property>
+	</bean>
+	<bean id="syncMessageServiceLocationProcessorConfirugarator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.ServiceLocationProcessorConfigurator">
+			
+		<property name="serviceLocationSelector" value="${dataSync.xpath.serviceLocationSelector}"></property>
+		<property name="parameterNamespace" value="${dataSync.xpath.serviceLocation.parameterNamespace}"></property>
+		<property name="mridSelector" value="${dataSync.xpath.serviceLocation.mridSelector}"></property>
+		<property name="addressGeneralSelector" value="${dataSync.xpath.serviceLocation.addressGeneralSelector}"></property>
+		<property name="addressLine2Selector" value="${dataSync.xpath.serviceLocation.addressLine2Selector}"></property>
+		<property name="citySelector" value="${dataSync.xpath.serviceLocation.citySelector}"></property>
+		<property name="stateOrProvinceSelector" value="${dataSync.xpath.serviceLocation.stateOrProvinceSelector}"></property>
+		<property name="countrySelector" value="${dataSync.xpath.serviceLocation.countrySelector}"></property>
+		<property name="postalCodeSelector" value="${dataSync.xpath.serviceLocation.postalCodeSelector}"></property>
+		<property name="poBoxSelector" value="${dataSync.xpath.serviceLocation.poBoxSelector}"></property>
+		<property name="timeZoneSelector" value="${dataSync.xpath.serviceLocation.timeZoneSelector}"></property>
+		<property name="locationTypeSelector" value="${dataSync.xpath.serviceLocation.locationTypeSelector}"></property>
+		<property name="locationCodeSelector" value="${dataSync.xpath.serviceLocation.locationCodeSelector}"></property>
+		<property name="latitudeSelector" value="${dataSync.xpath.serviceLocation.latitudeSelector}"></property>
+		<property name="longitudeSelector" value="${dataSync.xpath.serviceLocation.longitudeSelector}"></property>
+	</bean>
+	
+	<bean id="syncMessageRouteProcessorConfirugarator"  
+			class="hu.bme.mit.v37zen.prepayment.datasync.seeddata.configurators.RouteProcessorConfigurator">
+		
+		<property name="routeSelcetor" value="${dataSync.xpath.routeSelector}"></property>
+		<property name="parameterNamespace" value="${dataSync.xpath.route.parameterNamespace}"></property>
+		<property name="mridSelector" value="${dataSync.xpath.route.mridSelector}"></property>
+		<property name="typeSelector" value="${dataSync.xpath.route.typeSelector}"></property>
+		<property name="billingCycleSelector" value="${dataSync.xpath.route.billingCycleSelector}"></property>
+		<property name="readingCycleSelector" value="${dataSync.xpath.route.readingCycleSelector}"></property>
+		<property name="reconciliationLockFlag" value="${dataSync.xpath.route.reconciliationLockFlag}"></property>
+		<property name="statusSelector" value="${dataSync.xpath.route.statusSelector}"></property>
+	</bean>
+</beans>
+
+

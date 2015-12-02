@@ -1,0 +1,6 @@
+#Prefix URI
+syncif http://www.emeter.com/energyip/syncinterface
+mdif http://www.emeter.com/energyip/meterdatainterface
+pay http://www.debug.com/paymentinterface
+xsi http://www.w3.org/2001/XMLSchema-instance
+v37 http://www.v37zen.prepayment.datasync.com/meterreadings
