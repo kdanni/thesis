@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -27,6 +28,7 @@ public class PrepaymentAccount extends BaseEntity {
 	
 	private String sdpMRID;
 	private String accountMRID;
+	private String meterMRID;
 	
 	private boolean active;
 
@@ -38,13 +40,13 @@ public class PrepaymentAccount extends BaseEntity {
     
     private String status;
     
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     private List<Payment> payments = new ArrayList<Payment>();
     
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     private List<Balance> balance = new ArrayList<Balance>();
     
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     private List<IntervalReading> meterReadings = new ArrayList<IntervalReading>();
     
     public PrepaymentAccount() {
@@ -119,6 +121,14 @@ public class PrepaymentAccount extends BaseEntity {
 		this.accountMRID = accountMRID;
 	}
 
+	public String getMeterMRID() {
+		return meterMRID;
+	}
+
+	public void setMeterMRID(String meterMRID) {
+		this.meterMRID = meterMRID;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -131,6 +141,8 @@ public class PrepaymentAccount extends BaseEntity {
 						.hashCode());
 		result = prime * result + (active ? 1231 : 1237);
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result
+				+ ((meterMRID == null) ? 0 : meterMRID.hashCode());
 		result = prime * result + ((sdpMRID == null) ? 0 : sdpMRID.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
@@ -164,6 +176,11 @@ public class PrepaymentAccount extends BaseEntity {
 				return false;
 		} else if (!endDate.equals(other.endDate))
 			return false;
+		if (meterMRID == null) {
+			if (other.meterMRID != null)
+				return false;
+		} else if (!meterMRID.equals(other.meterMRID))
+			return false;
 		if (sdpMRID == null) {
 			if (other.sdpMRID != null)
 				return false;
@@ -186,9 +203,10 @@ public class PrepaymentAccount extends BaseEntity {
 	public String toString() {
 		return "PrepaymentAccount [accountSDPAssociation="
 				+ accountSDPAssociation + ", sdpMRID=" + sdpMRID
-				+ ", accountMRID=" + accountMRID + ", active=" + active
-				+ ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", status=" + status + ", id=" + id + ", mRID=" + mRID + "]";
+				+ ", accountMRID=" + accountMRID + ", meterMRID=" + meterMRID
+				+ ", active=" + active + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", status=" + status + ", id=" + id
+				+ ", mRID=" + mRID + "]";
 	}
 
 	public List<Payment> getPayments() {
@@ -202,6 +220,7 @@ public class PrepaymentAccount extends BaseEntity {
 	public List<IntervalReading> getMeterReadings() {
 		return meterReadings;
 	}
+
     
     
 }

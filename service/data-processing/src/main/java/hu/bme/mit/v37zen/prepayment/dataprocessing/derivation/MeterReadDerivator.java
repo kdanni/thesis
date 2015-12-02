@@ -52,7 +52,7 @@ public class MeterReadDerivator implements MessageHandler {
 				String ppaccId = persistTransaction((IntervalReading)payload);
 				outputChannel.send(new GenericMessage<String>(ppaccId));
 			
-				logger.debug(intervalReadingRepository.getIntervalReadingForProccessing(ppaccId).toString());
+				//logger.debug(intervalReadingRepository.getIntervalReadingForProccessing(ppaccId).toString());
 			} catch (ValidationException e) {
 				logValidationException(e);
 			}
@@ -70,20 +70,13 @@ public class MeterReadDerivator implements MessageHandler {
 		intervalReading.setInsertTime(new Date());
 		intervalReading.setProcessed(false);
 		intervalReading.setArchived(false);
+						
+		PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(meterMRID);
+		String id = ppacc.getMRID();
 		
 		intervalReading = this.intervalReadingRepository.save(intervalReading);
-				
-		PrepaymentAccount ppacc = accountValidator.getPrepaymentAccountByMeterAsset(meterMRID);
-		ppacc = this.prepaymentAccountRepository.findByIdFetchMeterReading(ppacc.getId());
-		
-		String id = ppacc.getMRID();
-		ppacc.getMeterReadings().size();
-		ppacc.getMeterReadings().add(intervalReading);
-		
-		this.prepaymentAccountRepository.save(ppacc);
 		
 		logger.debug("Meter read derived: " + intervalReading);
-		
 		return id;
 	}	
 	

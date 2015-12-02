@@ -114,6 +114,7 @@ subprojects {
 		
 		ext.springVersion = '4.2.2.RELEASE'
 		providedCompile "org.springframework:spring-context:$springVersion"
+		providedCompile "org.springframework:spring-aspects:$springVersion"
 		providedCompile "org.springframework:spring-jdbc:$springVersion" 
 		providedCompile "org.springframework:spring-webmvc:$springVersion"
 		

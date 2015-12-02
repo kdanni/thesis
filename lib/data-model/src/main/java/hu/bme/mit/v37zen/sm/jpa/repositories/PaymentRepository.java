@@ -12,9 +12,12 @@ public interface PaymentRepository extends JpaRepository<Payment,Long> {
 
 	public List<Payment> findById(Long id);
 	
-	@Query("select p from PrepaymentAccount pa inner join pa.payments p where pa.accountMRID = :id")
-	public List<Payment> findByAccountId(@Param("id") String accountMRID);
-		
-	@Query("select p from PrepaymentAccount pa inner join pa.payments p where pa.accountMRID = :id and p.processed = '0'")
+//	@Query("select p from PrepaymentAccount pa inner join pa.payments p where pa.accountMRID = :id")
+//	public List<Payment> findByAccountId(@Param("id") String accountMRID);
+//		
+//	@Query("select p from PrepaymentAccount pa inner join pa.payments p where pa.accountMRID = :id and p.processed = '0'")
+//	public List<Payment> getPaymentForProccessing(@Param("id") String accountMRID);
+	
+	@Query("select p from Payment p where p.accountId = :id and p.processed = '0'")
 	public List<Payment> getPaymentForProccessing(@Param("id") String accountMRID);
 }

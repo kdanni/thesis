@@ -10,6 +10,7 @@ import hu.bme.mit.v37zen.sm.jpa.repositories.SdpMeterAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -85,8 +86,9 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 			
 			List<ServiceDeliveryPoint> sdpList = getServiceDeliveryPointRepository().findByMRID(sdpMRID); 
 			if(sdpList.size() == 0){
-				Message<SdpMeterAssociation> m = new GenericMessage<SdpMeterAssociation>(sma);
-				m.getHeaders().put(PROCESSED_KEY, new Integer(processed+1));
+				HashMap<String, Object> header = new HashMap<String, Object>();
+				header.put(PROCESSED_KEY, new Integer(processed+1));
+				Message<SdpMeterAssociation> m = new GenericMessage<SdpMeterAssociation>(sma, header);
 				logger.debug("Rederivating: " + m.toString());
 				this.rederivatorChannel.send(m);
 				return;
@@ -100,8 +102,9 @@ public class SdpMeterAssociationDerivator implements MessageHandler {
 			
 			List<MeterAsset> meterList = meterAssetRepository.findByMRID(meterMRID); 
 			if(meterList.size() == 0){
-				Message<SdpMeterAssociation> m = new GenericMessage<SdpMeterAssociation>(sma);
-				m.getHeaders().put(PROCESSED_KEY, new Integer(processed+1));
+				HashMap<String, Object> header = new HashMap<String, Object>();
+				header.put(PROCESSED_KEY, new Integer(processed+1));
+				Message<SdpMeterAssociation> m = new GenericMessage<SdpMeterAssociation>(sma, header);
 				logger.debug("Rederivating: " + m.toString());
 				this.rederivatorChannel.send(m);
 				return;

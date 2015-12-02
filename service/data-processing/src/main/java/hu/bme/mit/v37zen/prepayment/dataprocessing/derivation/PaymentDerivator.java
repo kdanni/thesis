@@ -3,13 +3,11 @@ package hu.bme.mit.v37zen.prepayment.dataprocessing.derivation;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationException;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
-import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PaymentRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentAccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
 
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,26 +66,10 @@ public class PaymentDerivator implements MessageHandler {
 		payment.setProcessed(false);
 		payment.setArchived(false);
 				
-		payment = this.paymentRepository.save(payment);
-		
-		List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findByAccountMRID(accMRID);
-		if(ppaccList.size() != 1){
-			String msg = ((ppaccList.size() > 1) ? "Multiple" : "No") + " PrepaymentAccount found with id: " + accMRID +".";
-			throw new ValidationException(msg);
-		}
-		PrepaymentAccount ppacc = ppaccList.get(0);
-		ppacc = this.prepaymentAccountRepository.findByIdFetchPayment(ppacc.getId());
-				
-		String id = ppacc.getMRID();
-		
-		ppacc.getPayments().size();
-		ppacc.getPayments().add(payment);
-		
-		this.prepaymentAccountRepository.save(ppacc);
+		this.paymentRepository.save(payment);
 		
 		logger.debug("Payment derived: " + payment);
-		
-		return id;
+		return accMRID;
 	}	
 	
 	@Transactional

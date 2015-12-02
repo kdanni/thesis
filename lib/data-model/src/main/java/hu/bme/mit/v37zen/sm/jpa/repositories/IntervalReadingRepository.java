@@ -26,13 +26,16 @@ public interface IntervalReadingRepository extends JpaRepository<IntervalReading
 	
 	public List<IntervalReading> findByArchived(Boolean status);
 	
-	@Query("select ir from PrepaymentAccount pa inner join pa.meterReadings ir where pa.accountMRID = :id")
-	public List<IntervalReading> findByAccountId(@Param("id") String accountMRID);
-	
-	@Query("select ir from PrepaymentAccount pa inner join pa.meterReadings ir where pa.accountMRID = :id and ir.processed = '0'")
-	public List<IntervalReading> getIntervalReadingForProccessing(@Param("id") String accountMRID);
+//	@Query("select ir from PrepaymentAccount pa inner join pa.meterReadings ir where pa.accountMRID = :id")
+//	public List<IntervalReading> findByAccountId(@Param("id") String accountMRID);
+//	
+//	@Query("select ir from PrepaymentAccount pa inner join pa.meterReadings ir where pa.accountMRID = :id and ir.processed = '0'")
+//	public List<IntervalReading> getIntervalReadingForProccessing(@Param("id") String accountMRID);
 	
 	public List<IntervalReading> findByMeterReferenceIdAndEndTime(String referenceId, Date endTime);
+	
+	@Query("select ir from IntervalReading ir where ir.meterReferenceId = :id and ir.processed = '0'")
+	public List<IntervalReading> getIntervalReadingForProccessing(@Param("id") String meterMRID);
 	
 }
 //and ir.processed = false

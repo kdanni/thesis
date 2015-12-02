@@ -1,17 +1,21 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing.derivation;
 
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.PrepaymentAccount;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.AccountSDPAssociation;
+import hu.bme.mit.v37zen.sm.datamodel.smartmetering.SdpMeterAssociation;
 import hu.bme.mit.v37zen.sm.datamodel.smartmetering.ServiceDeliveryPoint;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.AccountSDPAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentAccountRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.PrepaymentExceptionRepository;
+import hu.bme.mit.v37zen.sm.jpa.repositories.SdpMeterAssociationRepository;
 import hu.bme.mit.v37zen.sm.jpa.repositories.ServiceDeliveryPointRepository;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -60,6 +64,12 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 	@Autowired
 	private ServiceDeliveryPointRepository serviceDeliveryPointRepository;
 	
+	@Autowired
+	private AccountValidator accountValidator;
+	
+	@Autowired
+	private SdpMeterAssociationRepository sdpMeterAssociationRepository;
+	
 	@Override
 	@Transactional
 	public void handleMessage(Message<?> message) throws MessagingException {
@@ -85,8 +95,9 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 						
 			List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findByAccountMRID(accMRID);
 			if(ppaccList.size() == 0){
-				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss);
-				m.getHeaders().put(PROCESSED_KEY, new Integer(processed+1));
+				HashMap<String, Object> header = new HashMap<String, Object>();
+				header.put(PROCESSED_KEY, new Integer(processed+1));
+				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss, header);
 				logger.debug("Rederivating: " + m.toString());
 				this.rederivatorChannel.send(m);
 				return;
@@ -100,8 +111,9 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			}
 			List<Account> accList = accountRepository.findByMRID(accMRID);
 			if(accList.size() == 0){
-				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss);
-				m.getHeaders().put(PROCESSED_KEY, new Integer(processed+1));
+				HashMap<String, Object> header = new HashMap<String, Object>();
+				header.put(PROCESSED_KEY, new Integer(processed+1));
+				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss, header);
 				logger.debug("Rederivating: " + m.toString());
 				this.rederivatorChannel.send(m);
 				return;
@@ -120,8 +132,9 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			}
 			List<ServiceDeliveryPoint> sdpList = serviceDeliveryPointRepository.findByMRID(sdpMRID); 
 			if(sdpList.size() == 0){
-				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss);
-				m.getHeaders().put(PROCESSED_KEY, new Integer(processed+1));
+				HashMap<String, Object> header = new HashMap<String, Object>();
+				header.put(PROCESSED_KEY, new Integer(processed+1));
+				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss, header);
 				logger.debug("Rederivating: " + m.toString());
 				this.rederivatorChannel.send(m);
 				return;
@@ -134,13 +147,33 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			}
 
 			//Lezárni az aktiv kapcsolatot a megeggyző kapcsolatra.
-			List<AccountSDPAssociation> list = accountSDPAssociationRepository.findByAccountMRID(accMRID);
-			for (AccountSDPAssociation accountSDPAssociation : list) {
+			List<AccountSDPAssociation> accountSDPAssociationList = accountSDPAssociationRepository.findByAccountMRID(accMRID);
+			for (AccountSDPAssociation accountSDPAssociation : accountSDPAssociationList) {
 				if(accountSDPAssociation.getSdpMRID() != null && accountSDPAssociation.getSdpMRID().equals(sdpMRID)){
 					accountSDPAssociation.setEndDate(new Date());
 					accountSDPAssociation.setStatus(inactiveStatus);
 				}
 			}			
+			
+			List<SdpMeterAssociation> smaList = this.sdpMeterAssociationRepository.findBySdpMRID(sdpMRID);
+			SdpMeterAssociation sma = null;
+			int active = 0;
+			for (SdpMeterAssociation a : smaList) {
+				if(a.getStatus() != null && a.getStatus().equalsIgnoreCase(activeStatus)){
+					active++;
+					sma = a;
+				}
+			}
+			if(active != 1){
+				HashMap<String, Object> header = new HashMap<String, Object>();
+				header.put(PROCESSED_KEY, new Integer(processed+1));
+				Message<AccountSDPAssociation> m = new GenericMessage<AccountSDPAssociation>(accSdpAss, header);
+				logger.debug("Rederivating: " + m.toString());
+				this.rederivatorChannel.send(m);
+				return;
+			}			
+			
+			accountSDPAssociationRepository.save(accountSDPAssociationList);
 			
 			PrepaymentAccount ppacc = ppaccList.get(0);
 			Account acc = accList.get(0);
@@ -153,6 +186,7 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 			ppacc.setStatus(accSdpAss.getStatus());
 			ppacc.setActive(true);
 			ppacc.setAccountSDPAssociation(accSdpAss);
+			ppacc.setMeterMRID(sma.getMeterAssetMRID());
 			
 			persistTransaction(ppacc, accSdpAss);
 		}		
@@ -241,6 +275,23 @@ public class PrepaymentAccountDerivator implements MessageHandler {
 
 	public void setActiveStatus(String activeStatus) {
 		this.activeStatus = activeStatus;
+	}
+
+	public AccountValidator getAccountValidator() {
+		return accountValidator;
+	}
+
+	public void setAccountValidator(AccountValidator accountValidator) {
+		this.accountValidator = accountValidator;
+	}
+
+	public SdpMeterAssociationRepository getSdpMeterAssociationRepository() {
+		return sdpMeterAssociationRepository;
+	}
+
+	public void setSdpMeterAssociationRepository(
+			SdpMeterAssociationRepository sdpMeterAssociationRepository) {
+		this.sdpMeterAssociationRepository = sdpMeterAssociationRepository;
 	}
 
 }

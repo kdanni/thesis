@@ -15,7 +15,7 @@
 	<task:scheduler id="rateingEngineScheduler" pool-size="10"/>
 	
 	<task:scheduled-tasks scheduler="rateingEngineScheduler">
-		<task:scheduled ref="rateingEngine" method="rate" fixed-rate="5000" />
+		<task:scheduled ref="rateingEngine" method="rate" fixed-delay="5000" />
 	</task:scheduled-tasks>
 	
 	<bean id="rateingEngine" class="hu.bme.mit.v37zen.prepayment.dataprocessing.rating.RatingEngine">

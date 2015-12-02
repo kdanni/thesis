@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -36,6 +37,12 @@ public class RatingEngine implements MessageHandler {
 	public static final Logger logger = LoggerFactory.getLogger(RatingEngine.class);
 	
 	private static ConcurrentSkipListSet<String> toProcessAccountId = new ConcurrentSkipListSet<String>();
+	
+	@Value("${validation.association.active.status}")
+	private String activeStatus;
+	
+	@Value("${validation.association.inactive.status}")
+	private String inactiveStatus;
 
 	private SubscribableChannel channel;
 	
@@ -79,48 +86,17 @@ public class RatingEngine implements MessageHandler {
 		
 	}
 	
+	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,transactionManager="transactionManager")
 	public void rate(){
 		try{
 			logger.debug("rating..");
 			while(!toProcessAccountId.isEmpty()){
-				String mRID = toProcessAccountId.pollFirst();
+				try {
 				
-				List<IntervalReading> intervalReadings = intervalReadingRepository.getIntervalReadingForProccessing(mRID);
-				double consumption = 0;
-				for (IntervalReading intervalReading : intervalReadings) {
-					consumption += intervalReading.getValue();
-					intervalReading.setProcessed(true);
-				}
-				
-				consumption = new BasicRate().rate(consumption);
-				
-				double prepaid = 0;
-				List<Payment> payments = paymentRepository.getPaymentForProccessing(mRID);
-				for (Payment payment : payments) {
-					prepaid += payment.getValue();
-					payment.setProcessed(true);
-				}
-				
-				List<Balance> result = balanceRepository.findByAccountIdOrderByDateDesc(mRID, new PageRequest(0, 1));
-				if(result.size() < 2){
-					double balance = 0;
-					if(result.size() == 1){
-						Balance b = result.get(0);
-						if(b != null){
-							balance = b.getBalance();
-						}
-					}										
-					Balance newBalance = new Balance(balance + prepaid - consumption, prepaid, consumption, mRID, new Date());
+					this.transaction();
 					
-					if(persistTransaction(newBalance) == null){
-						continue;
-					}
-					this.saveIntervalReads(intervalReadings);
-					this.savePayments(payments);
-					
-					this.outputChannel.send(new GenericMessage<String>(mRID));					
-					logger.debug("New Balance: " + newBalance.toString());	
-					
+				} catch (ValidationException e) {
+					this.logException(e.getMessage());
 				}
 			}
 		}catch(Exception e){
@@ -128,37 +104,62 @@ public class RatingEngine implements MessageHandler {
 		}		
 	}
 	
-	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,rollbackFor={ValidationException.class},transactionManager="transactionManager")
-	protected synchronized String persistTransaction(Balance balance) throws ValidationException{
-		List<PrepaymentAccount> ppaccList = prepaymentAccountRepository.findByAccountMRID(balance.getPrepaymentAccountMRID());
+	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,
+			rollbackFor={ValidationException.class},transactionManager="transactionManager")
+	protected synchronized void transaction() throws ValidationException {
+		
+		String mRID = toProcessAccountId.pollFirst();
+
+		List<PrepaymentAccount> ppaccList = this.prepaymentAccountRepository.findByAccountMRID(mRID);
 		if(ppaccList.size() != 1){
-			String msg = ((ppaccList.size() > 1) ? "Multiple" : "No") + " PrepaymentAccount found with id: " 
-					+ balance.getPrepaymentAccountMRID() +".";
-			logException(msg);
-			return null;
-		}		
+			String msg = ((ppaccList.size() == 0) ? "No" : "Multiple" ) 
+					+ " PrepaymentAccount found with id: " + mRID +".";
+			throw new ValidationException(msg);
+		}
+		PrepaymentAccount ppacc = ppaccList.get(0);
+				
+		List<IntervalReading> intervalReadings = intervalReadingRepository.getIntervalReadingForProccessing(ppacc.getMeterMRID());
+		double consumption = 0;
+		for (IntervalReading intervalReading : intervalReadings) {
+			consumption += intervalReading.getValue();
+			intervalReading.setProcessed(true);
+		}
 		
-		balance = this.balanceRepository.save(balance);
+		consumption = new BasicRate().rate(consumption);
 		
-		PrepaymentAccount ppacc = ppaccList.get(0);	
-		ppacc = this.prepaymentAccountRepository.findByIdFetchBalance(ppacc.getId());
+		double prepaid = 0;
+		List<Payment> payments = paymentRepository.getPaymentForProccessing(mRID);
+		for (Payment payment : payments) {
+			prepaid += payment.getValue();
+			payment.setProcessed(true);
+		}
 		
-		ppacc.getBalance().size();
-		ppacc.getBalance().add(balance);
+		List<Balance> result = balanceRepository.findByAccountIdOrderByDateDesc(mRID, new PageRequest(0, 1));
+		if(result.size() < 2){
+			double balance = 0;
+			if(result.size() == 1){
+				Balance b = result.get(0);
+				if(b != null){
+					balance = b.getBalance();
+				}
+			}										
+			Balance newBalance = new Balance(balance + prepaid - consumption, prepaid, consumption, mRID, new Date());
+			
+			ppacc = prepaymentAccountRepository.findByIdFetchBalance(ppacc.getId());
+			ppacc.getBalance().add(newBalance);
+			this.prepaymentAccountRepository.save(ppacc);
+			
+			ppacc = prepaymentAccountRepository.findByIdFetchMeterReading(ppacc.getId());
+			ppacc.getMeterReadings().addAll(intervalReadings);
+			this.prepaymentAccountRepository.save(ppacc);
 		
-		this.prepaymentAccountRepository.save(ppacc);
-		
-		return balance.getPrepaymentAccountMRID();
-	}	
-	
-	@Transactional
-	protected void saveIntervalReads(List<IntervalReading> intervalReadings){
-		this.intervalReadingRepository.save(intervalReadings);
-	}
-	
-	@Transactional
-	protected void savePayments(List<Payment> payments){
-		this.paymentRepository.save(payments);
+			ppacc = prepaymentAccountRepository.findByIdFetchPayment(ppacc.getId());
+			ppacc.getPayments().addAll(payments);
+			this.prepaymentAccountRepository.save(ppacc);
+			
+			this.outputChannel.send(new GenericMessage<String>(mRID));					
+			logger.debug("New Balance: " + newBalance.toString());	
+		}
 	}
 	
 	@Transactional
