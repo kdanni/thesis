@@ -139,10 +139,13 @@ subprojects {
 		providedCompile "org.springframework.integration:spring-integration-jms:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-xml:$springIntegrationVersion"
 		providedCompile "org.springframework.integration:spring-integration-ws:$springIntegrationVersion"
+		providedCompile "org.springframework.integration:spring-integration-mail:$springIntegrationVersion"
 		
 		providedCompile 'org.apache.activemq:activemq-core:5.7.0'
 		providedCompile 'org.apache.activemq:activemq-client:5.12.1'
 		
+		providedCompile 'javax.mail:javax.mail-api:1.5.4'
+		providedCompile 'com.sun.mail:javax.mail:1.5.4'
 		
 		testLib "org.springframework:spring-test:$springVersion"
 		

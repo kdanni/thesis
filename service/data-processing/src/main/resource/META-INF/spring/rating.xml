@@ -29,11 +29,11 @@
 	
 	<int:channel id="fromRatingEngine" />
 	
-	<int:logging-channel-adapter
-		channel="fromRatingEngine" 
-		level="DEBUG" 
-		expression=""
-		log-full-message="false"
-		logger-name="" />
+<!-- 	<int:logging-channel-adapter -->
+<!-- 		channel="fromRatingEngine"  -->
+<!-- 		level="DEBUG"  -->
+<!-- 		expression="" -->
+<!-- 		log-full-message="false" -->
+<!-- 		logger-name="" /> -->
 
 </beans>

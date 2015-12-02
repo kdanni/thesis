@@ -89,7 +89,7 @@ public class RatingEngine implements MessageHandler {
 	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED,transactionManager="transactionManager")
 	public void rate(){
 		try{
-			logger.debug("rating..");
+			//logger.debug("rating..");
 			while(!toProcessAccountId.isEmpty()){
 				try {
 				

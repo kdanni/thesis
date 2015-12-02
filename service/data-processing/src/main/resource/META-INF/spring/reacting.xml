@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail-4.2.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<int:bridge input-channel="fromRatingEngine" output-channel="toRectorChannel">
+	</int:bridge>
+	<int:channel id="toRectorChannel" />
+	
+	
+	<bean id="reactor" class="hu.bme.mit.v37zen.prepayment.dataprocessing.reacting.Reactor">
+		<property name="channel">
+			<ref bean="toRectorChannel" />
+		</property>
+		<property name="mailChannel">
+			<ref bean="mailReactionChannel"/>
+		</property>		
+	</bean>
+	
+	
+	<int:channel id="mailReactionChannel"></int:channel>
+	
+	<int-mail:header-enricher input-channel="mailReactionChannel" output-channel="enrichedMailChannel" default-overwrite="false">
+		<int-mail:to value="testuser@127.0.0.1"/>
+<!-- 		<int-mail:cc value=""/> -->
+<!-- 		<int-mail:bcc value=""/> -->
+		<int-mail:from value="prepay@127.0.0.1"/>
+		<int-mail:reply-to value="prepay@127.0.0.1"/>
+		<int-mail:subject value="PREPAYMET"/>
+	</int-mail:header-enricher>
+
+	<int:channel id="enrichedMailChannel"></int:channel>
+
+	<int-mail:outbound-channel-adapter mail-sender="mailSender" channel="enrichedMailChannel">
+	</int-mail:outbound-channel-adapter>
+	
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
+		<property name="host" value="127.0.0.1" />
+		<property name="port" value="25" />
+		<property name="username" value="prepay@127.0.0.1" />
+		<property name="password" value="password" />
+<!-- 		<property name="javaMailProperties"> -->
+<!-- 		   <props> -->
+<!-- 		      <prop key="mail.smtp.starttls.enable">true</prop> -->
+<!-- 		      <prop key="mail.smtp.auth">true</prop> -->
+<!-- 		   </props> -->
+<!-- 		</property> -->
+	</bean>
+	
+</beans>
