@@ -12,17 +12,14 @@
 	<import resource="classpath:/META-INF/spring/super-context.xml"/>
 
 	<web-services:annotation-driven/>	
-	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.datasync.ws">
+	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.webapi.endpoints">
 	</context:component-scan>
 
-	<web-services:dynamic-wsdl id="meterreadings" targetNamespace="http://www.v37zen.prepayment.datasync.com/meterreadings"
-		portTypeName="MeterReadings" locationUri="/prepay/meterreadings/" requestSuffix="Message">
-		<web-services:xsd location="classpath:WEB-INF/xsd/EipGenericDataImporter.xsd"/>
+	<web-services:dynamic-wsdl id="hello" targetNamespace="http://www.v37zen.prepayment.web.com/hello"
+		portTypeName="Hello" locationUri="/hello/" requestSuffix="Request" responseSuffix="Response">
+		<web-services:xsd location="classpath:WEB-INF/xsd/hello.xsd"/>
 	</web-services:dynamic-wsdl>
-		
-	<int:channel id="meterReadingsWSInChannel">
-	</int:channel>
-	<int:bridge input-channel="meterReadingsWSInChannel" output-channel="toRouterChannel">
-	</int:bridge>
+	
+	
 	
 </beans>

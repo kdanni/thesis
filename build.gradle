@@ -223,6 +223,20 @@ project(':rule-engine') {
 		}
 	}
 }
+project(':web-api') {
+    jar {
+		baseName = 'prepayment-web-api'
+	}
+	dependencies {
+        compile  project(':data-model')
+		compile  project(':util-lib')
+    }
+    //eclipse {
+	//	classpath {
+	//		plusConfigurations += [configurations.droolsLib]
+	//	}
+	//}
+}
 
 ext {
 	libBaseBase = 'lib'

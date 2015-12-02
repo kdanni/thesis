@@ -9,38 +9,7 @@
 	<!-- Null Channel, (dev/null) -->	
 	<bean id="nullChannel" class="org.springframework.integration.channel.NullChannel" />
     
-    <!-- MBean exporter -->
-	<!-- Autodetectálja a annotált beaneket -->
-	
-	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
-		<property name="assembler" ref="assembler" />
-		<property name="namingStrategy" ref="namingStrategy" />
-		<property name="autodetect" value="true" />        
-	</bean>
-
-	<bean id="jmxAttributeSource"
-		class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource" />
-
-	<bean id="assembler"
-		class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
-		<property name="attributeSource" ref="jmxAttributeSource" />
-	</bean>
-	<bean id="namingStrategy"
-		class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
-		<property name="attributeSource" ref="jmxAttributeSource" />
-	</bean>
-	
-	<bean id="exporter2" class="org.springframework.jmx.export.MBeanExporter">
-		<property name="beans">
-            <map>
-                <entry key="bean:name=DataSyncThreadPoolTaskExecutor" value-ref="dataSyncThreadPoolTaskExecutor"/>
-                <entry key="bean:name=MeterDataThreadPoolTaskExecutor" value-ref="meterDataThreadPoolTaskExecutor"/>
-                <entry key="bean:name=paymentDataThreadPoolTaskExecutor" value-ref="meterDataThreadPoolTaskExecutor"/>
-            </map>
-        </property>
-    </bean>
-	
-	<!-- /MBean exporter -->
+    <!-- /MBean exporter -->
 	
 	<bean id="resourceLoaderBean" class="hu.bme.mit.v37zen.prepayment.util.xml.ResourceLoaderBean"></bean>
 	
