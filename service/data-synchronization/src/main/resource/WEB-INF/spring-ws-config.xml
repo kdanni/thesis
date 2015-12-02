@@ -4,17 +4,34 @@
 	xmlns:web-services="http://www.springframework.org/schema/web-services"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:int="http://www.springframework.org/schema/integration"
-	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+	xmlns:int-ws="http://www.springframework.org/schema/integration/ws"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws-4.2.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
 	<import resource="classpath:/META-INF/spring/super-context.xml"/>
 
-	<web-services:annotation-driven/>	
-	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.datasync.ws">
-	</context:component-scan>
+<!-- 	<web-services:annotation-driven/>	 -->
+<!-- 	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.datasync.ws"> -->
+<!-- 	</context:component-scan> -->
 
+	<int-ws:inbound-gateway
+		id="meterReadingsInboundWSGateway"
+		request-channel="meterReadingsWSInChannel"
+	/>
+
+	<bean class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
+		<property name="endpointMap">
+			<map>
+				<entry 
+					key="{http://www.emeter.com/energyip/meterdatainterface}MeterDataMessage" 
+					value-ref="meterReadingsInboundWSGateway"></entry>
+			</map>
+		</property>
+	</bean>
+	
 	<web-services:dynamic-wsdl id="meterreadings" targetNamespace="http://www.v37zen.prepayment.datasync.com/meterreadings"
 		portTypeName="MeterReadings" locationUri="/prepay/meterreadings/" requestSuffix="Message">
 		<web-services:xsd location="classpath:WEB-INF/xsd/EipGenericDataImporter.xsd"/>
