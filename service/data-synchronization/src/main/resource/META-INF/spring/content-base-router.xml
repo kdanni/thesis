@@ -40,9 +40,9 @@
 			</map>
 		</constructor-arg>
 		
-		<property name="taskExecutor">
+		<constructor-arg name="taskExecutor">
 			<ref bean="routerThreadPoolTaskExecutor"/>
-		</property>
+		</constructor-arg>
 	</bean>	
 	
 	<!-- "RoutingTable" -->
