@@ -1,4 +1,4 @@
-package hu.bme.mit.v37zen.prepayment.application.webapi;
+package hu.bme.mit.v37zen.prepayment.application.dataprocessing;
 
 import java.io.File;
 
@@ -7,9 +7,9 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WebApiWebApp {
+public class DataProcessingWebApp {
 
-	public final static Logger logger = LoggerFactory.getLogger(WebApiWebApp.class);
+	public final static Logger logger = LoggerFactory.getLogger(DataProcessingWebApp.class);
 	public final static String DEFAULT_WAR_FILE = "src/main/resource/";
 	
 	
@@ -20,7 +20,7 @@ public class WebApiWebApp {
 				warFilePath = args[0];
 			}			
 			
-			Server server = new Server(8082);
+			Server server = new Server(8081);
 			
 			WebAppContext webapp = new WebAppContext();
 		    webapp.setContextPath("/");
