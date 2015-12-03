@@ -45,6 +45,15 @@ public class ContentBasedRouter {
 		//String xml = (new DOMNodeToString()).nodeToString(document);
 		logger.info("XML message has arrived.");
 		//logger.debug('\n' + xml);
+		if(routingTable == null || taskExecutor == null){
+			if(routingTable == null){
+				logger.warn("Routing table is null.");
+			}
+			if(taskExecutor == null){
+				logger.warn("TaskExecutor is null.");
+			}
+			return;
+		}
 		
 		document.getDocumentElement().normalize();
 		Node node = document;
@@ -58,10 +67,10 @@ public class ContentBasedRouter {
 		}	
 	}
 	
-	public ContentBasedRouter() {
-	}
+//	public ContentBasedRouter() {
+//	}
 	
-	public ContentBasedRouter(Map<String, RoutingRule> routingTable) {
+	public ContentBasedRouter(Map<String, RoutingRule> routingTable, ThreadPoolTaskExecutor taskExecutor) {
 		if(routingTable == null ){
 			this.routingTable = new HashMap<String, RoutingRule>();
 		}
