@@ -75,6 +75,7 @@ public class ContentBasedRouter {
 			this.routingTable = new HashMap<String, RoutingRule>();
 		}
 		this.routingTable = routingTable;
+		this.taskExecutor = taskExecutor;
 	}
 	
 	public RoutingRule putRoutingRule(String ruleName, RoutingRule rule){

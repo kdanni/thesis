@@ -17,6 +17,8 @@
         </logger>
         <logger name="org.springframework.ws.transport.http.MessageDispatcherServlet" level="DEBUG">      
         </logger>
+        <logger name="org.apache.activemq" level="WARN">
+        </logger>
         <logger name="org.hibernate" level="INFO">
         </logger>
         <logger name="org.eclipse.jetty" level="INFO">

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.debug.com/paymentinterface" 
+	xmlns:tns="http://www.debug.com/paymentinterface" elementFormDefault="qualified">
+
+	<element name="PaymentValidationRequest">
+		<complexType>
+			<sequence>
+				<element name="PaymentMessage" 
+					type="tns:PaymentMessage"></element>
+			</sequence>
+		</complexType>
+	</element>
+	
+	<element name="PaymentValidationResponse" type="boolean">
+	</element>
+
+	<complexType name="PaymentMessage">
+			<sequence>
+				<element name="Header" type="tns:Header"></element>
+				<element name="Payload" type="tns:Payload"></element>
+			</sequence>
+	</complexType>
+
+	<complexType name="Header">
+		<sequence>
+			<element name="verb" type="string"></element>
+			<element name="noun" type="string"></element>
+			<element name="revision" type="int"></element>
+			<element name="dateTime" type="dateTime"></element>
+			<element name="source" type="string"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Payload">
+		<sequence>
+			<element name="payment"></element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="payment">
+		<sequence>
+			<element name="account" type="tns:account"></element>
+			<element name="value" type="double"></element>
+			<element name="curency" type="string"></element>
+			<element name="dateTime" type="dateTime"></element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="account">
+		<sequence>
+			<element name="mRID" type="string"></element>
+		</sequence>
+	</complexType>
+	
+	
+	
+</schema>

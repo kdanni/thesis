@@ -5,8 +5,10 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ws="http://www.springframework.org/schema/integration/ws"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws-4.2.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
@@ -17,24 +19,50 @@
 <!-- 	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.datasync.ws"> -->
 <!-- 	</context:component-scan> -->
 
-	<int-ws:inbound-gateway
-		id="meterReadingsInboundWSGateway"
-		request-channel="meterReadingsWSInChannel"
-	/>
-
-	<bean class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
-		<property name="endpointMap">
-			<map>
-				<entry 
-					key="{http://www.emeter.com/energyip/meterdatainterface}MeterDataMessage" 
-					value-ref="meterReadingsInboundWSGateway"></entry>
-			</map>
+	<!-- Payment Validation -->
+	<bean id="paymentValidatorWS"
+			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.payment.PaymentValidator" >
+		<property name="channel">
+			<ref bean="paymentDataChannelWS"/>
+		</property>
+		<property name="validChannel">
+			<ref bean="validPaymentChannelWS" />
+		</property>
+		<property name="invalidChannel">
+			<ref bean="invalidPaymentChannelWS" />
 		</property>
 	</bean>
 	
-	<web-services:dynamic-wsdl id="meterreadings" targetNamespace="http://www.v37zen.prepayment.datasync.com/meterreadings"
-		portTypeName="MeterReadings" locationUri="/prepay/meterreadings/" requestSuffix="Message">
-		<web-services:xsd location="classpath:WEB-INF/xsd/EipGenericDataImporter.xsd"/>
+	<int:channel id="paymentDataChannelWS">
+		<int:dispatcher task-executor="pvwsTS"/>
+	</int:channel>
+	<int:channel id="validPaymentChannelWS"></int:channel>	
+	<int:channel id="invalidPaymentChannelWS"></int:channel>
+	<task:executor id="pvwsTS" pool-size="1" queue-capacity="6"/>
+	
+	<bean id="prepayValidationMux" 
+		class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationMultiplexer">
+		<constructor-arg name="validChannel">
+			<ref bean="validPaymentChannelWS"/>
+		</constructor-arg>
+		<constructor-arg name="invalidChannel">
+			<ref bean="invalidPaymentChannelWS"/>
+		</constructor-arg>
+		<constructor-arg name="outputChannel">
+			<ref bean="muxedValidationResultPaymentChannelWS"/>
+		</constructor-arg>
+	</bean>
+
+	<int:channel id="muxedValidationResultPaymentChannelWS">
+		<int:rendezvous-queue/>
+	</int:channel>	
+
+	<web-services:annotation-driven/>
+	<context:component-scan base-package="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.payment.ws"></context:component-scan>
+	
+	<web-services:dynamic-wsdl id="paymentvalidation" targetNamespace="http://www.v37zen.prepayment.datasync.com/meterreadings"
+		portTypeName="paymentvalidation" locationUri="/prepay/paymentvalidation/">
+		<web-services:xsd location="classpath:WEB-INF/xsd/payment.xsd"/>
 	</web-services:dynamic-wsdl>
 		
 	<int:channel id="meterReadingsWSInChannel">

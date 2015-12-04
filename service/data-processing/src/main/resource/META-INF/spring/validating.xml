@@ -7,13 +7,30 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 	
-	<bean id="seedDataValidator" scope="prototype"
+	
+	<int:channel id="syncDataChannel">
+		<int:dispatcher task-executor="seedDataValidatorThreadPoolTaskExecutor" />
+	</int:channel>
+	<int:channel id="meterDataChannel">
+		<int:dispatcher task-executor="meterReadingValidatorThreadPoolTaskExecutor" />
+	</int:channel>
+	<int:channel id="paymentDataChannel">
+		<int:dispatcher task-executor="paymentValidatorThreadPoolTaskExecutor" />
+	</int:channel>
+	
+	<bean id="seedDataValidator" 
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.SeedDataValidator" >
-			<property name="toRevalidationChannel">
+			<property name="channel">
+				<ref bean="syncDataChannel"/>
+			</property>
+			<property name="revalidationChannel">
 				<ref bean="toRevalidatingChannel" />
 			</property>
 			<property name="validChannel">
 				<ref bean="validChannel" />
+			</property>
+			<property name="invalidChannel">
+				<ref bean="invalidSeedDataChannel" />
 			</property>
 	</bean>
 	
@@ -29,6 +46,15 @@
 	<int:channel id="validChannel" >
 		<int:dispatcher task-executor="validChannelThreadPoolTaskExecutor"/>
 	</int:channel>
+	
+	<int:channel id="invalidSeedDataChannel" />
+	
+	<int:logging-channel-adapter
+		channel="invalidSeedDataChannel" 
+		level="DEBUG" 
+		expression=""
+		log-full-message="false"
+		logger-name="" />
 	
 	<int:payload-type-router id="validRouter" input-channel="validChannel" default-output-channel="nullChannel">
 	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.smartmetering.Account" channel="validAccountChannel" />
@@ -57,8 +83,11 @@
 	
 	
 	<!-- Meter Reading Validation -->
-	<bean id="meterReadValidator" scope="prototype"
+	<bean id="meterReadValidator"
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.meterdata.MeterReadValidator" >
+		<property name="channel">
+			<ref bean="meterDataChannel"/>
+		</property>
 		<property name="validChannel">
 			<ref bean="validMeterReadChannel" />
 		</property>
@@ -80,8 +109,11 @@
 		logger-name="" />
 	
 	<!-- Payment Validation -->
-	<bean id="paymentValidator" scope="prototype"
+	<bean id="paymentValidator"
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.validation.payment.PaymentValidator" >
+		<property name="channel">
+			<ref bean="paymentDataChannel"/>
+		</property>
 		<property name="validChannel">
 			<ref bean="validPaymentChannel" />
 		</property>

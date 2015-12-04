@@ -1,7 +1,7 @@
 package hu.bme.mit.v37zen.prepayment.dataprocessing.validation.payment;
 
+import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.AbstractValidator;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.ValidationException;
-import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.Validator;
 import hu.bme.mit.v37zen.prepayment.dataprocessing.validation.seeddata.AccountValidator;
 import hu.bme.mit.v37zen.sm.datamodel.audit.PrepaymentException;
 import hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment;
@@ -12,18 +12,14 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.transaction.annotation.Transactional;
 
-public class PaymentValidator implements Validator<Payment>{
+public class PaymentValidator extends AbstractValidator{
 	
 	private static Logger logger = LoggerFactory.getLogger(PaymentValidator.class);
-	
-	private Payment paymentData;
-	
-	private MessageChannel invalidChannel; 
-	private MessageChannel validChannel; 
 	
 	@Autowired
 	private AccountValidator accountValidator;
@@ -31,10 +27,21 @@ public class PaymentValidator implements Validator<Payment>{
 	private PrepaymentExceptionRepository prepaymentExceptionRepository;
 	
 	@Override
-	public void run() {
-		if(paymentData == null){
+	public void handleMessage(Message<?> message) throws MessagingException {
+		if(this.validChannel == null || this.invalidChannel == null){
+			if(this.validChannel == null){
+				logger.warn("Valid channel is null.");
+			}
+			if(this.invalidChannel == null){
+				logger.warn("Invalid Channel is null.");
+			}
 			return;
-		}		
+		}
+		if(message == null || message.getPayload() == null 
+				|| !(message.getPayload() instanceof Payment)){
+			return;
+		}
+		Payment paymentData = (Payment)message.getPayload();
 		try {
 			if(!accountValidator.isAccountExist(paymentData.getAccountId())){
 				throw new ValidationException("No Account exist with id: " + paymentData.getAccountId() , paymentData);
@@ -50,7 +57,7 @@ public class PaymentValidator implements Validator<Payment>{
 			
 		} catch (ValidationException e) {
 			logValidationException(e);
-			this.invalidChannel.send(new GenericMessage<Payment>(paymentData));
+			this.invalidChannel.send(new GenericMessage<ValidationException>(e));
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage(),e);
@@ -64,11 +71,6 @@ public class PaymentValidator implements Validator<Payment>{
 		prepaymentExceptionRepository.save(pe);
 	}
 	
-	@Override
-	public void setData(Payment paymentData) {
-		this.paymentData = paymentData;		
-	}
-
 	public AccountValidator getAccountValidator() {
 		return accountValidator;
 	}
@@ -84,22 +86,6 @@ public class PaymentValidator implements Validator<Payment>{
 	public void setPrepaymentExceptionRepository(
 			PrepaymentExceptionRepository prepaymentExceptionRepository) {
 		this.prepaymentExceptionRepository = prepaymentExceptionRepository;
-	}
-
-	public MessageChannel getValidChannel() {
-		return validChannel;
-	}
-
-	public void setValidChannel(MessageChannel validChannel) {
-		this.validChannel = validChannel;
-	}
-
-	public MessageChannel getInvalidChannel() {
-		return invalidChannel;
-	}
-
-	public void setInvalidChannel(MessageChannel invalidChannel) {
-		this.invalidChannel = invalidChannel;
 	}
 
 }

@@ -10,16 +10,16 @@
 
 	<int:payload-type-router input-channel="preProcessRouterChannel" default-output-channel="nullChannel">
 	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.DataProcessRequest" channel="dataProcessRequestsChannel" />
-	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.SeedData" channel="syncDataChannel" />
-	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading" channel="meterDataChannel" />
-	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment" channel="paymentDataChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.messaging.SeedData" channel="preprocSyncDataChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.meterreading.IntervalReading" channel="preprocMeterDataChannel" />
+	    <int:mapping type="hu.bme.mit.v37zen.sm.datamodel.prepayment.Payment" channel="preprocPaymentDataChannel" />
 	</int:payload-type-router>
 
 	<int:channel id="dataProcessRequestsChannel"></int:channel>
 	
-	<int:channel id="syncDataChannel"></int:channel>
-	<int:channel id="meterDataChannel"></int:channel>
-	<int:channel id="paymentDataChannel"></int:channel>
+	<int:channel id="preprocSyncDataChannel"></int:channel>
+	<int:channel id="preprocMeterDataChannel"></int:channel>
+	<int:channel id="preprocPaymentDataChannel"></int:channel>
 	
 	<int:service-activator id="dataProcessRequestActivator" 
 				ref="preprocessor"
@@ -30,30 +30,27 @@
 	<int:service-activator id="syncDataActivator" 
 				ref="preprocessor"
 				method="seedData"
-				input-channel="syncDataChannel">
+				input-channel="preprocSyncDataChannel"
+				output-channel="syncDataChannel">
 	</int:service-activator>
 	<int:service-activator id="meterDataActivator" 
 				ref="preprocessor"
 				method="meterReading"
-				input-channel="meterDataChannel">
+				input-channel="preprocMeterDataChannel"
+				output-channel="meterDataChannel">
 	</int:service-activator>
 	<int:service-activator id="paymebtDataActivator" 
 				ref="preprocessor"
 				method="paymentData"
-				input-channel="paymentDataChannel">
+				input-channel="preprocPaymentDataChannel"
+				output-channel="paymentDataChannel">
 	</int:service-activator>
 	
 	
 	<bean id="preprocessor" scope="prototype"
 			class="hu.bme.mit.v37zen.prepayment.dataprocessing.Preprocessor">
-			<constructor-arg name="seedDataValidatorThreadPoolTaskExecutor">
-				<ref bean="seedDataValidatorThreadPoolTaskExecutor"/>
-			</constructor-arg>
-			<constructor-arg name="meterReadingValidatorThreadPoolTaskExecutor">
-				<ref bean="meterReadingValidatorThreadPoolTaskExecutor"/>
-			</constructor-arg>
-			<constructor-arg name="paymentValidatorThreadPoolTaskExecutor">
-				<ref bean="paymentValidatorThreadPoolTaskExecutor"/>
+			<constructor-arg name="routerChannel">
+				<ref bean="preProcessRouterChannel"/>
 			</constructor-arg>
 	</bean>
 
